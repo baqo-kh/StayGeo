@@ -10,7 +10,7 @@
 
 <div class="reg-container">
     <div class="reg-header">
-        <a href="inex.html" class="back-home">← მთავარ გვერდზე დაბრუნება</a>
+        <a href="index.html" class="back-home">← მთავარ გვერდზე დაბრუნება</a>
     </div>
 
     <div class="progress-bar">
@@ -97,16 +97,14 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
-  // 🔗 Supabase-ის კლიენტის გლობალურად შექმნა
+  // 🔗 Supabase კლიენტის სწორი ინიციალიზაცია ახალ ცვლადში
   const SUPABASE_URL = "https://volwthkudypgvlafbdqf.supabase.co"; 
   const SUPABASE_ANON_KEY = "sb_publishable_IDi82Onln8r5EQ3ZH-u-Ow__ugEm86U"; 
 
-  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 </script>
 
-<script src="register-script.js"></script>
+<script src="register-script.js?v=1.1"></script>
 </body>
 </html>
