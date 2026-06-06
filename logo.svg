@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 130" width="450" height="130">
+  <!-- მუქი მწვანე საფირმო ფონი -->
+  <rect width="450" height="130" rx="24" fill="#0b3127"/>
+  
+  <!-- მთლიანად ყვითელი წარწერა StayGeo.ge -->
+  <g fill="#febb02" font-family="-apple-system, BlinkMacSystemFont, 'Montserrat', 'Inter', 'Segoe UI', sans-serif" font-weight="900" font-size="52" letter-spacing="-1">
+    <text x="45" y="90">Stay</text>
+    <text x="160" y="90">G</text>
+    <text x="202" y="90">eo.ge</text>
+  </g>
+  
+  <!-- თეთრი პინი - ზუსტად G-ს ცენტრში, ზემოდან შეხებით -->
+  <g transform="translate(179, 49) scale(0.28)" fill="#ffffff">
+    <path d="M0 0 C-16 -19 -26 -34 -26 -50 A 26 24 0 1 1 26 -50 C 26 -34 16 -19 0 0 Z"/>
+    <circle cx="0" cy="-50" r="7" fill="#0b3127"/>
+  </g>
+</svg>

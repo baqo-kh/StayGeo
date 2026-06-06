@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StayGeo.ge - ვერიფიცირებული რეგისტრაცია</title>
+    <link rel="stylesheet" href="register-style.css">
+</head>
+<body>
+
+<div class="reg-container">
+    <div class="reg-header">
+        <a href="inex.html" class="back-home">← მთავარ გვერდზე დაბრუნება</a>
+    </div>
+
+    <div class="progress-bar">
+        <div class="step active" id="step1-indicator">1. ანგარიში</div>
+        <div class="step" id="step2-indicator">2. ID ბარათი</div>
+        <div class="step" id="step3-indicator">3. სელფი</div>
+    </div>
+
+    <div class="reg-step-box active" id="step1">
+        <h2>ანგარიშის შექმნა</h2>
+        <p class="subtitle">გთხოვთ, შეავსოთ თქვენი ძირითადი მონაცემები</p>
+        <form id="infoForm">
+            <div class="input-row">
+                <div class="input-group">
+                    <label>სახელი</label>
+                    <input type="text" id="firstName" required placeholder="მაგ: გიორგი">
+                </div>
+                <div class="input-group">
+                    <label>გვარი</label>
+                    <input type="text" id="lastName" required placeholder="მაგ: კაპანაძე">
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label>ელ. ფოსტის მისამართი</label>
+                <input type="email" id="email" required placeholder="giorgi@example.com">
+            </div>
+            
+            <div class="input-group">
+                <label>პაროლი</label>
+                <div class="password-wrapper">
+                    <input type="password" id="password" required placeholder="••••••••">
+                    <button type="button" id="togglePassword" class="toggle-password-btn" onclick="togglePasswordVisibility()">
+                        <svg id="eyeIcon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#a0c4bc" stroke-width="2" stroke-linecap="round">
+                            <path d="M5 11a7 7 0 0 1 14 0" />
+                            <circle cx="12" cy="13" r="3" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <button type="button" class="action-btn next-btn" onclick="validateAndGoToStep2()">შემდეგი: ID ვერიფიკაცია</button>
+        </form>
+    </div>
+
+    <div class="reg-step-box" id="step2">
+        <h2>იდენტობის დადასტურება</h2>
+        <p class="subtitle">მოათავსეთ თქვენი ID ბარათი ან პასპორტი მონიშნულ ჩარჩოში</p>
+        
+        <div class="camera-wrapper">
+            <video id="videoID" autoplay playsinline></video>
+            <canvas id="canvasID" style="display:none;"></canvas>
+            <img id="photoPreviewID" class="photo-preview" style="display:none;">
+            <div class="camera-overlay-rect"></div>
+        </div>
+
+        <div class="btn-group">
+            <button type="button" class="capture-btn" onclick="capturePhoto('ID')">📸 ID ბარათის გადაღება</button>
+            <button type="button" class="action-btn" id="nextToStep3" disabled onclick="goToStep(3)">შემდეგი: ცოცხალი სელფი</button>
+        </div>
+    </div>
+
+    <div class="reg-step-box" id="step3">
+        <h2>სახის ვერიფიკაცია</h2>
+        <p class="subtitle">შეხედეთ პირდაპირ კამერას მფლობელობის დასადასტურებლად</p>
+        
+        <div class="camera-wrapper face-mode">
+            <video id="videoFace" autoplay playsinline></video>
+            <canvas id="canvasFace" style="display:none;"></canvas>
+            <img id="photoPreviewFace" class="photo-preview" style="display:none;">
+        </div>
+
+        <div id="ai-loading" class="loading-box" style="display:none;">
+            <div class="spinner"></div>
+            <p>AI ასკანირებს ბიომეტრიულ მონაცემებს და ადარებს სახეებს...</p>
+        </div>
+
+        <div class="btn-group">
+            <button type="button" class="capture-btn" onclick="capturePhoto('Face')">📸 სელფის გადაღება</button>
+            <button type="button" class="action-btn submit-btn" id="finalSubmitBtn" disabled onclick="verifyAndRegister()">ვერიფიკაცია და დასრულება</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  // 🔗 Supabase-ის კლიენტის გლობალურად შექმნა
+  const SUPABASE_URL = "https://volwthkudypgvlafbdqf.supabase.co"; 
+  const SUPABASE_ANON_KEY = "sb_publishable_IDi82Onln8r5EQ3ZH-u-Ow__ugEm86U"; 
+
+  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+</script>
+
+<script src="register-script.js"></script>
+</body>
+</html>
