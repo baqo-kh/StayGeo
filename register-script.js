@@ -141,7 +141,6 @@ function capturePhoto(type) {
 
 async function verifyAndRegister() {
     const loadingBox = document.getElementById('ai-loading');
-    // ვპოულობთ ტექსტის პარაგრაფს და სპინერს ლაივ-განახლებისთვის
     const loadingText = loadingBox ? loadingBox.querySelector('p') : null;
     const spinner = loadingBox ? loadingBox.querySelector('.spinner') : null;
 
@@ -176,7 +175,6 @@ async function verifyAndRegister() {
             return;
         }
 
-        // რეალური მოთხოვნა ბაზასთან
         const { data, error } = await supabaseClient.auth.signUp({
             email: email,
             password: password,
@@ -191,17 +189,18 @@ async function verifyAndRegister() {
         if (loadingText) loadingText.innerHTML = "📍 ნაბიჯი 4: პასუხი სერვერიდან მიღებულია!";
 
         if (error) {
-            // თუ ბაზამ ერორი დააბრუნა (მაგალითად, ეს მეილი უკვე არსებობს)
             if (loadingText) loadingText.innerHTML = "<span style='color: #ff6b6b;'>❌ ბაზის შეცდომა: " + error.message + "</span>";
             if (spinner) spinner.style.display = 'none';
         } else {
-            // თუ ყველაფერი კარგადაა
             if (loadingText) loadingText.innerHTML = "<span style='color: #4ecdc4; font-weight: bold;'>🎉 ბიომეტრიული რეგისტრაცია წარმატებით დასრულდა! გადავდივართ მთავარზე...</span>";
             if (spinner) spinner.style.display = 'none';
             
-            // 2 წამში გადავიყვანოთ მთავარ გვერდზე
+            // მომხმარებლის ავტორიზებულად მონიშვნა წარმატებული რეგისტრაციის შემდეგ
+            localStorage.setItem('isLoggedIn', 'true');
+
+            // 2 წამში გადავიყვანოთ მთავარ გვერდზე (გასწორდა index.html-ზე)
             setTimeout(() => {
-                window.location.href = "inex.html";
+                window.location.href = "index.html";
             }, 2000);
         }
     } catch (err) {
@@ -209,6 +208,3 @@ async function verifyAndRegister() {
         if (spinner) spinner.style.display = 'none';
     }
 }
-
-localStorage.setItem('isLoggedIn', 'true');
-window.location.href = 'index.html';

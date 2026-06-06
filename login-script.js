@@ -26,10 +26,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         console.log("ავტორიზაციის მონაცემები:", { email, password });
 
+        // ვინახავთ სტატუსს, რომ მთავარმა გვერდმა პროფილის ლოგო გამოაჩინოს
+        localStorage.setItem('isLoggedIn', 'true');
+
         alert("✅ ავტორიზაცია წარმატებულია! კეთილი იყოს თქვენი მობრძანება.");
         
-        // შეცვლილია inex.html-ზე
-        window.location.href = "inex.html"; 
+        // გასწორდა index.html-ზე
+        window.location.href = "index.html"; 
     });
 });
 
