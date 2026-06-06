@@ -234,3 +234,4 @@ document.addEventListener('click', () => { closeAllDropdowns(); });
 
 // საწყისი ჩატვირთვა
 updateGuestsUI();
+

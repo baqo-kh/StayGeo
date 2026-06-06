@@ -209,3 +209,6 @@ async function verifyAndRegister() {
         if (spinner) spinner.style.display = 'none';
     }
 }
+
+localStorage.setItem('isLoggedIn', 'true');
+window.location.href = 'index.html';
