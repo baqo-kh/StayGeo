@@ -189,9 +189,9 @@ async function verifyAndRegister() {
         if (error) {
             alert("❌ Supabase-ის ბაზის შეცდომა: " + error.message);
         } else {
-            alert("🎉 ბიომეტრიული რეგისტრაცია წარმატებით დასრულდა!");
-            window.location.href = "index.html"; 
-        }
+    alert("🎉 ბიომეტრიული რეგისტრაცია წარმატებით დასრულდა!");
+    window.location.href = "inex.html"; // შეცვლილია index -> inex-ზე
+}
     } catch (err) {
         alert("❌ სისტემური Catch შეცდომა: " + err.message);
     } finally {
