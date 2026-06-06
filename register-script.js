@@ -140,10 +140,14 @@ function capturePhoto(type) {
 }
 
 async function verifyAndRegister() {
-    alert("📍 ნაბიჯი 1: რეგისტრაციის ღილაკს დაეჭირა!"); 
-
     const loadingBox = document.getElementById('ai-loading');
+    // ვპოულობთ ტექსტის პარაგრაფს და სპინერს ლაივ-განახლებისთვის
+    const loadingText = loadingBox ? loadingBox.querySelector('p') : null;
+    const spinner = loadingBox ? loadingBox.querySelector('.spinner') : null;
+
     if (loadingBox) loadingBox.style.display = 'block';
+    if (spinner) spinner.style.display = 'block';
+    if (loadingText) loadingText.innerHTML = "📍 ნაბიჯი 1: რეგისტრაციის პროცესი დაიწყო...";
 
     const firstNameInput = document.getElementById('firstName');
     const lastNameInput = document.getElementById('lastName');
@@ -151,8 +155,8 @@ async function verifyAndRegister() {
     const passwordInput = document.getElementById('password');
 
     if (!firstNameInput || !lastNameInput || !emailInput || !passwordInput) {
-        alert("❌ კრიტიკული შეცდომა: HTML-ში ინპუტების ID-ები ვერ ვიპოვე!");
-        if (loadingBox) loadingBox.style.display = 'none';
+        if (loadingText) loadingText.innerHTML = "<span style='color: #ff6b6b;'>❌ კრიტიკული შეცდომა: ინპუტების ID ვერ მოიძებნა!</span>";
+        if (spinner) spinner.style.display = 'none';
         return;
     }
 
@@ -161,17 +165,18 @@ async function verifyAndRegister() {
     const email = emailInput.value;
     const password = passwordInput.value;
 
-    alert("📍 ნაბიჯი 2: მონაცემები წარმატებით წავიკითხე: " + email); 
+    if (loadingText) loadingText.innerHTML = "📍 ნაბიჯი 2: მონაცემები წარმატებით წავიკითხე: " + email;
 
     try {
-        alert("📍 ნაბიჯი 3: ვუკავშირდები Supabase-ს..."); 
+        if (loadingText) loadingText.innerHTML = "📍 ნაბიჯი 3: ვუკავშირდები Supabase-ის ბაზას...";
 
         if (typeof supabaseClient === 'undefined') {
-            alert("❌ შეცდომა: supabaseClient ცვლადი არ არსებობს გვერდზე!");
-            if (loadingBox) loadingBox.style.display = 'none';
+            if (loadingText) loadingText.innerHTML = "<span style='color: #ff6b6b;'>❌ შეცდომა: supabaseClient ბიბლიოთეკა არ არის ჩატვირთული!</span>";
+            if (spinner) spinner.style.display = 'none';
             return;
         }
 
+        // რეალური მოთხოვნა ბაზასთან
         const { data, error } = await supabaseClient.auth.signUp({
             email: email,
             password: password,
@@ -183,17 +188,24 @@ async function verifyAndRegister() {
             }
         });
 
-        alert("📍 ნაბიჯი 4: პასუხი სერვერიდან მიღებულია!"); 
+        if (loadingText) loadingText.innerHTML = "📍 ნაბიჯი 4: პასუხი სერვერიდან მიღებულია!";
 
         if (error) {
-            alert("❌ Supabase-ის ბაზის შეცდომა: " + error.message);
+            // თუ ბაზამ ერორი დააბრუნა (მაგალითად, ეს მეილი უკვე არსებობს)
+            if (loadingText) loadingText.innerHTML = "<span style='color: #ff6b6b;'>❌ ბაზის შეცდომა: " + error.message + "</span>";
+            if (spinner) spinner.style.display = 'none';
         } else {
-            alert("🎉 ბიომეტრიული რეგისტრაცია წარმატებით დასრულდა!");
-            window.location.href = "inex.html"; 
+            // თუ ყველაფერი კარგადაა
+            if (loadingText) loadingText.innerHTML = "<span style='color: #4ecdc4; font-weight: bold;'>🎉 ბიომეტრიული რეგისტრაცია წარმატებით დასრულდა! გადავდივართ მთავარზე...</span>";
+            if (spinner) spinner.style.display = 'none';
+            
+            // 2 წამში გადავიყვანოთ მთავარ გვერდზე
+            setTimeout(() => {
+                window.location.href = "inex.html";
+            }, 2000);
         }
     } catch (err) {
-        alert("❌ სისტემური Catch შეცდომა: " + err.message);
-    } finally {
-        if (loadingBox) loadingBox.style.display = 'none';
+        if (loadingText) loadingText.innerHTML = "<span style='color: #ff6b6b;'>❌ სისტემური Catch შეცდომა: " + err.message + "</span>";
+        if (spinner) spinner.style.display = 'none';
     }
 }
