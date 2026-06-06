@@ -139,7 +139,6 @@ function capturePhoto(type) {
     preview.style.display = 'block';
 }
 
-// საბოლოო ფუნქცია გაძლიერებული ალერტებით
 async function verifyAndRegister() {
     alert("📍 ნაბიჯი 1: რეგისტრაციის ღილაკს დაეჭირა!"); 
 
@@ -189,9 +188,9 @@ async function verifyAndRegister() {
         if (error) {
             alert("❌ Supabase-ის ბაზის შეცდომა: " + error.message);
         } else {
-    alert("🎉 ბიომეტრიული რეგისტრაცია წარმატებით დასრულდა!");
-    window.location.href = "inex.html"; // შეცვლილია index -> inex-ზე
-}
+            alert("🎉 ბიომეტრიული რეგისტრაცია წარმატებით დასრულდა!");
+            window.location.href = "inex.html"; 
+        }
     } catch (err) {
         alert("❌ სისტემური Catch შეცდომა: " + err.message);
     } finally {
