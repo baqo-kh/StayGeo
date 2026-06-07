@@ -2,44 +2,81 @@ document.addEventListener("DOMContentLoaded", () => {
     const loginForm = document.getElementById('loginForm');
     const passwordInput = document.getElementById('password');
     const toggleBtn = document.getElementById('togglePassword');
+    const submitBtn = document.querySelector('.submit-btn');
     
     // თვალის ღილაკის გამოჩენა/მალვა წერისას
-    passwordInput.addEventListener('input', () => {
-        if (passwordInput.value.length > 0) {
-            toggleBtn.style.display = 'flex'; 
-        } else {
-            toggleBtn.style.display = 'none'; 
-        }
-    });
+    if (passwordInput && toggleBtn) {
+        passwordInput.addEventListener('input', () => {
+            if (passwordInput.value.length > 0) {
+                toggleBtn.style.display = 'flex'; 
+            } else {
+                toggleBtn.style.display = 'none'; 
+            }
+        });
+    }
 
-    // ფორმის გაგზავნის მართვა
-    loginForm.addEventListener('submit', (event) => {
-        event.preventDefault(); 
+    // ფორმის გაგზავნის მართვა - ახლა უკვე ASYNC (ბაზას ელოდება)
+    if (loginForm) {
+        loginForm.addEventListener('submit', async (event) => {
+            event.preventDefault(); 
 
-        const email = document.getElementById('email').value.trim();
-        const password = passwordInput.value;
+            const email = document.getElementById('email').value.trim();
+            const password = passwordInput.value;
 
-        if (!email || !password) {
-            alert("გთხოვთ შეავსოთ ორივე ველი.");
-            return;
-        }
+            if (!email || !password) {
+                alert("გთხოვთ შეავსოთ ორივე ველი.");
+                return;
+            }
 
-        console.log("ავტორიზაციის მონაცემები:", { email, password });
+            // ვიზუალური ეფექტი: ღილაკს ვაწერთ "ვამოწმებ..." და ვბლოკავთ
+            const originalBtnText = submitBtn.innerText;
+            submitBtn.innerText = "ვამოწმებ...";
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = "0.7";
 
-        // ვინახავთ სტატუსს, რომ მთავარმა გვერდმა პროფილის ლოგო გამოაჩინოს
-        localStorage.setItem('isLoggedIn', 'true');
+            try {
+                if (typeof supabaseClient === 'undefined') {
+                    alert("❌ ბაზასთან კავშირი ვერ მოხერხდა! შეამოწმეთ ინტერნეტი.");
+                    resetButton();
+                    return;
+                }
 
-        alert("✅ ავტორიზაცია წარმატებულია! კეთილი იყოს თქვენი მობრძანება.");
-        
-        // გასწორდა index.html-ზე
-        window.location.href = "index.html"; 
-    });
+                // ⚡ რეალური მოთხოვნა Supabase ბაზაში
+                const { data, error } = await supabaseClient.auth.signInWithPassword({
+                    email: email,
+                    password: password,
+                });
+
+                if (error) {
+                    // თუ პაროლი ან მეილი არასწორია (ან არ არსებობს)
+                    alert("❌ შეცდომა: ელ-ფოსტის მისამართი ან პაროლი არასწორია!");
+                    resetButton();
+                } else {
+                    // თუ ყველაფერი დაემთხვა და ბაზამ შემოუშვა
+                    localStorage.setItem('isLoggedIn', 'true');
+                    alert("✅ ავტორიზაცია წარმატებულია! კეთილი იყოს თქვენი მობრძანება.");
+                    window.location.href = "index.html"; 
+                }
+            } catch (err) {
+                alert("❌ სისტემური შეცდომა: " + err.message);
+                resetButton();
+            }
+
+            // ღილაკის საწყის მდგომარეობაში დაბრუნების ფუნქცია
+            function resetButton() {
+                submitBtn.innerText = originalBtnText;
+                submitBtn.disabled = false;
+                submitBtn.style.opacity = "1";
+            }
+        });
+    }
 });
 
 // პაროლის ჩვენება / დამალვა
 function togglePasswordVisibility() {
     const passwordInput = document.getElementById('password');
     const eyeIcon = document.getElementById('eyeIcon');
+    if (!passwordInput || !eyeIcon) return;
     
     if (passwordInput.type === 'password') {
         passwordInput.type = 'text';

@@ -48,6 +48,16 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  // Supabase კლიენტის ინიციალიზაცია ლოგინისთვის
+  const SUPABASE_URL = "https://volwthkudypgvlafbdqf.supabase.co"; 
+  const SUPABASE_ANON_KEY = "sb_publishable_IDi82Onln8r5EQ3ZH-u-Ow__ugEm86U"; 
+
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+</script>
+
 <script src="login-script.js"></script>
 </body>
 </html>
