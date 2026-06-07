@@ -1,221 +1,303 @@
-let streams = { ID: null, Face: null };
-let capturedImages = { idCardBase64: null, faceBase64: null };
-
 document.addEventListener("DOMContentLoaded", () => {
-    const passwordInput = document.getElementById('password');
-    const toggleBtn = document.getElementById('togglePassword');
     
-    if (passwordInput && toggleBtn) {
-        passwordInput.addEventListener('input', () => {
-            if (passwordInput.value.length > 0) {
-                toggleBtn.style.display = 'flex'; 
+    // 🌍 ქვეყნების სრული გლობალური სია
+    const countries = [
+        { name: "საქართველო", code: "+995", iso: "ge" },
+        
+        // ევროპა
+        { name: "დიდი ბრიტანეთი", code: "+44", iso: "gb" },
+        { name: "გერმანია", code: "+49", iso: "de" },
+        { name: "საფრანგეთი", code: "+33", iso: "fr" },
+        { name: "იტალია", code: "+39", iso: "it" },
+        { name: "ესპანეთი", code: "+34", iso: "es" },
+        { name: "პოლონეთი", code: "+48", iso: "pl" },
+        { name: "უკრაინა", code: "+380", iso: "ua" },
+        { name: "საბერძნეთი", code: "+30", iso: "gr" },
+        { name: "ავსტრია", code: "+43", iso: "at" },
+        { name: "შვეიცარია", code: "+41", iso: "ch" },
+        { name: "ნიდერლანდები", code: "+31", iso: "nl" },
+        { name: "ბელგია", code: "+32", iso: "be" },
+        { name: "შვედეთი", code: "+46", iso: "se" },
+        { name: "ნორვეგია", code: "+47", iso: "no" },
+        { name: "დანია", code: "+45", iso: "dk" },
+        { name: "ფინეთი", code: "+358", iso: "fi" },
+        { name: "ჩეხეთი", code: "+420", iso: "cz" },
+        { name: "სლოვაკეთი", code: "+421", iso: "sk" },
+        { name: "უნგრეთი", code: "+36", iso: "hu" },
+        { name: "რუმინეთი", code: "+40", iso: "ro" },
+        { name: "ბულგარეთი", code: "+359", iso: "bg" },
+        { name: "ხორვატია", code: "+385", iso: "hr" },
+        { name: "სერბეთი", code: "+381", iso: "rs" },
+        { name: "ბოსნია და ჰერცეგოვინა", code: "+387", iso: "ba" },
+        { name: "ჩრდ. მაკედონია", code: "+389", iso: "mk" },
+        { name: "მონტენეგრო", code: "+382", iso: "me" },
+        { name: "სლოვენია", code: "+386", iso: "si" },
+        { name: "ალბანეთი", code: "+355", iso: "al" },
+        { name: "ირლანდია", code: "+353", iso: "ie" },
+        { name: "პორტუგალია", code: "+351", iso: "pt" },
+        { name: "ლიეტუვა", code: "+370", iso: "lt" },
+        { name: "ლატვია", code: "+371", iso: "lv" },
+        { name: "ესტონეთი", code: "+372", iso: "ee" },
+        { name: "ბელარუსი", code: "+375", iso: "by" },
+        { name: "მოლდოვა", code: "+373", iso: "md" },
+        { name: "ისლანდია", code: "+354", iso: "is" },
+        { name: "კვიპროსი", code: "+357", iso: "cy" },
+        { name: "მალტა", code: "+356", iso: "mt" },
+        { name: "ლუქსემბურგი", code: "+352", iso: "lu" },
+        { name: "ანდორა", code: "+376", iso: "ad" },
+        { name: "მონაკო", code: "+377", iso: "mc" },
+        { name: "სან-მარინო", code: "+378", iso: "sm" },
+        { name: "ვატიკანი", code: "+379", iso: "va" },
+        { name: "ლიხტენშტაინი", code: "+423", iso: "li" },
+
+        // ამერიკა
+        { name: "აშშ", code: "+1", iso: "us" },
+        { name: "კანადა", code: "+1", iso: "ca" },
+        { name: "მექსიკა", code: "+52", iso: "mx" },
+        { name: "ბრაზილია", code: "+55", iso: "br" },
+        { name: "არგენტინა", code: "+54", iso: "ar" },
+        { name: "კოლუმბია", code: "+57", iso: "co" },
+        { name: "ჩილე", code: "+56", iso: "cl" },
+        { name: "პერუ", code: "+51", iso: "pe" },
+        { name: "ვენესუელა", code: "+58", iso: "ve" },
+        { name: "ეკვადორი", code: "+593", iso: "ec" },
+        { name: "გვატემალა", code: "+502", iso: "gt" },
+        { name: "კუბა", code: "+53", iso: "cu" },
+        { name: "ბოლივია", code: "+591", iso: "bo" },
+        { name: "ჰაიტი", code: "+509", iso: "ht" },
+        { name: "დომინიკელთა რესპ.", code: "+1", iso: "do" },
+        { name: "ჰონდურასი", code: "+504", iso: "hn" },
+        { name: "პარაგვაი", code: "+595", iso: "py" },
+        { name: "ელ-სალვადორი", code: "+503", iso: "sv" },
+        { name: "ნიკარაგუა", code: "+505", iso: "ni" },
+        { name: "კოსტა-რიკა", code: "+506", iso: "cr" },
+        { name: "პანამა", code: "+507", iso: "pa" },
+        { name: "ურუგვაი", code: "+598", iso: "uy" },
+        { name: "იამაიკა", code: "+1", iso: "jm" },
+
+        // აზია და ევრაზია
+        { name: "თურქეთი", code: "+90", iso: "tr" },
+        { name: "სომხეთი", code: "+374", iso: "am" },
+        { name: "აზერბაიჯანი", code: "+994", iso: "az" },
+        { name: "რუსეთი", code: "+7", iso: "ru" },
+        { name: "ყაზახეთი", code: "+7", iso: "kz" },
+        { name: "უზბეკეთი", code: "+998", iso: "uz" },
+        { name: "ტაჯიკეთი", code: "+992", iso: "tj" },
+        { name: "ყირგიზეთი", code: "+996", iso: "kg" },
+        { name: "თურქმენეთი", code: "+993", iso: "tm" },
+        { name: "ჩინეთი", code: "+86", iso: "cn" },
+        { name: "იაპონია", code: "+81", iso: "jp" },
+        { name: "სამხრეთ კორეა", code: "+82", iso: "kr" },
+        { name: "ინდოეთი", code: "+91", iso: "in" },
+        { name: "პაკისტანი", code: "+92", iso: "pk" },
+        { name: "ავღანეთი", code: "+93", iso: "af" },
+        { name: "ბანგლადეში", code: "+880", iso: "bd" },
+        { name: "ინდონეზია", code: "+62", iso: "id" },
+        { name: "მალაიზია", code: "+60", iso: "my" },
+        { name: "სინგაპური", code: "+65", iso: "sg" },
+        { name: "ვიეტნამი", code: "+84", iso: "vn" },
+        { name: "ტაილანდი", code: "+66", iso: "th" },
+        { name: "ფილიპინები", code: "+63", iso: "ph" },
+        { name: "მიანმარი", code: "+95", iso: "mm" },
+        { name: "ნეპალი", code: "+977", iso: "np" },
+        { name: "შრი-ლანკა", code: "+94", iso: "lk" },
+        { name: "ტაივანი", code: "+886", iso: "tw" },
+        { name: "კამბოჯა", code: "+855", iso: "kh" },
+        { name: "მონღოლეთი", code: "+976", iso: "mn" },
+        { name: "მალდივები", code: "+960", iso: "mv" },
+
+        // ახლო აღმოსავლეთი და ჩრდ. აფრიკა
+        { name: "საამიროები (UAE)", code: "+971", iso: "ae" },
+        { name: "საუდის არაბეთი", code: "+966", iso: "sa" },
+        { name: "კატარი", code: "+974", iso: "qa" },
+        { name: "ქუვეითი", code: "+965", iso: "kw" },
+        { name: "ომანი", code: "+968", iso: "om" },
+        { name: "ბაჰრეინი", code: "+973", iso: "bh" },
+        { name: "ეგვიპტე", code: "+20", iso: "eg" },
+        { name: "იორდანია", code: "+962", iso: "jo" },
+        { name: "ლიბანი", code: "+961", iso: "lb" },
+        { name: "ერაყი", code: "+964", iso: "iq" },
+        { name: "სირია", code: "+963", iso: "sy" },
+        { name: "იემენი", code: "+967", iso: "ye" },
+        { name: "მაროკო", code: "+212", iso: "ma" },
+        { name: "ალჟირი", code: "+213", iso: "dz" },
+        { name: "ტუნისი", code: "+216", iso: "tn" },
+        { name: "ლიბია", code: "+218", iso: "ly" },
+        { name: "პალესტინა", code: "+970", iso: "ps" },
+        { name: "ისრაელი", code: "+972", iso: "il" },
+        { name: "ირანი", code: "+98", iso: "ir" },
+
+        // აფრიკა
+        { name: "სამხრეთ აფრიკა", code: "+27", iso: "za" },
+        { name: "ნიგერია", code: "+234", iso: "ng" },
+        { name: "ეთიოპია", code: "+251", iso: "et" },
+        { name: "ტანზანია", code: "+255", iso: "tz" },
+        { name: "კენია", code: "+254", iso: "ke" },
+        { name: "უგანდა", code: "+256", iso: "ug" },
+        { name: "სუდანი", code: "+249", iso: "sd" },
+        { name: "ანგოლა", code: "+244", iso: "ao" },
+        { name: "მოზამბიკი", code: "+258", iso: "mz" },
+        { name: "განა", code: "+233", iso: "gh" },
+        { name: "მადაგასკარი", code: "+261", iso: "mg" },
+        { name: "კამერუნი", code: "+237", iso: "cm" },
+        { name: "კოტ-დ'ივუარი", code: "+225", iso: "ci" },
+        { name: "სენეგალი", code: "+221", iso: "sn" },
+        { name: "ზიმბაბვე", code: "+263", iso: "zw" },
+        { name: "რუანდა", code: "+250", iso: "rw" },
+        { name: "ნამიბია", code: "+264", iso: "na" },
+
+        // ოკეანეთი
+        { name: "ავსტრალია", code: "+61", iso: "au" },
+        { name: "ახალი ზელანდია", code: "+64", iso: "nz" },
+        { name: "პაპუა-ახალი გვინეა", code: "+675", iso: "pg" },
+        { name: "ფიჯი", code: "+679", iso: "fj" },
+        { name: "ვანუატუ", code: "+678", iso: "vu" },
+        { name: "სამოა", code: "+685", iso: "ws" }
+    ];
+
+    const selectedCountry = document.getElementById('selectedCountry');
+    const countryDropdown = document.getElementById('countryDropdown');
+    const countryList = document.getElementById('countryList');
+    const selectedFlag = document.getElementById('selectedFlag');
+    const selectedCodeText = document.getElementById('selectedCodeText');
+    const regCountryCodeInput = document.getElementById('regCountryCodeInput');
+    const countrySearch = document.getElementById('countrySearch');
+
+    if (countryDropdown && countryList) {
+        
+        // 1. ფუნქცია: ხატავს სიას
+        function renderOptions(filterText = "") {
+            countryList.innerHTML = ''; // ვასუფთავებთ
+            
+            const filteredCountries = countries.filter(country => 
+                country.name.toLowerCase().includes(filterText.toLowerCase()) || 
+                country.code.includes(filterText)
+            );
+
+            if (filteredCountries.length === 0) {
+                countryList.innerHTML = '<div style="padding: 10px; color: #a0c4bc; font-size: 13px; text-align: center;">ვერ მოიძებნა</div>';
+                return;
+            }
+
+            filteredCountries.forEach(country => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'custom-option';
+                optionDiv.innerHTML = `
+                    <img src="https://flagcdn.com/w20/${country.iso}.png" alt="${country.iso}">
+                    <span>${country.name} (${country.code})</span>
+                `;
+                
+                optionDiv.addEventListener('click', () => {
+                    selectedFlag.src = `https://flagcdn.com/w20/${country.iso}.png`;
+                    selectedCodeText.innerText = country.code;
+                    regCountryCodeInput.value = country.code;
+                    countryDropdown.style.display = 'none';
+                    countrySearch.value = ''; // ვასუფთავებთ ძებნას დახურვისას
+                    renderOptions(); // ვაბრუნებთ სრულ სიას
+                });
+                
+                countryList.appendChild(optionDiv);
+            });
+        }
+
+        // ვხატავთ თავდაპირველად სრულ სიას
+        renderOptions();
+
+        // 2. ძებნის ლოგიკა (Search)
+        countrySearch.addEventListener('input', (e) => {
+            renderOptions(e.target.value);
+        });
+
+        // 3. სიის გახსნა/დახურვა
+        selectedCountry.addEventListener('click', (e) => {
+            e.stopPropagation(); 
+            const isClosed = countryDropdown.style.display === 'none' || countryDropdown.style.display === '';
+            
+            if (isClosed) {
+                countryDropdown.style.display = 'block';
+                countrySearch.focus(); // ეკრანის გახსნისთანავე კურსორი ძებნაში ჯდება
             } else {
-                toggleBtn.style.display = 'none'; 
+                countryDropdown.style.display = 'none';
+            }
+        });
+
+        // ხელს უშლის ძებნაზე დაჭერისას სიის დახურვას
+        countrySearch.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+        // გარე დაკლიკვისას სიის დახურვა
+        document.addEventListener('click', (e) => {
+            if (!selectedCountry.contains(e.target) && !countryDropdown.contains(e.target)) {
+                countryDropdown.style.display = 'none';
+            }
+        });
+    }
+
+    // 🚀 ფორმის გაგზავნა
+    const registerForm = document.getElementById('registerForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    if (registerForm) {
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const firstName = document.getElementById('regFirstName').value.trim();
+            const lastName = document.getElementById('regLastName').value.trim();
+            const countryCode = document.getElementById('regCountryCodeInput').value;
+            const phoneNumber = document.getElementById('regPhone').value.trim();
+            const fullPhone = `${countryCode} ${phoneNumber}`; 
+            const email = document.getElementById('regEmail').value.trim();
+            const password = document.getElementById('regPassword').value;
+
+            if (!firstName || !lastName || !phoneNumber || !email || !password) {
+                alert("გთხოვთ შეავსოთ ყველა ველი!");
+                return;
+            }
+
+            if (password.length < 6) {
+                alert("პაროლი უნდა შეიცავდეს მინიმუმ 6 სიმბოლოს!");
+                return;
+            }
+
+            const originalBtnText = submitBtn.innerText;
+            submitBtn.innerText = "ვარეგისტრირებ...";
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = "0.7";
+
+            try {
+                const { data, error } = await supabaseClient.auth.signUp({
+                    email: email,
+                    password: password,
+                    options: {
+                        data: {
+                            first_name: firstName,
+                            last_name: lastName,
+                            phone_number: fullPhone
+                        }
+                    }
+                });
+
+                if (error) throw error;
+
+                alert("✅ რეგისტრაცია წარმატებით დასრულდა! ახლა შეგიძლიათ გაიაროთ ავტორიზაცია.");
+                window.location.href = "login.html";
+
+            } catch (err) {
+                let errorMsg = "დაფიქსირდა შეცდომა.";
+                if (err.message.includes("User already registered")) {
+                    errorMsg = "ეს ელ-ფოსტა უკვე გამოყენებულია!";
+                } else if (err.message.includes("Password should be")) {
+                    errorMsg = "პაროლი ძალიან მარტივია.";
+                } else {
+                    errorMsg = err.message;
+                }
+                alert("❌ რეგისტრაცია ვერ მოხერხდა: " + errorMsg);
+                
+                submitBtn.innerText = originalBtnText;
+                submitBtn.disabled = false;
+                submitBtn.style.opacity = "1";
             }
         });
     }
 });
-
-function togglePasswordVisibility() {
-    const passwordInput = document.getElementById('password');
-    const eyeIcon = document.getElementById('eyeIcon');
-    if (!passwordInput || !eyeIcon) return;
-
-    if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        eyeIcon.innerHTML = `
-            <path d="M5 11a7 7 0 0 1 14 0" />
-            <circle cx="12" cy="13" r="3" />
-            <line x1="3" y1="3" x2="21" y2="21" stroke="#ff6b6b" stroke-width="2"/>
-        `;
-    } else {
-        passwordInput.type = 'password';
-        eyeIcon.innerHTML = `
-            <path d="M5 11a7 7 0 0 1 14 0" />
-            <circle cx="12" cy="13" r="3" />
-        `;
-    }
-}
-
-function goToStep(stepNumber) {
-    document.querySelectorAll('.reg-step-box').forEach(box => box.classList.remove('active'));
-    document.querySelectorAll('.step').forEach((s, index) => {
-        if (index + 1 <= stepNumber) s.classList.add('active');
-        else s.classList.remove('active');
-    });
-
-    const targetStep = document.getElementById(`step${stepNumber}`);
-    if (targetStep) targetStep.classList.add('active');
-
-    if (stepNumber === 2) {
-        startCamera('videoID', 'ID');
-    } else if (stepNumber === 3) {
-        stopCamera('ID'); 
-        startCamera('videoFace', 'Face');
-    }
-}
-
-function validateAndGoToStep2() {
-    const firstName = document.getElementById('firstName').value.trim();
-    const lastName = document.getElementById('lastName').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const pass = document.getElementById('password').value;
-
-    if (!firstName || !lastName || !email || !pass) {
-        alert("გთხოვთ, შეავსოთ ყველა ველი რეგისტრაციის გასაგრძელებლად.");
-        return;
-    }
-    if (pass.length < 8) {
-        alert("❌ პაროლი უნდა შედგებოდეს მინიმუმ 8 სიმბოლოსგან!");
-        return;
-    }
-    if (!/[A-Z]/.test(pass)) {
-        alert("❌ პაროლი უნდა შეიცავდეს მინიმუმ 1 დიდ ინგლისურ ასოს (A-Z)!");
-        return;
-    }
-    if (!/\d/.test(pass)) {
-        alert("❌ პაროლი უნდა შეიცავდეს მინიმუმ 1 ციფრს (0-9)!");
-        return;
-    }
-    if (/[ა-ჰ]/.test(pass)) {
-        alert("❌ ასოები უნდა იყოს მხოლოდ ინგლისური! ქართული შრიფტი არ დაიშვება.");
-        return;
-    }
-    goToStep(2);
-}
-
-async function startCamera(videoId, type) {
-    try {
-        const constraints = {
-            video: { facingMode: type === 'ID' ? 'environment' : 'user' },
-            audio: false
-        };
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
-        streams[type] = stream;
-        const videoElement = document.getElementById(videoId);
-        if (videoElement) {
-            videoElement.srcObject = stream;
-            videoElement.style.display = 'block';
-        }
-        const previewId = type === 'ID' ? 'photoPreviewID' : 'photoPreviewFace';
-        const previewElement = document.getElementById(previewId);
-        if (previewElement) previewElement.style.display = 'none';
-    } catch (err) {
-        console.error("კამერის შეცდომა: ", err);
-        alert("კამერაზე წვდომა უარყოფილია ან მოწყობილობას არ აქვს კამერა.");
-        goToStep(1);
-    }
-}
-
-function stopCamera(type) {
-    if (streams[type]) {
-        streams[type].getTracks().forEach(track => track.stop());
-        streams[type] = null;
-    }
-}
-
-function capturePhoto(type) {
-    const isID = type === 'ID';
-    const video = document.getElementById(isID ? 'videoID' : 'videoFace');
-    const canvas = document.getElementById(isID ? 'canvasID' : 'canvasFace');
-    const preview = document.getElementById(isID ? 'photoPreviewID' : 'photoPreviewFace');
-    if (!video || !video.srcObject || !canvas || !preview) return;
-
-    const context = canvas.getContext('2d');
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    context.drawImage(video, 0, 0, canvas.width, canvas.height);
-    const dataURL = canvas.toDataURL('image/jpeg', 0.9);
-    
-    if (isID) {
-        capturedImages.idCardBase64 = dataURL;
-        document.getElementById('nextToStep3').disabled = false;
-    } else {
-        capturedImages.faceBase64 = dataURL;
-        document.getElementById('finalSubmitBtn').disabled = false;
-    }
-    video.style.display = 'none';
-    preview.src = dataURL;
-    preview.style.display = 'block';
-}
-
-async function verifyAndRegister() {
-    const loadingBox = document.getElementById('ai-loading');
-    const loadingText = loadingBox ? loadingBox.querySelector('p') : null;
-    const spinner = loadingBox ? loadingBox.querySelector('.spinner') : null;
-
-    // 1. მკაცრი შემოწმება: გადაიღო თუ არა ორივე სურათი?
-    if (!capturedImages.idCardBase64 || !capturedImages.faceBase64) {
-        alert("❌ გთხოვთ, აუცილებლად გადაიღოთ ID ბარათი და სელფი რეგისტრაციის დასასრულებლად!");
-        return;
-    }
-
-    if (loadingBox) loadingBox.style.display = 'block';
-    if (spinner) spinner.style.display = 'block';
-    if (loadingText) loadingText.innerHTML = "📍 ნაბიჯი 1: სურათების ხარისხის შემოწმება...";
-
-    const firstNameInput = document.getElementById('firstName');
-    const lastNameInput = document.getElementById('lastName');
-    const emailInput = document.getElementById('email');
-    const passwordInput = document.getElementById('password');
-
-    const firstName = firstNameInput.value;
-    const lastName = lastNameInput.value;
-    const email = emailInput.value;
-    const password = passwordInput.value;
-
-    try {
-        if (loadingText) loadingText.innerHTML = "📍 ნაბიჯი 2: AI ბიომეტრიული ანალიზი მიმდინარეობს...";
-
-        // ==============================================================
-        // 🤖 აქ მომავალში ჩაისმება რეალური AI API-ს მოთხოვნა (მაგ. Face++)
-        // მაგალითი, როგორ იმუშავებს:
-        // const aiResponse = await fetch('https://api.face.com/v1/compare', {
-        //     method: 'POST',
-        //     body: JSON.stringify({ idImage: capturedImages.idCardBase64, faceImage: capturedImages.faceBase64 })
-        // });
-        // const aiResult = await aiResponse.json();
-        // if (!aiResult.isMatch) throw new Error("სახეები არ ემთხვევა ერთმანეთს!");
-        // ==============================================================
-
-        // დროებითი დაყოვნება, რომ AI-ს სიმულაცია უფრო რეალისტური იყოს (2.5 წამი)
-        await new Promise(resolve => setTimeout(resolve, 2500));
-
-        if (loadingText) loadingText.innerHTML = "📍 ნაბიჯი 3: ვუკავშირდები Supabase-ის ბაზას...";
-
-        if (typeof supabaseClient === 'undefined') {
-            throw new Error("supabaseClient ბიბლიოთეკა არ არის ჩატვირთული!");
-        }
-
-        // რეალური რეგისტრაცია Supabase-ში
-        const { data, error } = await supabaseClient.auth.signUp({
-            email: email,
-            password: password,
-            options: {
-                data: {
-                    first_name: firstName,
-                    last_name: lastName,
-                    // სურვილისამებრ, შეგიძლიათ ბაზაში შეინახოთ, რომ მომხმარებელმა KYC გაიარა
-                    is_verified: true 
-                }
-            }
-        });
-
-        if (error) {
-            throw error;
-        } else {
-            if (loadingText) loadingText.innerHTML = "<span style='color: #4ecdc4; font-weight: bold;'>🎉 ბიომეტრიული რეგისტრაცია წარმატებით დასრულდა! გადავდივართ მთავარზე...</span>";
-            if (spinner) spinner.style.display = 'none';
-            
-            localStorage.setItem('isLoggedIn', 'true');
-
-            // გადამისამართება მთავარ გვერდზე
-            setTimeout(() => {
-                window.location.href = "index.html";
-            }, 2000);
-        }
-    } catch (err) {
-        if (loadingText) loadingText.innerHTML = "<span style='color: #ff6b6b;'>❌ შეცდომა: " + err.message + "</span>";
-        if (spinner) spinner.style.display = 'none';
-    }
-}

@@ -235,3 +235,107 @@ document.addEventListener('click', () => { closeAllDropdowns(); });
 // საწყისი ჩატვირთვა
 updateGuestsUI();
 
+/* =========================================
+   მესამე ეტაპი: განცხადებების გამოტანა და ფილტრაცია
+   ========================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+    const listingsGrid = document.getElementById('listingsGrid');
+    const searchForm = document.querySelector('.sg-search-inner-form'); // შენი საძიებო ფორმა
+
+    if (!listingsGrid) return; // თუ ამ გვერდზე არ ვართ, არაფერი ქნას
+
+    // 1. ფუნქცია: ბაზიდან მონაცემების წამოღება და გაფილტვრა
+    function loadListings(filterLocation = "", filterRooms = 0) {
+        // ვიღებთ მონაცემებს LocalStorage-დან
+        let listings = JSON.parse(localStorage.getItem('staygeo_listings')) || [];
+        
+        // 🔍 ფილტრაციის ლოგიკა
+        if (filterLocation !== "") {
+            // ვეძებთ ლოკაციას (ასოების სიდიდის მიუხედავად)
+            listings = listings.filter(item => 
+                item.location.toLowerCase().includes(filterLocation.toLowerCase())
+            );
+        }
+        if (filterRooms > 0) {
+            // ვაჩვენებთ მხოლოდ იმას, რასაც იმდენივე ან მეტი ოთახი აქვს
+            listings = listings.filter(item => item.rooms >= filterRooms);
+        }
+
+        // ვაგზავნით გასახატად
+        renderListings(listings);
+    }
+
+    // 2. ფუნქცია: HTML ბარათების გენერაცია
+    function renderListings(listings) {
+        listingsGrid.innerHTML = ''; // ვასუფთავებთ წინა შედეგებს
+
+
+        // ვხატავთ თითოეულ ბარათს
+        listings.forEach(listing => {
+            // ვიღებთ მთავარ სურათს (ინდექსი 0, რადგან დამატებისას დავალაგეთ)
+            const mainImage = listing.images && listing.images.length > 0 ? listing.images[0] : '';
+            
+            // ვიღებთ პირველ 3 კეთილმოწყობას, რომ ბარათი არ გადაიტვირთოს
+            let amenitiesHTML = '';
+            if (listing.amenities && listing.amenities.length > 0) {
+                const topAmenities = listing.amenities.slice(0, 3);
+                amenitiesHTML = topAmenities.map(a => `<span>${a}</span>`).join('');
+                
+                if (listing.amenities.length > 3) {
+                    amenitiesHTML += `<span>+${listing.amenities.length - 3} მეტი</span>`;
+                }
+            }
+
+            // ვქმნით HTML ელემენტს
+            const card = document.createElement('div');
+            card.className = 'listing-card';
+            
+            // მომავალში აქ დავადებთ ლინკს დეტალური გვერდისკენ: onclick="window.location.href='details.html?id=${listing.id}'"
+            
+            card.innerHTML = `
+                <img src="${mainImage}" alt="${listing.title}" class="card-image">
+                <div class="card-content">
+                    <h3 class="card-title">${listing.title}</h3>
+                    <div class="card-location">📍 ${listing.location}</div>
+                    
+                    <div class="card-amenities">
+                        ${amenitiesHTML}
+                    </div>
+                    
+                    <div class="card-footer">
+                        <div class="details">
+                            ${listing.area} მ²<br>
+                            ${listing.rooms} ოთახი
+                        </div>
+                        <div class="price">
+                            ${listing.price}₾ <span>/ ღამე</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            listingsGrid.appendChild(card);
+        });
+    }
+
+    // 3. საწყისი ჩატვირთვა (როცა საიტზე ახალი შემოსულია)
+    loadListings();
+
+    // 4. ძებნის ღილაკზე დაჭერის ივენთი
+    if (searchForm) {
+        searchForm.addEventListener('submit', (e) => {
+            e.preventDefault(); // გვერდის დარეფრეშებას ვბლოკავთ
+            
+            // ვიღებთ მნიშვნელობას ლოკაციის ინპუტიდან
+            const locationInput = document.getElementById('sgDestInput').value.trim();
+            // ვიღებთ ოთახების რაოდენობას მრიცხველიდან
+            const roomsValue = parseInt(document.getElementById('valRooms').innerText) || 0;
+
+            // ვძახით ფილტრს
+            loadListings(locationInput, roomsValue);
+            
+            // ეკრანს რბილად ჩამოვასქროლებთ შედეგებისკენ
+            document.querySelector('.sg-listings-section').scrollIntoView({ behavior: 'smooth' });
+        });
+    }
+});
