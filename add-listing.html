@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StayGeo.ge - განცხადების დამატება</title>
-    <link rel="stylesheet" href="css/add-listing-style.css"> </head>
+    <link rel="stylesheet" href="css/add-listing-style.css"> 
+</head>
 <body>
     <div class="add-listing-container">
         <div class="header-link">
@@ -14,51 +15,120 @@
         <p class="subtitle">შეავსეთ დეტალები თქვენი ადგილის შესახებ</p>
 
         <form id="addListingForm">
-            <div class="input-group">
-                <label>სახელწოდება</label>
-                <input type="text" id="listTitle" required placeholder="მაგ: მყუდრო კოტეჯი ცენტრში">
-            </div>
-
-            <div class="input-row">
+            
+            <div class="form-section">
+                <h3>1. ძირითადი ინფორმაცია</h3>
                 <div class="input-group">
-                    <label>მდებარეობა</label>
-                    <select id="listLocation" required>
-                        <option value="" disabled selected>აირჩიეთ...</option>
-                        <option value="თბილისი">თბილისი</option>
-                        <option value="ბათუმი">ბათუმი</option>
-                        <option value="ქუთაისი">ქუთაისი</option>
-                        <option value="ბაკურიანი">ბაკურიანი</option>
-                        <option value="გუდაური">გუდაური</option>
-                        <option value="მესტია">მესტია</option>
-                        <option value="ბორჯომი">ბორჯომი</option>
-                        <option value="თელავი">თელავი</option>
-                        <option value="სიღნაღი">სიღნაღი</option>
-                        <option value="მცხეთა">მცხეთა</option>
-                    </select>
+                    <label>სახელწოდება</label>
+                    <input type="text" id="listTitle" required placeholder="მაგ: მყუდრო კოტეჯი ცენტრში">
                 </div>
+
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>მდებარეობა</label>
+                        <select id="listLocation" required>
+                            <option value="" disabled selected>აირჩიეთ...</option>
+                            <option value="თბილისი">თბილისი</option>
+                            <option value="ბათუმი">ბათუმი</option>
+                            <option value="ქუთაისი">ქუთაისი</option>
+                            <option value="ბაკურიანი">ბაკურიანი</option>
+                            <option value="გუდაური">გუდაური</option>
+                            <option value="მესტია">მესტია</option>
+                            <option value="ბორჯომი">ბორჯომი</option>
+                            <option value="თელავი">თელავი</option>
+                            <option value="სიღნაღი">სიღნაღი</option>
+                            <option value="მცხეთა">მცხეთა</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>ოთახები</label>
+                        <input type="number" id="listRooms" required min="1" placeholder="მაგ: 2">
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>ფართობი (მ²)</label>
+                        <input type="number" id="listArea" required min="5" placeholder="მაგ: 50">
+                    </div>
+                    <div class="input-group">
+                        <label>ფასი 1 ღამეში (₾)</label>
+                        <input type="number" id="listPrice" required min="1" placeholder="მაგ: 150">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>2. კეთილმოწყობა და ინვენტარი</h3>
+                <div class="amenities-grid">
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="უფასო Wi-Fi"><span>უფასო Wi-Fi</span></label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="ტელევიზორი"><span>ტელევიზორი</span></label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="კონდიციონერი"><span>კონდიციონერი</span></label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="გათბობა"><span>გათბობა</span></label>
+                    
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="საკუთარი ეზო"><span>საკუთარი ეზო</span></label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="საპარკინგე არეა"><span>საპარკინგე არეა</span></label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="აივანი / ტერასა"><span>აივანი / ტერასა</span></label>
+                    
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="პირსახოცები"><span>პირსახოცები</span></label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="საწოლის თეთრეული"><span>საწოლის თეთრეული</span></label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="ერთჯერადი ჩუსტები"><span>ერთჯერადი ჩუსტები</span></label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="თმის საშრობი (ფენი)"><span>თმის საშრობი (ფენი)</span></label>
+                    
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="სარეცხი მანქანა"><span>სარეცხი მანქანა</span></label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="ტანსაცმლის საშრობი"><span>ტანსაცმლის საშრობი</span></label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="მაცივარი"><span>მაცივარი</span></label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="ელექტრო ღუმელი"><span>ელექტრო ღუმელი</span></label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="გაზის/ელექტრო ქურა"><span>გაზის/ელექტრო ქურა</span></label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="ელექტრო გამწოვი"><span>ელექტრო გამწოვი</span></label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="ჭურჭლის სარეცხი მანქანა"><span>ჭურჭლის სარეცხი მანქანა</span></label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="ჩაიდანი"><span>ჩაიდანი</span></label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="ჭურჭელი"><span>ჭურჭელი</span></label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="ბუხარი"><span>ბუხარი</span></label>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>3. კვება</h3>
+                <label class="custom-checkbox toggle-meal">
+                    <input type="checkbox" id="hasMeals">
+                    <span>ობიექტზე შესაძლებელია კვების დამატება</span>
+                </label>
+                
+                <div id="mealOptions" style="display: none; margin-top: 15px; padding-left: 15px; border-left: 2px solid #febb02;">
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label>კვების ტიპი</label>
+                            <select id="mealType">
+                                <option value="საუზმე">მხოლოდ საუზმე</option>
+                                <option value="2-ჯერადი">2-ჯერადი კვება</option>
+                                <option value="3-ჯერადი">3-ჯერადი კვება</option>
+                                <option value="All-Inclusive">All-Inclusive (ყველაფერი შედის)</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>ფასი 1 პერსონაზე (₾)</label>
+                            <input type="number" id="mealPrice" min="0" placeholder="0 = შედის მთავარ ფასში">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>4. ფოტოები და აღწერა</h3>
                 <div class="input-group">
-                    <label>ოთახების რაოდენობა</label>
-                    <input type="number" id="listRooms" required min="1" placeholder="მაგ: 2">
+                    <label>ატვირთეთ სურათები (შეგიძლიათ ერთდროულად რამდენიმეს არჩევა)</label>
+                    <input type="file" id="listImages" accept="image/*" multiple required>
+                    <div id="imageGallery" class="image-gallery"></div> 
+                </div>
+
+                <div class="input-group">
+                    <label>ადგილის აღწერა</label>
+                    <textarea id="listDesc" rows="4" required placeholder="მოკლედ აღწერეთ ადგილი და მისი უპირატესობები..."></textarea>
                 </div>
             </div>
 
-            <div class="input-group">
-                <label>ფასი 1 ღამეში (₾)</label>
-                <input type="number" id="listPrice" required min="1" placeholder="მაგ: 150">
-            </div>
-
-            <div class="input-group">
-                <label>მთავარი სურათი</label>
-                <input type="file" id="listImage" accept="image/*" required>
-                <img id="imagePreview" class="image-preview" style="display:none;">
-            </div>
-
-            <div class="input-group">
-                <label>აღწერა</label>
-                <textarea id="listDesc" rows="3" required placeholder="მოკლედ აღწერეთ ადგილი..."></textarea>
-            </div>
-
-            <button type="submit" class="submit-btn">გამოქვეყნება</button>
+            <button type="submit" class="submit-btn">განცხადების გამოქვეყნება</button>
         </form>
     </div>
     

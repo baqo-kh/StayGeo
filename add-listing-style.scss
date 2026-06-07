@@ -4,18 +4,18 @@ body {
     color: #ffffff;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start; /* შეიცვალა ცენტრიდან ზემოთ, რადგან დიდი ფორმაა */
     min-height: 100vh;
     margin: 0;
-    padding: 20px;
+    padding: 40px 20px;
     box-sizing: border-box;
 }
 
 .add-listing-container {
     background-color: #0d3b2f;
     width: 100%;
-    max-width: 500px;
-    padding: 30px;
+    max-width: 700px; /* გავაფართოვეთ, რადგან ბევრი ინფორმაციაა */
+    padding: 35px;
     border-radius: 16px;
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
     box-sizing: border-box;
@@ -32,18 +32,35 @@ body {
         }
     }
 
-    h2 { font-size: 24px; color: #febb02; margin: 0 0 6px 0; font-weight: 700; }
-    .subtitle { font-size: 14px; color: #a0c4bc; margin: 0 0 25px 0; }
+    h2 { font-size: 26px; color: #febb02; margin: 0 0 6px 0; font-weight: 700; }
+    .subtitle { font-size: 14px; color: #a0c4bc; margin: 0 0 30px 0; }
+
+    /* სექციების დიზაინი */
+    .form-section {
+        background-color: #0f4537;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+        border: 1px solid #1a5142;
+
+        h3 {
+            font-size: 16px;
+            color: #ffffff;
+            margin: 0 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #1a5142;
+        }
+    }
 
     .input-row {
         display: flex;
         gap: 15px;
         .input-group { flex: 1; }
-        @media (max-width: 480px) { flex-direction: column; gap: 0; }
+        @media (max-width: 600px) { flex-direction: column; gap: 0; }
     }
 
     .input-group {
-        margin-bottom: 20px;
+        margin-bottom: 18px;
         display: flex;
         flex-direction: column;
 
@@ -52,7 +69,7 @@ body {
         input, select, textarea {
             background-color: #0b3127;
             border: 1px solid #1a5142;
-            padding: 14px;
+            padding: 12px 14px;
             border-radius: 8px;
             color: #ffffff;
             font-size: 15px;
@@ -70,32 +87,100 @@ body {
             padding: 10px;
             background-color: #1a5142;
             cursor: pointer;
+            border: 2px dashed #a0c4bc;
+            &:hover { border-color: #febb02; }
         }
 
-        .image-preview {
-            margin-top: 10px;
-            width: 100%;
-            height: 160px;
-            object-fit: cover;
-            border-radius: 8px;
-            border: 2px dashed #1a5142;
+        /* მრავალი სურათის გალერეის სტილი */
+        .image-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+
+            .img-thumb-box {
+                position: relative;
+                width: 100px;
+                height: 100px;
+                border-radius: 8px;
+                overflow: hidden;
+                border: 2px solid #1a5142;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+
+                .remove-btn {
+                    position: absolute;
+                    top: 4px;
+                    right: 4px;
+                    background: rgba(255, 59, 48, 0.9);
+                    color: white;
+                    border: none;
+                    border-radius: 50%;
+                    width: 22px;
+                    height: 22px;
+                    font-size: 12px;
+                    font-weight: bold;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    
+                    &:hover { background: #ff3b30; transform: scale(1.1); }
+                }
+            }
         }
+    }
+
+    /* კეთილმოწყობის ჩექბოქსების CSS Grid განლაგება */
+    .amenities-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 12px;
+    }
+
+    /* ლამაზი Booking-ის სტილის ჩექბოქსები */
+    .custom-checkbox {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        color: #e0e0e0;
+        font-size: 14px;
+        user-select: none;
+
+        input {
+            width: 18px;
+            height: 18px;
+            accent-color: #febb02; /* ფერს ყვითლად აქცევს */
+            cursor: pointer;
+        }
+
+        &:hover { color: #ffffff; }
+    }
+
+    .toggle-meal {
+        font-weight: bold;
+        color: #febb02;
     }
 
     .submit-btn {
         width: 100%;
-        padding: 15px;
+        padding: 16px;
         border: none;
         border-radius: 8px;
-        font-size: 15px;
+        font-size: 16px;
         font-weight: 700;
         cursor: pointer;
         background-color: #febb02;
         color: #0b3127;
-        transition: background-color 0.2s, transform 0.1s;
-        margin-top: 10px;
+        transition: all 0.2s;
+        margin-top: 15px;
         
-        &:hover { background-color: #e0a502; }
-        &:active { transform: scale(0.98); }
+        &:hover { background-color: #e0a502; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(254, 187, 2, 0.3); }
+        &:active { transform: translateY(0); }
     }
 }
