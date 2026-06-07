@@ -637,53 +637,53 @@ body {
 
 /* <-- ეს ბოლო ფრჩხილი აუცილებელია, რომ SCSS არ გატყდეს! */
 /* =========================================
-   მთავარი გვერდის რესპონსიულობა და დიზაინის კორექცია
+   მთავარი გვერდის რესპონსიულობა და დიზაინის კორექცია (განახლებული)
    ========================================= */
 /* 1. საძიებო ზოლის სქელი ჩარჩოები (დესკტოპზე და მობილურზე) */
 .sg-search-bar-box {
-  border: 3px solid #febb02 !important; /* მთლიან ყუთს ექნება სქელი ყვითელი ჩარჩო */
+  border: 3px solid #febb02 !important;
   border-radius: 12px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 .sg-input-block {
-  border-right: 2px solid #d1d1d1 !important; /* შიდა გამყოფების გასქელება */
+  border-right: 2px solid #d1d1d1 !important;
 }
 
 .sg-input-block:last-of-type {
   border-right: none !important;
 }
 
-/* 2. მობილურის ეკრანის (768px-მდე) ადაპტაცია */
+/* 2. მობილურის ეკრანის (768px-მდე) ადაპტაცია - სპეციალური ფიქსით ღილაკისთვის */
 @media (max-width: 768px) {
-  /* ჰედერის და ლოგოს დაპატარავება, რომ ღილაკები დაეტიოს */
   .sg-header-nav {
-    padding: 10px 15px !important;
+    padding: 10px !important; /* კიდევ უფრო შევამცირეთ padding-ი */
   }
   .logo-link svg {
-    width: 170px !important;
-    height: 42px !important;
+    width: 150px !important; /* ლოგო კიდევ დავაპატარავეთ */
+    height: 38px !important;
   }
-  /* ღილაკების დაშორების და ზომის შემცირება */
   .nav-links {
-    gap: 8px !important;
+    gap: 5px !important; /* მინიმალური დაშორება ღილაკებს შორის */
   }
   .login-btn, .register-btn {
-    padding: 6px 10px !important;
-    font-size: 12px !important;
-    border-radius: 6px !important;
+    padding: 5px 8px !important; /* მაქსიმალურად შევამცირეთ padding-ი */
+    font-size: 11px !important; /* ტექსტი დავაპატარავეთ 11px-მდე, რომ ჩაეტიოს */
+    border-radius: 5px !important;
+    white-space: nowrap !important; /* ვუკრძალავთ ტექსტს გადატანას */
+    overflow: visible !important; /* ვრთავთ clipping-ს */
   }
   /* მთავარი ტექსტის (Hero) დაპატარავება მობილურზე */
   .sg-hero-title {
-    font-size: 24px !important;
-    margin-top: 20px !important;
+    font-size: 22px !important; /* ცოტა კიდევ დავაპატარავეთ */
+    margin-top: 15px !important;
     line-height: 1.3 !important;
     padding: 0 10px;
   }
   .sg-hero-subtitle {
-    font-size: 14px !important;
+    font-size: 13px !important;
     padding: 0 10px;
-    margin-bottom: 25px !important;
+    margin-bottom: 20px !important;
   }
   /* საძიებო ზოლის განლაგება მობილურზე (ერთმანეთის ქვეშ) */
   .sg-search-inner-form {
@@ -691,8 +691,8 @@ body {
   }
   .sg-input-block {
     width: 100% !important;
-    border-right: none !important; /* გვერდითა ხაზს ვაქრობთ */
-    border-bottom: 2px solid #d1d1d1 !important; /* მობილურზე ქვევით ვუკეთებთ სქელ ხაზს */
+    border-right: none !important;
+    border-bottom: 2px solid #d1d1d1 !important;
     padding: 15px !important;
   }
   .sg-input-block:last-of-type {
