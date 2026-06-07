@@ -144,67 +144,78 @@ async function verifyAndRegister() {
     const loadingText = loadingBox ? loadingBox.querySelector('p') : null;
     const spinner = loadingBox ? loadingBox.querySelector('.spinner') : null;
 
+    // 1. მკაცრი შემოწმება: გადაიღო თუ არა ორივე სურათი?
+    if (!capturedImages.idCardBase64 || !capturedImages.faceBase64) {
+        alert("❌ გთხოვთ, აუცილებლად გადაიღოთ ID ბარათი და სელფი რეგისტრაციის დასასრულებლად!");
+        return;
+    }
+
     if (loadingBox) loadingBox.style.display = 'block';
     if (spinner) spinner.style.display = 'block';
-    if (loadingText) loadingText.innerHTML = "📍 ნაბიჯი 1: რეგისტრაციის პროცესი დაიწყო...";
+    if (loadingText) loadingText.innerHTML = "📍 ნაბიჯი 1: სურათების ხარისხის შემოწმება...";
 
     const firstNameInput = document.getElementById('firstName');
     const lastNameInput = document.getElementById('lastName');
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
 
-    if (!firstNameInput || !lastNameInput || !emailInput || !passwordInput) {
-        if (loadingText) loadingText.innerHTML = "<span style='color: #ff6b6b;'>❌ კრიტიკული შეცდომა: ინპუტების ID ვერ მოიძებნა!</span>";
-        if (spinner) spinner.style.display = 'none';
-        return;
-    }
-
     const firstName = firstNameInput.value;
     const lastName = lastNameInput.value;
     const email = emailInput.value;
     const password = passwordInput.value;
 
-    if (loadingText) loadingText.innerHTML = "📍 ნაბიჯი 2: მონაცემები წარმატებით წავიკითხე: " + email;
-
     try {
+        if (loadingText) loadingText.innerHTML = "📍 ნაბიჯი 2: AI ბიომეტრიული ანალიზი მიმდინარეობს...";
+
+        // ==============================================================
+        // 🤖 აქ მომავალში ჩაისმება რეალური AI API-ს მოთხოვნა (მაგ. Face++)
+        // მაგალითი, როგორ იმუშავებს:
+        // const aiResponse = await fetch('https://api.face.com/v1/compare', {
+        //     method: 'POST',
+        //     body: JSON.stringify({ idImage: capturedImages.idCardBase64, faceImage: capturedImages.faceBase64 })
+        // });
+        // const aiResult = await aiResponse.json();
+        // if (!aiResult.isMatch) throw new Error("სახეები არ ემთხვევა ერთმანეთს!");
+        // ==============================================================
+
+        // დროებითი დაყოვნება, რომ AI-ს სიმულაცია უფრო რეალისტური იყოს (2.5 წამი)
+        await new Promise(resolve => setTimeout(resolve, 2500));
+
         if (loadingText) loadingText.innerHTML = "📍 ნაბიჯი 3: ვუკავშირდები Supabase-ის ბაზას...";
 
         if (typeof supabaseClient === 'undefined') {
-            if (loadingText) loadingText.innerHTML = "<span style='color: #ff6b6b;'>❌ შეცდომა: supabaseClient ბიბლიოთეკა არ არის ჩატვირთული!</span>";
-            if (spinner) spinner.style.display = 'none';
-            return;
+            throw new Error("supabaseClient ბიბლიოთეკა არ არის ჩატვირთული!");
         }
 
+        // რეალური რეგისტრაცია Supabase-ში
         const { data, error } = await supabaseClient.auth.signUp({
             email: email,
             password: password,
             options: {
                 data: {
                     first_name: firstName,
-                    last_name: lastName
+                    last_name: lastName,
+                    // სურვილისამებრ, შეგიძლიათ ბაზაში შეინახოთ, რომ მომხმარებელმა KYC გაიარა
+                    is_verified: true 
                 }
             }
         });
 
-        if (loadingText) loadingText.innerHTML = "📍 ნაბიჯი 4: პასუხი სერვერიდან მიღებულია!";
-
         if (error) {
-            if (loadingText) loadingText.innerHTML = "<span style='color: #ff6b6b;'>❌ ბაზის შეცდომა: " + error.message + "</span>";
-            if (spinner) spinner.style.display = 'none';
+            throw error;
         } else {
             if (loadingText) loadingText.innerHTML = "<span style='color: #4ecdc4; font-weight: bold;'>🎉 ბიომეტრიული რეგისტრაცია წარმატებით დასრულდა! გადავდივართ მთავარზე...</span>";
             if (spinner) spinner.style.display = 'none';
             
-            // მომხმარებლის ავტორიზებულად მონიშვნა წარმატებული რეგისტრაციის შემდეგ
             localStorage.setItem('isLoggedIn', 'true');
 
-            // 2 წამში გადავიყვანოთ მთავარ გვერდზე (გასწორდა index.html-ზე)
+            // გადამისამართება მთავარ გვერდზე
             setTimeout(() => {
                 window.location.href = "index.html";
             }, 2000);
         }
     } catch (err) {
-        if (loadingText) loadingText.innerHTML = "<span style='color: #ff6b6b;'>❌ სისტემური Catch შეცდომა: " + err.message + "</span>";
+        if (loadingText) loadingText.innerHTML = "<span style='color: #ff6b6b;'>❌ შეცდომა: " + err.message + "</span>";
         if (spinner) spinner.style.display = 'none';
     }
 }

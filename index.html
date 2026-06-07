@@ -31,7 +31,16 @@
             <div class="sg-nav-actions"> 
                 <div class="language-switcher"></div>
                 
-                <div class="nav-links">
+                <div class="nav-links" style="display: flex; align-items: center; gap: 15px;">
+                    
+                    <button id="addListingBtn" class="add-listing-btn">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        <span class="btn-text">დამატება</span>
+                    </button>
+
                     <div id="guestLinks" style="display: contents;">
                         <a href="login.html" style="text-decoration: none;">
                             <button class="login-btn">შესვლა</button>
@@ -196,12 +205,9 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    // ფანჯრის გახსნა / ჩაკეტვა
     helpBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        console.log("🔘 ლურჯ ღილაკს დაეჭირა!");
         helpPopup.classList.toggle('active');
-        console.log("ფანჯარა აქტიურია:", helpPopup.classList.contains('active'));
     });
 
     closeHelpBtn.addEventListener('click', () => {
@@ -214,7 +220,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // ფაილის მიბმა
     fileUpload.addEventListener('change', () => {
         if (fileUpload.files.length > 0) {
             fileNameDisplay.textContent = `📎 ${fileUpload.files[0].name}`;
@@ -222,14 +227,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // ფაილის წაშლა
     removeFileBtn.addEventListener('click', () => {
         fileUpload.value = '';
         filePreviewContainer.style.display = 'none';
         fileNameDisplay.textContent = '';
     });
 
-    // ფორმის გაგზავნა
     helpForm.addEventListener('submit', (e) => {
         e.preventDefault();
         alert("✅ თქვენი შეტყობინება წარმატებით გაიგზავნა!");
@@ -244,13 +247,26 @@ window.addEventListener('DOMContentLoaded', () => {
     const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
     const guestLinks = document.getElementById('guestLinks');
     const userProfile = document.getElementById('userProfile');
+    const addListingBtn = document.getElementById('addListingBtn'); // ➕ პლიუს ღილაკი
 
+    // UI-ის მართვა
     if (isLoggedIn) {
         if (guestLinks) guestLinks.style.display = 'none';
         if (userProfile) userProfile.style.setProperty('display', 'inline-block', 'important');
     } else {
         if (guestLinks) guestLinks.style.display = 'contents';
         if (userProfile) userProfile.style.display = 'none';
+    }
+
+    // პლიუს ღილაკის ლოგიკა
+    if (addListingBtn) {
+        addListingBtn.addEventListener('click', () => {
+            if (isLoggedIn) {
+                window.location.href = 'add-listing.html';
+            } else {
+                alert('გთხოვთ გაიაროთ რეგისტრაცია (ან შეხვიდეთ სისტემაში) განცხადების დასამატებლად.');
+            }
+        });
     }
 
     window.addEventListener('click', () => {

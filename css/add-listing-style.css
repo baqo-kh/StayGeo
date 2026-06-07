@@ -1,0 +1,124 @@
+body {
+  background-color: #0b3127;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.add-listing-container {
+  background-color: #0d3b2f;
+  width: 100%;
+  max-width: 500px;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  box-sizing: border-box;
+}
+.add-listing-container .header-link {
+  margin-bottom: 25px;
+}
+.add-listing-container .header-link a {
+  color: #a0c4bc;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.add-listing-container .header-link a:hover {
+  color: #febb02;
+}
+.add-listing-container h2 {
+  font-size: 24px;
+  color: #febb02;
+  margin: 0 0 6px 0;
+  font-weight: 700;
+}
+.add-listing-container .subtitle {
+  font-size: 14px;
+  color: #a0c4bc;
+  margin: 0 0 25px 0;
+}
+.add-listing-container .input-row {
+  display: flex;
+  gap: 15px;
+}
+.add-listing-container .input-row .input-group {
+  flex: 1;
+}
+@media (max-width: 480px) {
+  .add-listing-container .input-row {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+.add-listing-container .input-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+.add-listing-container .input-group label {
+  font-size: 13px;
+  color: #a0c4bc;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+.add-listing-container .input-group input, .add-listing-container .input-group select, .add-listing-container .input-group textarea {
+  background-color: #0b3127;
+  border: 1px solid #1a5142;
+  padding: 14px;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 15px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+.add-listing-container .input-group input:focus, .add-listing-container .input-group select:focus, .add-listing-container .input-group textarea:focus {
+  border-color: #febb02;
+}
+.add-listing-container .input-group select {
+  cursor: pointer;
+}
+.add-listing-container .input-group textarea {
+  resize: vertical;
+}
+.add-listing-container .input-group input[type=file] {
+  padding: 10px;
+  background-color: #1a5142;
+  cursor: pointer;
+}
+.add-listing-container .input-group .image-preview {
+  margin-top: 10px;
+  width: 100%;
+  height: 160px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 8px;
+  border: 2px dashed #1a5142;
+}
+.add-listing-container .submit-btn {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  background-color: #febb02;
+  color: #0b3127;
+  transition: background-color 0.2s, transform 0.1s;
+  margin-top: 10px;
+}
+.add-listing-container .submit-btn:hover {
+  background-color: #e0a502;
+}
+.add-listing-container .submit-btn:active {
+  transform: scale(0.98);
+}/*# sourceMappingURL=add-listing-style.css.map */

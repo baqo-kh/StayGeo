@@ -596,4 +596,43 @@ body {
 }
 .help-popup .popup-body form .form-controls .send-btn:hover {
   background-color: #e0a502;
-}/*# sourceMappingURL=style.css.map */
+}
+
+/* პლიუს ღილაკის სტილი */
+.add-listing-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #ffffff;
+  color: #0b3127;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+.add-listing-btn:hover {
+  background-color: #febb02;
+  color: #0b3127;
+  transform: translateY(-2px);
+}
+.add-listing-btn:active {
+  transform: translateY(0);
+}
+.add-listing-btn .btn-text {
+  display: inline-block;
+}
+@media (max-width: 768px) {
+  .add-listing-btn {
+    padding: 8px;
+    border-radius: 50%;
+  }
+  .add-listing-btn .btn-text {
+    display: none;
+  }
+}
+
+/* <-- ეს ბოლო ფრჩხილი აუცილებელია, რომ SCSS არ გატყდეს! *//*# sourceMappingURL=style.css.map */

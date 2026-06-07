@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StayGeo.ge - განცხადების დამატება</title>
+    <link rel="stylesheet" href="add-listing-style.css"> </head>
+<body>
+    <div class="add-listing-container">
+        <div class="header-link">
+            <a href="index.html">← მთავარ გვერდზე დაბრუნება</a>
+        </div>
+        <h2>ახალი განცხადება</h2>
+        <p class="subtitle">შეავსეთ დეტალები თქვენი ადგილის შესახებ</p>
+
+        <form id="addListingForm">
+            <div class="input-group">
+                <label>სახელწოდება</label>
+                <input type="text" id="listTitle" required placeholder="მაგ: მყუდრო კოტეჯი ცენტრში">
+            </div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label>მდებარეობა</label>
+                    <select id="listLocation" required>
+                        <option value="" disabled selected>აირჩიეთ...</option>
+                        <option value="თბილისი">თბილისი</option>
+                        <option value="ბათუმი">ბათუმი</option>
+                        <option value="ქუთაისი">ქუთაისი</option>
+                        <option value="ბაკურიანი">ბაკურიანი</option>
+                        <option value="გუდაური">გუდაური</option>
+                        <option value="მესტია">მესტია</option>
+                        <option value="ბორჯომი">ბორჯომი</option>
+                        <option value="თელავი">თელავი</option>
+                        <option value="სიღნაღი">სიღნაღი</option>
+                        <option value="მცხეთა">მცხეთა</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>ოთახების რაოდენობა</label>
+                    <input type="number" id="listRooms" required min="1" placeholder="მაგ: 2">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>ფასი 1 ღამეში (₾)</label>
+                <input type="number" id="listPrice" required min="1" placeholder="მაგ: 150">
+            </div>
+
+            <div class="input-group">
+                <label>მთავარი სურათი</label>
+                <input type="file" id="listImage" accept="image/*" required>
+                <img id="imagePreview" class="image-preview" style="display:none;">
+            </div>
+
+            <div class="input-group">
+                <label>აღწერა</label>
+                <textarea id="listDesc" rows="3" required placeholder="მოკლედ აღწერეთ ადგილი..."></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">გამოქვეყნება</button>
+        </form>
+    </div>
+    
+    <script src="add-listing-script.js"></script>
+</body>
+</html>
