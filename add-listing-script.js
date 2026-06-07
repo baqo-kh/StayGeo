@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. უსაფრთხოება: თუ შესული არ არის, მთავარზე ვაგდებთ
+    // თუ შესული არ არის, მთავარზე ვაგდებთ
     if (localStorage.getItem('isLoggedIn') !== 'true') {
         window.location.href = 'index.html';
         return;
@@ -10,18 +10,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const hasMealsCheckbox = document.getElementById('hasMeals');
     const mealOptionsDiv = document.getElementById('mealOptions');
     
-    let uploadedImagesBase64 = []; // აქ შევინახავთ მრავალ სურათს
+    let uploadedImagesBase64 = []; 
+    let mainPhotoIndex = 0; // ნაგულისხმევად პირველი ატვირთული ფოტოა მთავარი
 
-    // 2. კვების სექციის გამოჩენა / დამალვა ლოგიკა
+    // კვების გამოჩენა/დამალვა
     hasMealsCheckbox.addEventListener('change', (e) => {
-        if (e.target.checked) {
-            mealOptionsDiv.style.display = 'block';
-        } else {
-            mealOptionsDiv.style.display = 'none';
-        }
+        mealOptionsDiv.style.display = e.target.checked ? 'block' : 'none';
     });
 
-    // 3. მრავალი სურათის ატვირთვა და ავტომატური კომპრესია
+    // სურათის ატვირთვა და კომპრესია
     imageInput.addEventListener('change', (e) => {
         const files = Array.from(e.target.files);
         
@@ -30,7 +27,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const reader = new FileReader();
             reader.onload = function(event) {
-                // ვქმნით იმიჯს, რომ შევამციროთ მისი ზომა (კომპრესია localStorage-სთვის)
                 const img = new Image();
                 img.src = event.target.result;
                 
@@ -38,18 +34,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
                     
-                    // მაქსიმალური სიგანე 800px-მდე ვამცირებთ
-                    const MAX_WIDTH = 800;
+                    const MAX_WIDTH = 800; // ვამცირებთ სიგანეს ბაზისთვის
                     const scaleSize = MAX_WIDTH / img.width;
                     canvas.width = MAX_WIDTH;
                     canvas.height = img.height * scaleSize;
                     
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    
-                    // ვაქცევთ JPEG-ად 70% ხარისხით
                     const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
                     
-                    // ვამატებთ მასივში
                     uploadedImagesBase64.push(compressedBase64);
                     renderGallery();
                 }
@@ -57,35 +49,59 @@ document.addEventListener("DOMContentLoaded", () => {
             reader.readAsDataURL(file);
         });
         
-        // ვასუფთავებთ ინპუტს, რომ იგივე სურათი კიდევ შეიძლებოდეს აიტვირთოს
-        imageInput.value = ''; 
+        imageInput.value = ''; // ვასუფთავებთ ინპუტს
     });
 
-    // გალერეის დახატვა და წაშლის ლოგიკა
+    // გალერეის დახატვა
     function renderGallery() {
         imageGallery.innerHTML = '';
+        
+        if (mainPhotoIndex >= uploadedImagesBase64.length) {
+            mainPhotoIndex = 0;
+        }
+
         uploadedImagesBase64.forEach((base64, index) => {
+            const isMain = index === mainPhotoIndex;
             const thumbBox = document.createElement('div');
-            thumbBox.className = 'img-thumb-box';
+            thumbBox.className = `img-thumb-box ${isMain ? 'main-photo' : ''}`;
             
             thumbBox.innerHTML = `
                 <img src="${base64}" alt="Upload preview">
-                <button type="button" class="remove-btn" data-index="${index}">&times;</button>
+                <button type="button" class="remove-btn" data-index="${index}" title="ფოტოს წაშლა">&times;</button>
+                ${isMain ? 
+                    '<div class="main-badge">★ მთავარი</div>' : 
+                    `<button type="button" class="set-main-btn" data-index="${index}">მთავარზე დაყენება</button>`
+                }
             `;
             imageGallery.appendChild(thumbBox);
         });
 
-        // წაშლის ღილაკებზე ივენთის მიბმა
+        // წაშლის ლოგიკა
         document.querySelectorAll('.remove-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                const indexToRemove = e.target.getAttribute('data-index');
-                uploadedImagesBase64.splice(indexToRemove, 1); // შლის მასივიდან
-                renderGallery(); // თავიდან ხატავს
+                const indexToRemove = parseInt(e.target.getAttribute('data-index'));
+                uploadedImagesBase64.splice(indexToRemove, 1);
+                
+                if (indexToRemove === mainPhotoIndex) {
+                    mainPhotoIndex = 0;
+                } else if (indexToRemove < mainPhotoIndex) {
+                    mainPhotoIndex--; 
+                }
+                
+                renderGallery(); 
+            });
+        });
+
+        // "მთავარზე დაყენება"
+        document.querySelectorAll('.set-main-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                mainPhotoIndex = parseInt(e.target.getAttribute('data-index'));
+                renderGallery(); 
             });
         });
     }
 
-    // 4. ფორმის გაგზავნა და ყველა მონაცემის შენახვა
+    // ფორმის გაგზავნა
     document.getElementById('addListingForm').addEventListener('submit', (e) => {
         e.preventDefault();
 
@@ -94,13 +110,13 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // ვაგროვებთ ყველა მონიშნულ ჩექბოქსს კეთილმოწყობიდან
+        // ჩექბოქსების შეგროვება
         const selectedAmenities = [];
         document.querySelectorAll('input[name="amenity"]:checked').forEach(checkbox => {
             selectedAmenities.push(checkbox.value);
         });
 
-        // კვების მონაცემების აღება
+        // კვების მონაცემები
         let mealData = null;
         if (hasMealsCheckbox.checked) {
             const mPrice = document.getElementById('mealPrice').value;
@@ -110,34 +126,36 @@ document.addEventListener("DOMContentLoaded", () => {
             };
         }
 
-        // ვქმნით მთავარ ობიექტს
+        // სურათების გადალაგება - მთავარი ფოტო პირველ ადგილას
+        let finalImagesArray = [...uploadedImagesBase64];
+        if (mainPhotoIndex !== 0 && uploadedImagesBase64.length > 1) {
+            const mainImg = finalImagesArray.splice(mainPhotoIndex, 1)[0];
+            finalImagesArray.unshift(mainImg); 
+        }
+
         const newListing = {
-            id: Date.now(), // უნიკალური ID
+            id: Date.now(),
             title: document.getElementById('listTitle').value,
             location: document.getElementById('listLocation').value,
             rooms: parseInt(document.getElementById('listRooms').value),
             area: parseInt(document.getElementById('listArea').value),
             price: parseInt(document.getElementById('listPrice').value),
             description: document.getElementById('listDesc').value,
-            amenities: selectedAmenities, // მასივი
-            meals: mealData, // ობიექტი ან null
-            images: uploadedImagesBase64, // მრავალი სურათის მასივი
+            amenities: selectedAmenities,
+            meals: mealData,
+            images: finalImagesArray, 
             dateAdded: new Date().toISOString()
         };
 
-        // ვიღებთ ძველ განცხადებებს ან ვქმნით ცარიელ სიას
         let listings = JSON.parse(localStorage.getItem('staygeo_listings')) || [];
-        
-        // ვამატებთ ახალს სიაში
         listings.push(newListing);
         
-        // ვაბრუნებთ შენახულ სიას ბრაუზერის მეხსიერებაში
         try {
             localStorage.setItem('staygeo_listings', JSON.stringify(listings));
             alert("🎉 განცხადება წარმატებით დაემატა!");
             window.location.href = 'index.html';
         } catch (err) {
-            alert("❌ შეცდომა შენახვისას! ბრაუზერის მეხსიერება გადაივსო. სცადეთ ნაკლები სურათის ატვირთვა.");
+            alert("❌ შეცდომა შენახვისას! ბრაუზერის მეხსიერება გადაივსო.");
             console.error(err);
         }
     });
