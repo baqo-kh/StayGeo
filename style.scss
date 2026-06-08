@@ -565,3 +565,331 @@ $classic-blue: #007bff;    // მცურავი ღილაკის ორ
         font-size: 16px !important;
     }
 }
+
+/* =========================================
+   ჩემი განცხადებების მართვის ღილაკები
+   ========================================= */
+
+.my-listing-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #eaeaea;
+
+    button {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+        
+        &.edit-btn {
+            background-color: #febb02;
+            color: #0b3127;
+            &:hover { background-color: #e0a502; transform: translateY(-2px); }
+        }
+        
+        &.delete-btn {
+            background-color: #ffe5e5;
+            color: #ff3b30;
+            &:hover { background-color: #ff3b30; color: white; transform: translateY(-2px); }
+        }
+    }
+}
+
+/* კომპაქტური ბარათები "ჩემი განცხადებები"-სთვის */
+.listings-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* 300-დან 250-ზე ჩამოვედით */
+    gap: 20px;
+}
+
+.listing-card {
+    .card-image { height: 160px; } /* ფოტოს ზომა დავაპატარავეთ */
+    .card-content { padding: 15px; }
+    .card-title { font-size: 16px; } /* სათაური დავაპატარავეთ */
+    .price { font-size: 18px; }      /* ფასი დავაპატარავეთ */
+}
+
+/* =========================================
+   🏡 განცხადებების გრიდი და ბარათები
+   ========================================= */
+
+.listings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.listing-card {
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #eaeaea;
+    cursor: pointer;
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .card-content {
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .card-title {
+        font-size: 18px;
+        font-weight: 800;
+        color: #0b3127;
+        margin: 0 0 8px 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .card-location {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .card-details {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 12px;
+
+        span {
+            background: #f4f7f6;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #444;
+            font-weight: 500;
+        }
+    }
+
+    .card-amenities {
+        font-size: 13px;
+        color: #666;
+        margin-bottom: 15px;
+        line-height: 1.4;
+
+        .extra-amenities {
+            color: #0b3127;
+            font-weight: 700;
+            background: #e6f0ed;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 5px;
+        }
+    }
+
+    .card-price {
+        font-size: 22px;
+        font-weight: 800;
+        color: #0b3127;
+        margin-top: auto;
+        border-top: 1px solid #eaeaea;
+        padding-top: 12px;
+
+        span {
+            font-size: 14px;
+            font-weight: 500;
+            color: #888;
+        }
+    }
+}
+
+/* =========================================
+   🔍 დეტალური გვერდის (details.html) სტილები
+   ========================================= */
+
+.sg-details-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.details-header {
+    margin-bottom: 25px;
+    
+    h1 {
+        font-size: 32px;
+        color: #0b3127;
+        margin: 0 0 10px 0;
+        font-weight: 900;
+    }
+    p {
+        font-size: 16px;
+        color: #555;
+        margin: 0;
+        font-weight: 500;
+    }
+}
+
+.details-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 40px;
+
+    .main-image-box {
+        width: 100%;
+        height: 500px;
+        border-radius: 16px;
+        overflow: hidden;
+        
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    .thumbnails {
+        display: flex;
+        gap: 15px;
+        overflow-x: auto;
+        padding-bottom: 10px;
+
+        img {
+            width: 120px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: 0.2s;
+
+            &:hover {
+                border-color: #febb02;
+                transform: scale(1.05);
+            }
+        }
+    }
+}
+
+.details-content-split {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 50px;
+
+    @media (max-width: 900px) {
+        grid-template-columns: 1fr;
+    }
+
+    .left-info {
+        .stats-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eaeaea;
+
+            span {
+                font-size: 16px;
+                font-weight: 700;
+                color: #0b3127;
+                background: #f4f7f6;
+                padding: 10px 16px;
+                border-radius: 8px;
+            }
+        }
+
+        .info-section {
+            margin-bottom: 30px;
+            
+            h3 {
+                font-size: 22px;
+                color: #0b3127;
+                margin-bottom: 15px;
+            }
+            
+            p {
+                font-size: 16px;
+                color: #444;
+                line-height: 1.6;
+            }
+
+            .amenities-list {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 15px;
+
+                .am-item {
+                    font-size: 15px;
+                    color: #333;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                }
+            }
+        }
+    }
+
+    .right-sidebar {
+        .booking-card {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            border: 1px solid #eaeaea;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 20px;
+
+            .price-header {
+                margin-bottom: 20px;
+                .price-val { font-size: 32px; font-weight: 900; color: #0b3127; }
+                .price-night { font-size: 16px; color: #666; font-weight: 500; }
+            }
+
+            hr { border: 0; height: 1px; background: #eaeaea; margin: 20px 0; }
+
+            .contact-btn {
+                width: 100%;
+                background: #febb02;
+                color: #0b3127;
+                border: none;
+                padding: 15px;
+                font-size: 16px;
+                font-weight: 800;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: 0.2s;
+                
+                &:hover { background: #e0a502; transform: translateY(-2px); }
+            }
+
+            .safe-text {
+                text-align: center;
+                font-size: 13px;
+                color: #888;
+                margin-top: 15px;
+                font-weight: 500;
+            }
+        }
+    }
+}
