@@ -188,7 +188,6 @@ body {
     transition: opacity 0.2s ease;
 }
 
-/* კურსორის მიტანისას ოდნავ რბილი ეფექტი */
 .logo-link:hover {
     opacity: 0.9;
 }
@@ -197,12 +196,10 @@ body {
     display: flex;
     align-items: center;
 
-    // შიდა ბმულები, რომლებიც ღილაკებს აკავშირებს
     a {
         text-decoration: none;
     }
 
-    // 🛠️ ორივე ღილაკის საერთო (Shared) ბაზისი
     .login-btn, .register-btn {
         font-family: inherit;
         font-size: 14px;
@@ -210,22 +207,20 @@ body {
         padding: 10px 22px;
         border-radius: 6px;
         cursor: pointer;
-        border: none;       // აქრობს ბრაუზერის თეთრ ჩარჩოს
+        border: none;       
         outline: none;
         transition: all 0.2s ease-in-out;
     }
 
-    // 🌙 შესვლის ღილაკის სტილი
     .login-btn {
         background-color: transparent;
         color: #a0c4bc;
 
         &:hover {
-            color: #febb02; // მაუსის მიტანისას ოქროსფერი ხდება
+            color: #febb02; 
         }
     }
 
-    // ✨ რეგისტრაციის ღილაკის სტილი
     .register-btn {
         background-color: #febb02;
         color: #0b3127;
@@ -233,24 +228,24 @@ body {
 
         &:hover {
             background-color: #e0a502;
-            transform: translateY(-1px); // მსუბუქი წამოწევა
+            transform: translateY(-1px); 
         }
 
         &:active {
-            transform: translateY(0); // დაჭერისას ბრუნდება საწყის პოზიციაზე
+            transform: translateY(0); 
         }
     }
 }
-// 🎨 ფერების ახალი ცვლადები (Midnight Blue & Gold)
-$popup-header-bg: #0f172a; // მუქი მელნისფერი ჰედერი
-$popup-body-bg: #1e293b;   // ღამის ლურჯი ფონი ფანჯრისთვის
-$input-bg: #0f172a;        // ტექსტის ველის მუქი ფონი
-$yellow-gold: #febb02;     // შენი ბრენდირებული ყვითელი
-$text-light: #ffffff;      // თეთრი ტექსტი
-$text-muted: #94a3b8;      // რბილი ცისფერი-ნაცრისფერი ტექსტი
-$classic-blue: #007bff;    // მცურავი ღილაკის ორიგინალი ლურჯი
+// 🎨 ფერების ახალი ცვლადები
+$popup-header-bg: #0f172a; 
+$popup-body-bg: #1e293b;   
+$input-bg: #0f172a;        
+$yellow-gold: #febb02;     
+$text-light: #ffffff;      
+$text-muted: #94a3b8;      
+$classic-blue: #007bff;    
 
-// 🎧 მცურავი ღილაკი (კლასიკური ლურჯი)
+// 🎧 მცურავი ღილაკი
 .help-center-btn {
     position: fixed;
     bottom: 30px;
@@ -277,7 +272,7 @@ $classic-blue: #007bff;    // მცურავი ღილაკის ორ
     }
 }
 
-// 💬 დახმარების ფანჯარა (Midnight Blue სტილი)
+// 💬 დახმარების ფანჯარა
 .help-popup {
     position: fixed;
     bottom: 105px;
@@ -293,7 +288,6 @@ $classic-blue: #007bff;    // მცურავი ღილაკის ორ
     z-index: 9998;
     overflow: hidden;
     
-    // საწყისი მდგომარეობა
     opacity: 0;
     pointer-events: none;
     transform: translateY(20px) scale(0.95);
@@ -368,11 +362,10 @@ $classic-blue: #007bff;    // მცურავი ღილაკის ორ
                 transition: border-color 0.2s;
 
                 &:focus {
-                    border-color: $yellow-gold; // წერისას ჩარჩო ყვითლდება
+                    border-color: $yellow-gold; 
                 }
             }
 
-            // ფაილის მიბმის ზონა
             .file-preview-container {
                 display: none;
                 align-items: center;
@@ -424,10 +417,9 @@ $classic-blue: #007bff;    // მცურავი ღილაკის ორ
                     }
                 }
 
-                // ✨ ყვითელი გაგზავნის ღილაკი
                 .send-btn {
                     background-color: $yellow-gold;
-                    color: $popup-header-bg; // მუქი ტექსტი ყვითელ ფონზე
+                    color: $popup-header-bg; 
                     border: none;
                     padding: 10px 24px;
                     border-radius: 6px;
@@ -445,7 +437,6 @@ $classic-blue: #007bff;    // მცურავი ღილაკის ორ
     }
 }
 
-/* პლიუს ღილაკის სტილი */
 .add-listing-btn {
     display: flex;
     align-items: center;
@@ -484,13 +475,11 @@ $classic-blue: #007bff;    // მცურავი ღილაკის ორ
         }
     }
 } 
-/* <-- ეს ბოლო ფრჩხილი აუცილებელია, რომ SCSS არ გატყდეს! */
 
 /* =========================================
-   მთავარი გვერდის რესპონსიულობა და დიზაინის კორექცია (განახლებული)
+   მთავარი გვერდის რესპონსიულობა და დიზაინის კორექცია
    ========================================= */
 
-/* 1. საძიებო ზოლის სქელი ჩარჩოები (დესკტოპზე და მობილურზე) */
 .sg-search-bar-box {
     border: 3px solid #febb02 !important; 
     border-radius: 12px;
@@ -504,33 +493,30 @@ $classic-blue: #007bff;    // მცურავი ღილაკის ორ
     border-right: none !important;
 }
 
-/* 2. მობილურის ეკრანის (768px-მდე) ადაპტაცია - სპეციალური ფიქსით ღილაკისთვის */
 @media (max-width: 768px) {
-    
     .sg-header-nav {
-        padding: 10px !important; /* კიდევ უფრო შევამცირეთ padding-ი */
+        padding: 10px !important; 
     }
     
     .logo-link svg {
-        width: 150px !important; /* ლოგო კიდევ დავაპატარავეთ */
+        width: 150px !important; 
         height: 38px !important;
     }
 
     .nav-links {
-        gap: 5px !important; /* მინიმალური დაშორება ღილაკებს შორის */
+        gap: 5px !important; 
     }
 
     .login-btn, .register-btn {
-        padding: 5px 8px !important; /* მაქსიმალურად შევამცირეთ padding-ი */
-        font-size: 11px !important; /* ტექსტი დავაპატარავეთ 11px-მდე, რომ ჩაეტიოს */
+        padding: 5px 8px !important; 
+        font-size: 11px !important; 
         border-radius: 5px !important;
-        white-space: nowrap !important; /* ვუკრძალავთ ტექსტს გადატანას */
-        overflow: visible !important; /* ვრთავთ clipping-ს */
+        white-space: nowrap !important; 
+        overflow: visible !important; 
     }
 
-    /* მთავარი ტექსტის (Hero) დაპატარავება მობილურზე */
     .sg-hero-title {
-        font-size: 22px !important; /* ცოტა კიდევ დავაპატარავეთ */
+        font-size: 22px !important; 
         margin-top: 15px !important;
         line-height: 1.3 !important;
         padding: 0 10px;
@@ -542,7 +528,6 @@ $classic-blue: #007bff;    // მცურავი ღილაკის ორ
         margin-bottom: 20px !important;
     }
 
-    /* საძიებო ზოლის განლაგება მობილურზე (ერთმანეთის ქვეშ) */
     .sg-search-inner-form {
         flex-direction: column !important;
     }
@@ -601,17 +586,16 @@ $classic-blue: #007bff;    // მცურავი ღილაკის ორ
     }
 }
 
-/* კომპაქტური ბარათები "ჩემი განცხადებები"-სთვის */
 .listings-grid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* 300-დან 250-ზე ჩამოვედით */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
     gap: 20px;
 }
 
 .listing-card {
-    .card-image { height: 160px; } /* ფოტოს ზომა დავაპატარავეთ */
+    .card-image { height: 160px; } 
     .card-content { padding: 15px; }
-    .card-title { font-size: 16px; } /* სათაური დავაპატარავეთ */
-    .price { font-size: 18px; }      /* ფასი დავაპატარავეთ */
+    .card-title { font-size: 16px; } 
+    .price { font-size: 18px; }      
 }
 
 /* =========================================
@@ -850,7 +834,9 @@ $classic-blue: #007bff;    // მცურავი ღილაკის ორ
         }
     }
 
-    .right-sidebar {
+}
+
+.right-sidebar {
         .booking-card {
             background: white;
             padding: 25px;
@@ -868,19 +854,52 @@ $classic-blue: #007bff;    // მცურავი ღილაკის ორ
 
             hr { border: 0; height: 1px; background: #eaeaea; margin: 20px 0; }
 
-            .contact-btn {
+            .date-input {
                 width: 100%;
-                background: #febb02;
-                color: #0b3127;
+                padding: 12px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                font-family: inherit;
+                outline: none;
+                transition: 0.2s;
+                background: #fafafa;
+                box-sizing: border-box; 
+                
+                &:focus { 
+                    border-color: #0b3127; 
+                    background: #fff;
+                    box-shadow: 0 0 0 3px rgba(11, 49, 39, 0.1);
+                }
+            }
+            
+            .pay-online-btn {
+                width: 100%;
+                background: #0b3127;
+                color: #febb02;
                 border: none;
                 padding: 15px;
-                font-size: 16px;
+                font-size: 15px;
                 font-weight: 800;
                 border-radius: 8px;
                 cursor: pointer;
                 transition: 0.2s;
                 
-                &:hover { background: #e0a502; transform: translateY(-2px); }
+                &:hover { background: #154a3c; transform: translateY(-2px); }
+            }
+
+            .pay-cash-btn {
+                width: 100%;
+                background: #f4f7f6;
+                color: #0b3127;
+                border: 1px solid #eaeaea;
+                padding: 15px;
+                font-size: 15px;
+                font-weight: 800;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: 0.2s;
+                
+                &:hover { background: #e6eaea; transform: translateY(-2px); }
             }
 
             .safe-text {
@@ -891,5 +910,225 @@ $classic-blue: #007bff;    // მცურავი ღილაკის ორ
                 font-weight: 500;
             }
         }
+    }
+
+/* =========================================
+   🖼️ ფოტოების გალერეის ღილაკების ფიქსი (მთავარზე დაყენება და წაშლა)
+   ========================================= */
+.img-thumb-box {
+    position: relative; /* ეს აუცილებელია, რომ აბსოლუტური პოზიციის შვილები დაიკავოს */
+
+    img {
+        position: relative;
+        z-index: 1; /* სურათი მიდის ქვემოთ */
+    }
+
+    .remove-btn, 
+    .set-main-btn, 
+    .main-badge {
+        position: absolute;
+        z-index: 999 !important; /* ღილაკები ამოდის სურათის ზემოთ! */
+    }
+}
+
+/* =========================================
+   🏡 განცხადების დეტალური გვერდის (details.html) განახლებული სტილები
+   ========================================= */
+
+.listing-details-page {
+    background-color: #FDF9F3;
+}
+
+// ⚡ 1. ფიქსირებული ჰედერი (Sticky Navigation)
+.details-header-nav {
+    background-color: $hero-bg;
+    padding: 10px 20px; // ოდნავ შევამცირეთ პედინგი სიმაღლის დასაბალანსებლად
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    
+    // აფიქსირებს ჰედერს ეკრანის ზედა ნაწილში სქროლვისას
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; 
+    box-sizing: border-box;
+    
+    // გლუვი გამოჩენის ეფექტი
+    transition: all 0.3s ease; 
+
+    .details-header-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start; 
+        gap: 30px; 
+
+        .logo-link {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+
+            // ⚡ 2. ლოგოს გადიდება
+            .header-logo {
+                height: 55px; // 40px-დან გავზარდეთ 55px-მდე
+                width: auto;
+                object-fit: contain;
+                transition: transform 0.2s ease;
+                
+                &:hover {
+                    transform: scale(1.02);
+                }
+            }
+        }
+
+        .back-link {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0.9;
+            transition: 0.2s;
+            &:hover { opacity: 1; color: $booking-yellow; }
+        }
+    }
+}
+
+// ⚡ 3. კონტეინერის დაშორება ზემოდან (რომ ფიქსირებულმა ჰედერმა ტექსტი არ დაფაროს)
+.sg-details-container {
+    max-width: 1200px;
+    margin: 120px auto 40px auto; // ზედა მარჟინი გავზარდეთ 120px-მდე
+    padding: 0 20px;
+}
+
+.details-main-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 40px;
+
+    @media (max-width: 900px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+// მარჯვენა საიდბარი (გადახდების ფიქსირებული პანელი)
+.right-sidebar {
+    .booking-card {
+        background: white;
+        padding: 25px;
+        border-radius: 16px;
+        border: 1px solid #eaeaea;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        
+        position: relative; 
+        top: 0; 
+        
+        /* ⚡ თუ ოდნავ კიდევ ზემოთ/ქვემოთ დაგჭირდება, მხოლოდ ეს 65px შეცვალე (მაგ: 60px, 70px...) */
+        margin-top: 120px; 
+
+        .price-header {
+            margin-bottom: 20px;
+            .price-val { font-size: 32px; font-weight: 900; color: $hero-bg; }
+            .price-night { font-size: 16px; color: #666; font-weight: 500; }
+        }
+
+        .booking-form .form-group {
+            margin-bottom: 15px;
+            label { font-size: 12px; color: $text-muted; margin-bottom: 6px; display: block; font-weight: 600; }
+        }
+
+        .date-input {
+            width: 100%; padding: 12px;
+            border: 1px solid #ddd; border-radius: 8px;
+            font-family: inherit; outline: none; transition: 0.2s;
+            background: #fafafa;
+            box-sizing: border-box; 
+            
+            &:focus { 
+                border-color: $hero-bg; background: #fff;
+                box-shadow: 0 0 0 3px rgba(11, 49, 39, 0.1);
+            }
+        }
+
+        hr { border: 0; height: 1px; background: #eaeaea; margin: 20px 0; }
+
+        .price-details {
+            font-size: 14px; color: #555; margin-bottom: 15px;
+            p { margin: 0 0 8px 0; display: flex; justify-content: space-between; }
+        }
+
+        .total-price {
+            font-size: 18px; font-weight: 800; color: $hero-bg; margin-bottom: 20px;
+            padding-top: 15px; border-top: 1px solid #eaeaea;
+        }
+
+        .pay-online-btn {
+            width: 100%;
+            background: $hero-bg;
+            color: $booking-yellow; 
+            border: none;
+            padding: 15px;
+            font-size: 15px;
+            font-weight: 800;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            margin-bottom: 10px;
+            
+            &:hover { background: #154a3c; transform: translateY(-2px); }
+        }
+
+        .pay-cash-btn {
+            width: 100%;
+            background: #ffffff;
+            color: $hero-bg;
+            border: 2px solid $hero-bg;
+            padding: 15px;
+            font-size: 15px;
+            font-weight: 800;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            
+            &:hover { background: #f4f7f6; transform: translateY(-2px); }
+        }
+
+        .safe-text {
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+            margin-top: 15px;
+            font-weight: 500;
+            line-height: 1.3;
+        }
+    }
+}
+
+/* =========================================
+   ჩემი განცხადებების (my-listings.html) ფიქსი
+   ========================================= */
+
+.my-listings-container {
+    max-width: 1200px;
+    /* ⚡ მთავარი ფიქსი: 120px დაშორება ზემოდან, რომ ჰედერის ქვეშ არ შეძვრეს */
+    margin: 120px auto 40px auto; 
+    padding: 0 20px;
+}
+
+/* სათაურის ოდნავი გალამაზება (თუ დაგჭირდება) */
+.my-listings-header {
+    margin-bottom: 30px;
+    
+    h1 {
+        color: #0b3127;
+        font-size: 28px;
+        margin-bottom: 10px;
+    }
+    
+    p {
+        color: #666;
+        font-size: 15px;
     }
 }

@@ -3,63 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StayGeo.ge - დეტალები</title>
+    <title>StayGeo.ge - განცხადების დეტალები</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body style="background-color: #f9f9f9;">
+<body class="listing-details-page">
 
-    <header style="background-color: #0b3127; padding: 15px 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
-        <div style="max-width: 1200px; margin: 0 auto; display: flex; align-items: center;">
-            <a href="index.html" style="color: #a0c4bc; text-decoration: none; font-size: 15px; font-weight: bold;">← მთავარ გვერდზე დაბრუნება</a>
+    <header class="details-header-nav">
+        <div class="details-header-container">
+            <a href="index.html" class="logo-link">
+                <img src="logo.svg" alt="StayGeo Logo" class="header-logo">
+            </a>
+            <a href="index.html" class="back-link">← მთავარ გვერდზე დაბრუნება</a>
         </div>
     </header>
 
     <main class="sg-details-container">
-        <div class="details-header">
-            <h1 id="detTitle">იტვირთება...</h1>
-            <p id="detLocation">📍 იტვირთება...</p>
-        </div>
-
-        <div class="details-gallery">
-            <div class="main-image-box">
-                <img id="detMainImg" src="" alt="მთავარი ფოტო">
-            </div>
-            <div class="thumbnails" id="detThumbnails">
-                </div>
-        </div>
-
-        <div class="details-content-split">
-            
+        <div class="details-main-content">
             <div class="left-info">
-                <div class="stats-row">
-                    <span id="detArea">📏 0 მ²</span>
-                    <span id="detRooms">🛏️ 0 ოთახი</span>
+                
+                <div class="details-header">
+                    <h1 id="detailTitle">იტვირთება...</h1>
+                    <div class="location-line">
+                        <span class="flag-icon">📍</span>
+                        <p id="detailLocation">იტვირთება...</p>
+                    </div>
+                </div>
+
+                <div class="details-gallery">
+                    <div class="main-image-box">
+                        <img id="detailMainImg" src="" alt="მთავარი ფოტო">
+                    </div>
+                    <div class="thumbnails" id="detailThumbnails"></div>
+                </div>
+
+                <div class="listing-stats-tags">
+                    <span id="detailArea">📏 -- მ²</span>
+                    <span id="detailRooms">🛏️ -- ოთახი</span>
                 </div>
 
                 <div class="info-section">
                     <h3>აღწერა</h3>
-                    <p id="detDesc">აღწერა იტვირთება...</p>
+                    <p id="detailDesc">იტვირთება...</p>
                 </div>
 
                 <div class="info-section">
                     <h3>კეთილმოწყობა და სერვისები</h3>
-                    <div class="amenities-list" id="detAmenities">
-                        </div>
+                    <div class="amenities-grid" id="detailAmenities"></div>
                 </div>
             </div>
 
-            <div class="right-sidebar">
+            <aside class="right-sidebar">
                 <div class="booking-card">
                     <div class="price-header">
-                        <span class="price-val" id="detPrice">0₾</span>
+                        <span class="price-val" id="detailPrice">--₾</span> 
                         <span class="price-night">/ ღამე</span>
                     </div>
-                    <hr>
-                    <button class="contact-btn">დაუკავშირდით მასპინძელს</button>
-                    <p class="safe-text">🔒 უსაფრთხო გარიგება StayGeo-ს გავლით</p>
-                </div>
-            </div>
 
+                    <form class="booking-form" id="bookingForm">
+                        <div class="form-group">
+                            <label>შესვლა</label>
+                            <input type="date" id="checkIn" class="date-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label>გასვლა</label>
+                            <input type="date" id="checkOut" class="date-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label>სტუმარი</label>
+                            <input type="number" id="guestCount" class="date-input" value="1" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label>კვება (1 პერსონა/ღამე)</label>
+                            <select id="mealSelect" class="date-input">
+                                <option value="0">კვების გარეშე - 0₾</option>
+                            </select>
+                        </div>
+                    </form>
+
+                    <hr>
+
+                    <div class="price-details" id="calcDetails">
+                        <p id="calcRoom">-- ₾ x -- ღამე = -- ₾</p>
+                        <p id="calcMeal">კვება: 0 ₾ x 1 სტუმარი x -- ღამე = 0 ₾</p>
+                    </div>
+
+                    <div class="total-price" id="totalPriceDisplay">სულ გადასახდელი: -- ₾</div>
+
+                    <button class="pay-online-btn">💳 ონლაინ გადახდა</button>
+                    <button class="pay-cash-btn">💵 ადგილზე გადახდა</button>
+                    
+                    <p class="safe-text">თანხა გადაიხდება უსაფრთხოდ StayGeo-ს გავლით.</p>
+                </div>
+            </aside>
         </div>
     </main>
 

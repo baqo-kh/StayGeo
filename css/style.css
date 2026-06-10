@@ -379,7 +379,6 @@ body {
   transition: opacity 0.2s ease;
 }
 
-/* კურსორის მიტანისას ოდნავ რბილი ეფექტი */
 .logo-link:hover {
   opacity: 0.9;
 }
@@ -598,7 +597,6 @@ body {
   background-color: #e0a502;
 }
 
-/* პლიუს ღილაკის სტილი */
 .add-listing-btn {
   display: flex;
   align-items: center;
@@ -635,11 +633,9 @@ body {
   }
 }
 
-/* <-- ეს ბოლო ფრჩხილი აუცილებელია, რომ SCSS არ გატყდეს! */
 /* =========================================
-   მთავარი გვერდის რესპონსიულობა და დიზაინის კორექცია (განახლებული)
+   მთავარი გვერდის რესპონსიულობა და დიზაინის კორექცია
    ========================================= */
-/* 1. საძიებო ზოლის სქელი ჩარჩოები (დესკტოპზე და მობილურზე) */
 .sg-search-bar-box {
   border: 3px solid #febb02 !important;
   border-radius: 12px;
@@ -654,28 +650,26 @@ body {
   border-right: none !important;
 }
 
-/* 2. მობილურის ეკრანის (768px-მდე) ადაპტაცია - სპეციალური ფიქსით ღილაკისთვის */
 @media (max-width: 768px) {
   .sg-header-nav {
-    padding: 10px !important; /* კიდევ უფრო შევამცირეთ padding-ი */
+    padding: 10px !important;
   }
   .logo-link svg {
-    width: 150px !important; /* ლოგო კიდევ დავაპატარავეთ */
+    width: 150px !important;
     height: 38px !important;
   }
   .nav-links {
-    gap: 5px !important; /* მინიმალური დაშორება ღილაკებს შორის */
+    gap: 5px !important;
   }
   .login-btn, .register-btn {
-    padding: 5px 8px !important; /* მაქსიმალურად შევამცირეთ padding-ი */
-    font-size: 11px !important; /* ტექსტი დავაპატარავეთ 11px-მდე, რომ ჩაეტიოს */
+    padding: 5px 8px !important;
+    font-size: 11px !important;
     border-radius: 5px !important;
-    white-space: nowrap !important; /* ვუკრძალავთ ტექსტს გადატანას */
-    overflow: visible !important; /* ვრთავთ clipping-ს */
+    white-space: nowrap !important;
+    overflow: visible !important;
   }
-  /* მთავარი ტექსტის (Hero) დაპატარავება მობილურზე */
   .sg-hero-title {
-    font-size: 22px !important; /* ცოტა კიდევ დავაპატარავეთ */
+    font-size: 22px !important;
     margin-top: 15px !important;
     line-height: 1.3 !important;
     padding: 0 10px;
@@ -685,7 +679,6 @@ body {
     padding: 0 10px;
     margin-bottom: 20px !important;
   }
-  /* საძიებო ზოლის განლაგება მობილურზე (ერთმანეთის ქვეშ) */
   .sg-search-inner-form {
     flex-direction: column !important;
   }
@@ -743,27 +736,23 @@ body {
   transform: translateY(-2px);
 }
 
-/* კომპაქტური ბარათები "ჩემი განცხადებები"-სთვის */
 .listings-grid {
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* 300-დან 250-ზე ჩამოვედით */
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
 }
 
 .listing-card .card-image {
   height: 160px;
 }
-.listing-card { /* ფოტოს ზომა დავაპატარავეთ */ }
 .listing-card .card-content {
   padding: 15px;
 }
 .listing-card .card-title {
   font-size: 16px;
 }
-.listing-card { /* სათაური დავაპატარავეთ */ }
 .listing-card .price {
   font-size: 18px;
 }
-.listing-card { /* ფასი დავაპატარავეთ */ }
 
 /* =========================================
    🏡 განცხადებების გრიდი და ბარათები
@@ -977,7 +966,8 @@ body {
   align-items: center;
   gap: 8px;
 }
-.details-content-split .right-sidebar .booking-card {
+
+.right-sidebar .booking-card {
   background: white;
   padding: 25px;
   border-radius: 16px;
@@ -986,45 +976,314 @@ body {
   position: sticky;
   top: 20px;
 }
-.details-content-split .right-sidebar .booking-card .price-header {
+.right-sidebar .booking-card .price-header {
   margin-bottom: 20px;
 }
-.details-content-split .right-sidebar .booking-card .price-header .price-val {
+.right-sidebar .booking-card .price-header .price-val {
   font-size: 32px;
   font-weight: 900;
   color: #0b3127;
 }
-.details-content-split .right-sidebar .booking-card .price-header .price-night {
+.right-sidebar .booking-card .price-header .price-night {
   font-size: 16px;
   color: #666;
   font-weight: 500;
 }
-.details-content-split .right-sidebar .booking-card hr {
+.right-sidebar .booking-card hr {
   border: 0;
   height: 1px;
   background: #eaeaea;
   margin: 20px 0;
 }
-.details-content-split .right-sidebar .booking-card .contact-btn {
+.right-sidebar .booking-card .date-input {
   width: 100%;
-  background: #febb02;
-  color: #0b3127;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-family: inherit;
+  outline: none;
+  transition: 0.2s;
+  background: #fafafa;
+  box-sizing: border-box;
+}
+.right-sidebar .booking-card .date-input:focus {
+  border-color: #0b3127;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(11, 49, 39, 0.1);
+}
+.right-sidebar .booking-card .pay-online-btn {
+  width: 100%;
+  background: #0b3127;
+  color: #febb02;
   border: none;
   padding: 15px;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 800;
   border-radius: 8px;
   cursor: pointer;
   transition: 0.2s;
 }
-.details-content-split .right-sidebar .booking-card .contact-btn:hover {
-  background: #e0a502;
+.right-sidebar .booking-card .pay-online-btn:hover {
+  background: #154a3c;
   transform: translateY(-2px);
 }
-.details-content-split .right-sidebar .booking-card .safe-text {
+.right-sidebar .booking-card .pay-cash-btn {
+  width: 100%;
+  background: #f4f7f6;
+  color: #0b3127;
+  border: 1px solid #eaeaea;
+  padding: 15px;
+  font-size: 15px;
+  font-weight: 800;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.right-sidebar .booking-card .pay-cash-btn:hover {
+  background: #e6eaea;
+  transform: translateY(-2px);
+}
+.right-sidebar .booking-card .safe-text {
   text-align: center;
   font-size: 13px;
   color: #888;
   margin-top: 15px;
   font-weight: 500;
+}
+
+/* =========================================
+   🖼️ ფოტოების გალერეის ღილაკების ფიქსი (მთავარზე დაყენება და წაშლა)
+   ========================================= */
+.img-thumb-box {
+  position: relative; /* ეს აუცილებელია, რომ აბსოლუტური პოზიციის შვილები დაიკავოს */
+}
+.img-thumb-box img {
+  position: relative;
+  z-index: 1; /* სურათი მიდის ქვემოთ */
+}
+.img-thumb-box .remove-btn,
+.img-thumb-box .set-main-btn,
+.img-thumb-box .main-badge {
+  position: absolute;
+  z-index: 999 !important; /* ღილაკები ამოდის სურათის ზემოთ! */
+}
+
+/* =========================================
+   🏡 განცხადების დეტალური გვერდის (details.html) განახლებული სტილები
+   ========================================= */
+.listing-details-page {
+  background-color: #FDF9F3;
+}
+
+.details-header-nav {
+  background-color: #0b3127;
+  padding: 10px 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+.details-header-nav .details-header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 30px;
+}
+.details-header-nav .details-header-container .logo-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+.details-header-nav .details-header-container .logo-link .header-logo {
+  height: 55px;
+  width: auto;
+  -o-object-fit: contain;
+     object-fit: contain;
+  transition: transform 0.2s ease;
+}
+.details-header-nav .details-header-container .logo-link .header-logo:hover {
+  transform: scale(1.02);
+}
+.details-header-nav .details-header-container .back-link {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.9;
+  transition: 0.2s;
+}
+.details-header-nav .details-header-container .back-link:hover {
+  opacity: 1;
+  color: #febb02;
+}
+
+.sg-details-container {
+  max-width: 1200px;
+  margin: 120px auto 40px auto;
+  padding: 0 20px;
+}
+
+.details-main-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+}
+@media (max-width: 900px) {
+  .details-main-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+.right-sidebar .booking-card {
+  background: white;
+  padding: 25px;
+  border-radius: 16px;
+  border: 1px solid #eaeaea;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  position: relative;
+  top: 0;
+  /* ⚡ თუ ოდნავ კიდევ ზემოთ/ქვემოთ დაგჭირდება, მხოლოდ ეს 65px შეცვალე (მაგ: 60px, 70px...) */
+  margin-top: 120px;
+}
+.right-sidebar .booking-card .price-header {
+  margin-bottom: 20px;
+}
+.right-sidebar .booking-card .price-header .price-val {
+  font-size: 32px;
+  font-weight: 900;
+  color: #0b3127;
+}
+.right-sidebar .booking-card .price-header .price-night {
+  font-size: 16px;
+  color: #666;
+  font-weight: 500;
+}
+.right-sidebar .booking-card .booking-form .form-group {
+  margin-bottom: 15px;
+}
+.right-sidebar .booking-card .booking-form .form-group label {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-bottom: 6px;
+  display: block;
+  font-weight: 600;
+}
+.right-sidebar .booking-card .date-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-family: inherit;
+  outline: none;
+  transition: 0.2s;
+  background: #fafafa;
+  box-sizing: border-box;
+}
+.right-sidebar .booking-card .date-input:focus {
+  border-color: #0b3127;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(11, 49, 39, 0.1);
+}
+.right-sidebar .booking-card hr {
+  border: 0;
+  height: 1px;
+  background: #eaeaea;
+  margin: 20px 0;
+}
+.right-sidebar .booking-card .price-details {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 15px;
+}
+.right-sidebar .booking-card .price-details p {
+  margin: 0 0 8px 0;
+  display: flex;
+  justify-content: space-between;
+}
+.right-sidebar .booking-card .total-price {
+  font-size: 18px;
+  font-weight: 800;
+  color: #0b3127;
+  margin-bottom: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #eaeaea;
+}
+.right-sidebar .booking-card .pay-online-btn {
+  width: 100%;
+  background: #0b3127;
+  color: #febb02;
+  border: none;
+  padding: 15px;
+  font-size: 15px;
+  font-weight: 800;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.right-sidebar .booking-card .pay-online-btn:hover {
+  background: #154a3c;
+  transform: translateY(-2px);
+}
+.right-sidebar .booking-card .pay-cash-btn {
+  width: 100%;
+  background: #ffffff;
+  color: #0b3127;
+  border: 2px solid #0b3127;
+  padding: 15px;
+  font-size: 15px;
+  font-weight: 800;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.right-sidebar .booking-card .pay-cash-btn:hover {
+  background: #f4f7f6;
+  transform: translateY(-2px);
+}
+.right-sidebar .booking-card .safe-text {
+  text-align: center;
+  font-size: 12px;
+  color: #888;
+  margin-top: 15px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+/* =========================================
+   ჩემი განცხადებების (my-listings.html) ფიქსი
+   ========================================= */
+.my-listings-container {
+  max-width: 1200px;
+  /* ⚡ მთავარი ფიქსი: 120px დაშორება ზემოდან, რომ ჰედერის ქვეშ არ შეძვრეს */
+  margin: 120px auto 40px auto;
+  padding: 0 20px;
+}
+
+/* სათაურის ოდნავი გალამაზება (თუ დაგჭირდება) */
+.my-listings-header {
+  margin-bottom: 30px;
+}
+.my-listings-header h1 {
+  color: #0b3127;
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+.my-listings-header p {
+  color: #666;
+  font-size: 15px;
 }/*# sourceMappingURL=style.css.map */

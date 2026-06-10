@@ -10,6 +10,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const fileNameDisplay = document.getElementById('fileNameDisplay');
     const removeFileBtn = document.getElementById('removeFileBtn');
 
+    // 🛡️ უსაფრთხოების შემოწმება: თუ ეს ღილაკი გვერდზე არ არსებობს, კოდი ჩერდება და არ დაერორდება
+    if (!helpBtn || !helpPopup) return;
+
     // 1. ფანჯრის გახსნა / ჩაკეტვა ლურჯ ღილაკზე დაჭერით
     helpBtn.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -17,52 +20,60 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // 2. ჩაკეტვა X ღილაკით
-    closeHelpBtn.addEventListener('click', () => {
-        helpPopup.classList.remove('active');
-    });
+    if (closeHelpBtn) {
+        closeHelpBtn.addEventListener('click', () => {
+            helpPopup.classList.remove('active');
+        });
+    }
 
     // 3. ჩაკეტვა ეკრანზე სხვაგან დაჭერისას
     document.addEventListener('click', (e) => {
-        if (!helpPopup.contains(e.target) && e.target !== helpBtn) {
+        if (helpPopup.classList.contains('active') && !helpPopup.contains(e.target) && e.target !== helpBtn) {
             helpPopup.classList.remove('active');
         }
     });
 
     // 4. ფაილის მიბმის და მისი სახელის გამოჩენის ლოგიკა
-    fileUpload.addEventListener('change', () => {
-        if (fileUpload.files.length > 0) {
-            const file = fileUpload.files[0];
-            fileNameDisplay.textContent = `📎 ${file.name}`;
-            filePreviewContainer.style.display = 'flex';
-        }
-    });
+    if (fileUpload && filePreviewContainer && fileNameDisplay) {
+        fileUpload.addEventListener('change', () => {
+            if (fileUpload.files.length > 0) {
+                const file = fileUpload.files[0];
+                fileNameDisplay.textContent = `📎 ${file.name}`;
+                filePreviewContainer.style.display = 'flex';
+            }
+        });
+    }
 
     // 5. ფაილის წაშლა გაგზავნამდე
-    removeFileBtn.addEventListener('click', () => {
-        fileUpload.value = '';
-        filePreviewContainer.style.display = 'none';
-        fileNameDisplay.textContent = '';
-    });
-
-    // 6. ფორმის გაგზავნა
-    helpForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const message = helpQuestion.value.trim();
-        const hasFile = fileUpload.files.length > 0;
-
-        if (message) {
-            if (hasFile) {
-                alert(`✅ თქვენი შეტყობინება და ფაილი (${fileUpload.files[0].name}) წარმატებით გაიგზავნა! ოპერატორი მალე დაგიკავშირდებათ.`);
-            } else {
-                alert("✅ თქვენი შეტყობინება წარმატებით გაიგზავნა! ოპერატორი მალე დაგიკავშირდებათ.");
-            }
-            
-            // ველების გასუფთავება
-            helpQuestion.value = '';
+    if (removeFileBtn && fileUpload && filePreviewContainer && fileNameDisplay) {
+        removeFileBtn.addEventListener('click', () => {
             fileUpload.value = '';
             filePreviewContainer.style.display = 'none';
             fileNameDisplay.textContent = '';
-            helpPopup.classList.remove('active');
-        }
-    });
+        });
+    }
+
+    // 6. ფორმის გაგზავნა
+    if (helpForm && helpQuestion) {
+        helpForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const message = helpQuestion.value.trim();
+            const hasFile = fileUpload && fileUpload.files.length > 0;
+
+            if (message) {
+                if (hasFile) {
+                    alert(`✅ თქვენი შეტყობინება და ფაილი (${fileUpload.files[0].name}) წარმატებით გაიგზავნა! ოპერატორი მალე დაგიკავშირდებათ.`);
+                } else {
+                    alert("✅ თქვენი შეტყობინება წარმატებით გაიგზავნა! ოპერატორი მალე დაგიკავშირდებათ.");
+                }
+                
+                // ველების გასუფთავება
+                helpQuestion.value = '';
+                if (fileUpload) fileUpload.value = '';
+                if (filePreviewContainer) filePreviewContainer.style.display = 'none';
+                if (fileNameDisplay) fileNameDisplay.textContent = '';
+                helpPopup.classList.remove('active');
+            }
+        });
+    }
 });

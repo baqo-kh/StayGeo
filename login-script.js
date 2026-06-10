@@ -4,39 +4,47 @@ document.addEventListener("DOMContentLoaded", () => {
     const toggleBtn = document.getElementById('togglePassword');
     const submitBtn = document.querySelector('.submit-btn');
     
-    // თვალის ღილაკის გამოჩენა/მალვა წერისას
+    // 1. თვალის ღილაკის გამოჩენა/მალვა წერისას (უფრო მოკლე ჩანაწერი)
     if (passwordInput && toggleBtn) {
         passwordInput.addEventListener('input', () => {
-            if (passwordInput.value.length > 0) {
-                toggleBtn.style.display = 'flex'; 
-            } else {
-                toggleBtn.style.display = 'none'; 
-            }
+            toggleBtn.style.display = passwordInput.value.length > 0 ? 'flex' : 'none';
         });
     }
 
-    // ფორმის გაგზავნის მართვა - ახლა უკვე ASYNC (ბაზას ელოდება)
+    // 2. ფორმის გაგზავნის მართვა
     if (loginForm) {
         loginForm.addEventListener('submit', async (event) => {
             event.preventDefault(); 
 
-            const email = document.getElementById('email').value.trim();
-            const password = passwordInput.value;
+            // ვიყენებთ Optional Chaining-ს უსაფრთხოებისთვის
+            const email = document.getElementById('email')?.value.trim();
+            const password = passwordInput?.value;
 
             if (!email || !password) {
                 alert("გთხოვთ შეავსოთ ორივე ველი.");
                 return;
             }
 
+            // ღილაკის საწყის მდგომარეობაში დაბრუნების ფუნქცია
+            const originalBtnText = submitBtn ? submitBtn.innerText : "შესვლა";
+            const resetButton = () => {
+                if (submitBtn) {
+                    submitBtn.innerText = originalBtnText;
+                    submitBtn.disabled = false;
+                    submitBtn.style.opacity = "1";
+                }
+            };
+
             // ვიზუალური ეფექტი: ღილაკს ვაწერთ "ვამოწმებ..." და ვბლოკავთ
-            const originalBtnText = submitBtn.innerText;
-            submitBtn.innerText = "ვამოწმებ...";
-            submitBtn.disabled = true;
-            submitBtn.style.opacity = "0.7";
+            if (submitBtn) {
+                submitBtn.innerText = "ვამოწმებ...";
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = "0.7";
+            }
 
             try {
                 if (typeof supabaseClient === 'undefined') {
-                    alert("❌ ბაზასთან კავშირი ვერ მოხერხდა! შეამოწმეთ ინტერნეტი.");
+                    alert("❌ ბაზასთან კავშირი ვერ მოხერხდა! (Supabase არ არის ჩატვირთული)");
                     resetButton();
                     return;
                 }
@@ -52,8 +60,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     alert("❌ შეცდომა: ელ-ფოსტის მისამართი ან პაროლი არასწორია!");
                     resetButton();
                 } else {
-                    // თუ ყველაფერი დაემთხვა და ბაზამ შემოუშვა
+                    // ავტორიზაცია წარმატებულია
                     localStorage.setItem('isLoggedIn', 'true');
+                    
+                    // 🆕 ვინახავთ მომხმარებლის ID-ს (დაგჭირდება Supabase-ში განცხადების დასამატებლად)
+                    if (data.user) {
+                        localStorage.setItem('user_id', data.user.id);
+                    }
+
                     alert("✅ ავტორიზაცია წარმატებულია! კეთილი იყოს თქვენი მობრძანება.");
                     window.location.href = "index.html"; 
                 }
@@ -61,19 +75,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 alert("❌ სისტემური შეცდომა: " + err.message);
                 resetButton();
             }
-
-            // ღილაკის საწყის მდგომარეობაში დაბრუნების ფუნქცია
-            function resetButton() {
-                submitBtn.innerText = originalBtnText;
-                submitBtn.disabled = false;
-                submitBtn.style.opacity = "1";
-            }
         });
     }
 });
 
-// პაროლის ჩვენება / დამალვა
-function togglePasswordVisibility() {
+// 3. პაროლის ჩვენება / დამალვა 
+// (მიბმულია window-ზე, რომ HTML-ის onclick-მა გარანტირებულად იპოვოს)
+window.togglePasswordVisibility = function() {
     const passwordInput = document.getElementById('password');
     const eyeIcon = document.getElementById('eyeIcon');
     if (!passwordInput || !eyeIcon) return;
@@ -92,4 +100,4 @@ function togglePasswordVisibility() {
             <circle cx="12" cy="13" r="3" />
         `;
     }
-}
+};

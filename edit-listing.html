@@ -4,140 +4,143 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StayGeo.ge - განცხადების რედაქტირება</title>
-    <link rel="stylesheet" href="css/style.css">
-    
-    <style>
-        body { background-color: #f4f7f6; margin: 0; font-family: 'Montserrat', sans-serif; }
-        .edit-container { max-width: 800px; margin: 40px auto; background: #fff; padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        h2 { color: #0b3127; margin-top: 0; margin-bottom: 30px; font-size: 26px; }
-        .form-group { margin-bottom: 25px; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: 700; color: #333; font-size: 14px; }
-        .form-group input[type="text"], .form-group input[type="number"], .form-group select, .form-group textarea { 
-            width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 8px; outline: none; font-size: 15px; box-sizing: border-box; background: #fafafa;
-        }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #febb02; background: #fff; }
-        
-        /* ჩექბოქსების დიზაინი */
-        .amenities-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
-        .amenity-label { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; color: #555; }
-        
-        /* სურათების გალერეა */
-        .image-gallery { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 15px; }
-        .gallery-item { position: relative; width: 120px; height: 120px; border-radius: 8px; overflow: hidden; border: 2px solid #eaeaea; }
-        .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
-        .delete-img-btn { 
-            position: absolute; top: 5px; right: 5px; background: #ff3b30; color: white; border: none; 
-            border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center;
-        }
-        
-        .submit-btn { background: #febb02; color: #0b3127; font-weight: 800; padding: 18px; border: none; border-radius: 8px; cursor: pointer; width: 100%; font-size: 16px; margin-top: 20px; transition: 0.2s; }
-        .submit-btn:hover { background: #e0a502; transform: translateY(-2px); }
-    </style>
+    <link rel="stylesheet" href="css/add-listing-style.css"> 
 </head>
 <body>
-
-    <header style="background-color: #0b3127; padding: 15px 20px;">
-        <div style="max-width: 1200px; margin: 0 auto;">
-            <a href="my-listings.html" style="color: #a0c4bc; text-decoration: none; font-size: 14px; font-weight: 500;">← ჩემს განცხადებებში დაბრუნება</a>
+    <div class="add-listing-container">
+        <div class="header-link">
+            <a href="my-listings.html">← ჩემს განცხადებებში დაბრუნება</a>
         </div>
-    </header>
-
-    <div class="edit-container">
         <h2>✏️ განცხადების რედაქტირება</h2>
-        
+        <p class="subtitle">შეცვალეთ ან განაახლეთ განცხადების მონაცემები</p>
+
         <form id="editListingForm">
             
-            <div class="form-group">
-                <label>სათაური</label>
-                <input type="text" id="listTitle" required>
+            <div class="form-section">
+                <h3>1. ძირითადი ინფორმაცია</h3>
+                <div class="input-group">
+                    <label>სახელწოდება</label>
+                    <input type="text" id="listTitle" required>
+                </div>
+
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>მდებარეობა</label>
+                        <select id="listLocation" required>
+                            <option value="თბილისი">თბილისი</option>
+                            <option value="ბათუმი">ბათუმი</option>
+                            <option value="ქუთაისი">ქუთაისი</option>
+                            <option value="ბაკურიანი">ბაკურიანი</option>
+                            <option value="გუდაური">გუდაური</option>
+                            <option value="მესტია">მესტია</option>
+                            <option value="ბორჯომი">ბორჯომი</option>
+                            <option value="თელავი">თელავი</option>
+                            <option value="სიღნაღი">სიღნაღი</option>
+                            <option value="მცხეთა">მცხეთა</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>ოთახები</label>
+                        <input type="number" id="listRooms" required min="1">
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>ფართობი (მ²)</label>
+                        <input type="number" id="listArea" required min="5">
+                    </div>
+                    <div class="input-group">
+                        <label>ფასი 1 ღამეში (₾)</label>
+                        <input type="number" id="listPrice" required min="1">
+                    </div>
+                </div>
             </div>
 
-            <div style="display: flex; gap: 20px;">
-                <div class="form-group" style="flex: 1;">
-                    <label>ქალაქი / კურორტი</label>
-                    <select id="listLocation" required>
-                        <option value="თბილისი">თბილისი</option>
-                        <option value="ბათუმი">ბათუმი</option>
-                        <option value="ბაკურიანი">ბაკურიანი</option>
-                        <option value="გუდაური">გუდაური</option>
-                        <option value="ქობულეთი">ქობულეთი</option>
-                        <option value="ბორჯომი">ბორჯომი</option>
-                        <option value="სიღნაღი">სიღნაღი</option>
-                        <option value="ყაზბეგი">ყაზბეგი</option>
-                        <option value="ქუთაისი">ქუთაისი</option>
-                    </select>
-                </div>
-                
-                <div class="form-group" style="flex: 1;">
-                    <label>ფასი (1 ღამე / ₾)</label>
-                    <input type="number" id="listPrice" required min="1">
-                </div>
-            </div>
-
-            <div style="display: flex; gap: 20px;">
-                <div class="form-group" style="flex: 1;">
-                    <label>ოთახების რაოდენობა</label>
-                    <input type="number" id="listRooms" required min="1">
-                </div>
-                <div class="form-group" style="flex: 1;">
-                    <label>ფართობი (მ²)</label>
-                    <input type="number" id="listArea" required min="1">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>კეთილმოწყობა</label>
+            <div class="form-section">
+                <h3>2. კეთილმოწყობა და სერვისები</h3>
                 <div class="amenities-grid">
-                    <label class="amenity-label"><input type="checkbox" name="amenity" value="WiFi"> WiFi</label>
-                    <label class="amenity-label"><input type="checkbox" name="amenity" value="კონდიციონერი"> კონდიციონერი</label>
-                    <label class="amenity-label"><input type="checkbox" name="amenity" value="ცენტრალური გათბობა"> ცენტრალური გათბობა</label>
-                    <label class="amenity-label"><input type="checkbox" name="amenity" value="ტელევიზორი"> ტელევიზორი (Smart TV)</label>
-                    <label class="amenity-label"><input type="checkbox" name="amenity" value="სარეცხი მანქანა"> სარეცხი მანქანა</label>
-                    <label class="amenity-label"><input type="checkbox" name="amenity" value="ფენი"> ფენი</label>
-                    <label class="amenity-label"><input type="checkbox" name="amenity" value="უთო"> უთო და საუთოო მაგიდა</label>
-                    <label class="amenity-label"><input type="checkbox" name="amenity" value="თეთრეული და პირსახოცები"> თეთრეული / პირსახოცები</label>
-                    <label class="amenity-label"><input type="checkbox" name="amenity" value="ბუხარი"> ბუხარი</label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="WiFi"> WiFi</label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="კონდიციონერი"> კონდიციონერი</label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="ცენტრალური გათბობა"> ცენტრალური გათბობა</label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="ტელევიზორი"> ტელევიზორი (Smart TV)</label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="სარეცხი მანქანა"> სარეცხი მანქანა</label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="ფენი"> ფენი</label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="უთო"> უთო და საუთოო მაგიდა</label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="თეთრეული და პირსახოცები"> თეთრეული / პირსახოცები</label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="ბუხარი"> ბუხარი</label>
 
-                    <label class="amenity-label"><input type="checkbox" name="amenity" value="სამზარეულო"> სამზარეულო</label>
-                    <label class="amenity-label"><input type="checkbox" name="amenity" value="მაცივარი"> მაცივარი</label>
-                    <label class="amenity-label"><input type="checkbox" name="amenity" value="მიკროტალღური ღუმელი"> მიკროტალღური ღუმელი</label>
-                    <label class="amenity-label"><input type="checkbox" name="amenity" value="ჭურჭლის სარეცხი მანქანა"> ჭურჭლის სარეცხი მანქანა</label>
-                    <label class="amenity-label"><input type="checkbox" name="amenity" value="ყავის აპარატი"> ყავის აპარატი</label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="სამზარეულო"> სამზარეულო</label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="მაცივარი"> მაცივარი</label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="მიკროტალღური ღუმელი"> მიკროტალღური ღუმელი</label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="ჭურჭლის სარეცხი მანქანა"> ჭურჭლის სარეცხი მანქანა</label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="ყავის აპარატი"> ყავის აპარატი</label>
 
-                    <label class="amenity-label"><input type="checkbox" name="amenity" value="აივანი"> აივანი</label>
-                    <label class="amenity-label"><input type="checkbox" name="amenity" value="ტერასა / ეზო"> ტერასა / ეზო</label>
-                    <label class="amenity-label"><input type="checkbox" name="amenity" value="ზღვის ხედი"> ზღვის ხედი</label>
-                    <label class="amenity-label"><input type="checkbox" name="amenity" value="მთის ხედი"> მთის ხედი</label>
-                    <label class="amenity-label"><input type="checkbox" name="amenity" value="ბარბექიუ / მაყალი"> ბარბექიუ / მაყალი</label>
-                    <label class="amenity-label"><input type="checkbox" name="amenity" value="სათხილამურო ტრასასთან ახლოს"> სათხილამურო ტრასასთან</label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="აივანი"> აივანი</label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="ტერასა / ეზო"> ტერასა / ეზო</label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="ზღვის ხედი"> ზღვის ხედი</label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="მთის ხედი"> მთის ხედი</label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="ბარბექიუ / მაყალი"> ბარბექიუ / მაყალი</label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="სათხილამურო ტრასასთან ახლოს"> სათხილამურო ტრასასთან</label>
 
-                    <label class="amenity-label"><input type="checkbox" name="amenity" value="პარკინგი"> უფასო პარკინგი</label>
-                    <label class="amenity-label"><input type="checkbox" name="amenity" value="აუზი"> აუზი</label>
-                    <label class="amenity-label"><input type="checkbox" name="amenity" value="საუნა / სპა"> საუნა / სპა</label>
-                    <label class="amenity-label"><input type="checkbox" name="amenity" value="სპორტდარბაზი"> სპორტდარბაზი</label>
-                    <label class="amenity-label"><input type="checkbox" name="amenity" value="ლიფტი"> ლიფტი</label>
-                    <label class="amenity-label"><input type="checkbox" name="amenity" value="24/7 დაცვა / რეცეფცია"> 24/7 დაცვა / რეცეფცია</label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="პარკინგი"> უფასო პარკინგი</label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="აუზი"> აუზი</label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="საუნა / სპა"> საუნა / სპა</label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="სპორტდარბაზი"> სპორტდარბაზი</label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="ლიფტი"> ლიფტი</label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="24/7 დაცვა / რეცეფცია"> 24/7 დაცვა / რეცეფცია</label>
 
-                    <label class="amenity-label"><input type="checkbox" name="amenity" value="შინაური ცხოველები დაშვებულია"> ცხოველები დაშვებულია</label>
-                    <label class="amenity-label"><input type="checkbox" name="amenity" value="მოწევა დაშვებულია"> მოწევა დაშვებულია</label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="შინაური ცხოველები დაშვებულია"> ცხოველები დაშვებულია</label>
+                    <label class="custom-checkbox"><input type="checkbox" name="amenity" value="მოწევა დაშვებულია"> მოწევა დაშვებულია</label>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label>დეტალური აღწერა</label>
-                <textarea id="listDesc" rows="5" required></textarea>
+            <div class="form-section">
+                <h3>3. კვების ოპციები</h3>
+                <p class="subtitle">შეცვალეთ ან მიუთითეთ კვების საფასური 1 პერსონაზე (1 ღამით).</p>
+                
+                <div class="input-row">
+                    <div class="meal-box">
+                        <label>
+                            <input type="checkbox" id="hasBreakfast" onchange="document.getElementById('priceBreakfast').disabled = !this.checked; if(!this.checked) document.getElementById('priceBreakfast').value='';"> 🥞 საუზმე
+                        </label>
+                        <input type="number" id="priceBreakfast" placeholder="ფასი (₾)" disabled>
+                    </div>
+                    
+                    <div class="meal-box">
+                        <label>
+                            <input type="checkbox" id="hasHalfBoard" onchange="document.getElementById('priceHalfBoard').disabled = !this.checked; if(!this.checked) document.getElementById('priceHalfBoard').value='';"> 🍖 2-ჯერადი კვება
+                        </label>
+                        <input type="number" id="priceHalfBoard" placeholder="ფასი (₾)" disabled>
+                    </div>
+
+                    <div class="meal-box">
+                        <label>
+                            <input type="checkbox" id="hasFullBoard" onchange="document.getElementById('priceFullBoard').disabled = !this.checked; if(!this.checked) document.getElementById('priceFullBoard').value='';"> 🍲 3-ჯერადი კვება
+                        </label>
+                        <input type="number" id="priceFullBoard" placeholder="ფასი (₾)" disabled>
+                    </div>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label>ფოტოები (არსებულის წაშლა ან ახლის დამატება)</label>
-                <input type="file" id="listImages" accept="image/*" multiple>
-                <div id="imageGallery" class="image-gallery"></div>
+            <div class="form-section">
+                <h3>4. ფოტოები და აღწერა</h3>
+                <div class="input-group">
+                    <label>ფოტოები (არსებულის წაშლა ან ახლის დამატება)</label>
+                    <input type="file" id="listImages" accept="image/*" multiple>
+                    <div id="imageGallery" class="image-gallery"></div> 
+                </div>
+
+                <div class="input-group">
+                    <label>დეტალური აღწერა</label>
+                    <textarea id="listDesc" rows="4" required></textarea>
+                </div>
             </div>
 
             <button type="submit" class="submit-btn">ცვლილებების შენახვა</button>
         </form>
     </div>
-
+    
     <script src="edit-listing-script.js"></script>
 </body>
 </html>

@@ -1,0 +1,132 @@
+/* css/register-style.css */
+
+body {
+    background-color: #0b3127;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.reg-container {
+    background-color: #0d3b2f;
+    width: 100%;
+    max-width: 440px;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Header & Back link */
+.login-header { margin-bottom: 25px; }
+.back-home {
+    color: #a0c4bc;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+.back-home:hover { color: #febb02; }
+
+/* Headings */
+h2 { font-size: 24px; color: #febb02; margin: 0 0 6px 0; font-weight: 700; }
+.subtitle { font-size: 14px; color: #a0c4bc; margin: 0 0 25px 0; }
+
+/* Input Fields */
+.input-group { margin-bottom: 20px; display: flex; flex-direction: column; }
+.input-group label { font-size: 13px; color: #a0c4bc; margin-bottom: 8px; display: block; }
+.input-group input { 
+    width: 100%; 
+    background-color: #0b3127; 
+    border: 1px solid #1a5142; 
+    padding: 14px; 
+    border-radius: 8px; 
+    color: #ffffff; 
+    font-size: 15px; 
+    outline: none; 
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+.input-group input:focus { border-color: #febb02; }
+
+/* Phone Country Selector */
+.custom-select-wrapper { position: relative; width: 140px; }
+.custom-select-trigger {
+    background-color: #0b3127;
+    border: 1px solid #1a5142;
+    padding: 13px 10px;
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    box-sizing: border-box;
+}
+.custom-options {
+    position: absolute;
+    display: none;
+    top: 100%;
+    left: 0;
+    width: 220px;
+    background-color: #0b3127;
+    border: 1px solid #1a5142;
+    border-radius: 8px;
+    margin-top: 5px;
+    z-index: 100;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    overflow: hidden;
+}
+.search-box { padding: 10px; background-color: #0d3b2f; border-bottom: 1px solid #1a5142; }
+.search-box input { 
+    width: 100%; background-color: #0b3127; border: 1px solid #1a5142; 
+    color: white; padding: 8px 10px; border-radius: 6px; font-size: 13px; outline: none;
+}
+.country-list-container { max-height: 200px; overflow-y: auto; }
+.custom-option { padding: 10px; display: flex; align-items: center; gap: 10px; color: #ffffff; font-size: 13px; cursor: pointer; }
+.custom-option:hover { background-color: #1a5142; }
+.custom-option img { width: 20px; border-radius: 2px; }
+
+/* Password Wrapper */
+.password-wrapper { position: relative; width: 100%; }
+.toggle-password-btn {
+    position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+    background: transparent; border: none; cursor: pointer; display: flex; align-items: center;
+}
+
+/* Button */
+.action-btn {
+    width: 100%; padding: 16px; border: none; border-radius: 8px;
+    font-size: 16px; font-weight: 700; cursor: pointer;
+    background-color: #febb02; color: #0b3127;
+    transition: background-color 0.2s;
+}
+.action-btn:hover { background-color: #e0a502; }
+
+/* Footer */
+.login-footer { text-align: center; margin-top: 25px; }
+.login-footer span { color: #a0c4bc; font-size: 14px; }
+.login-footer a { color: #febb02; text-decoration: none; font-weight: bold; font-size: 14px; }
+
+.password-wrapper input[type="password"]::-ms-reveal,
+.password-wrapper input[type="password"]::-ms-clear,
+.password-wrapper input[type="text"]::-ms-reveal,
+.password-wrapper input[type="text"]::-ms-clear {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.password-wrapper input[type="password"]::-webkit-credentials-auto-fill-button,
+.password-wrapper input[type="text"]::-webkit-credentials-auto-fill-button {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}

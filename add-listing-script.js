@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // თუ შესული არ არის, მთავარზე ვაგდებთ
+    // 1. ავტორიზაციის შემოწმება
     if (localStorage.getItem('isLoggedIn') !== 'true') {
         window.location.href = 'index.html';
         return;
@@ -7,18 +7,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const imageInput = document.getElementById('listImages');
     const imageGallery = document.getElementById('imageGallery');
-    const hasMealsCheckbox = document.getElementById('hasMeals');
-    const mealOptionsDiv = document.getElementById('mealOptions');
     
     let uploadedImagesBase64 = []; 
-    let mainPhotoIndex = 0; // ნაგულისხმევად პირველი ატვირთული ფოტოა მთავარი
+    let mainPhotoIndex = 0; // ნაგულისხმევად პირველი ფოტოა მთავარი
 
-    // კვების გამოჩენა/დამალვა
-    hasMealsCheckbox.addEventListener('change', (e) => {
-        mealOptionsDiv.style.display = e.target.checked ? 'block' : 'none';
+    // 🏆 EVENT DELEGATION: კლიკების მართვა მთლიან გალერეაზე
+    imageGallery.addEventListener('click', (e) => {
+        // 1. თუ დააკლიკა "მთავარზე დაყენებას"
+        if (e.target.classList.contains('set-main-btn')) {
+            mainPhotoIndex = parseInt(e.target.getAttribute('data-index'));
+            renderGallery();
+        }
+        
+        // 2. თუ დააკლიკა "წაშლას"
+        if (e.target.classList.contains('remove-btn')) {
+            const idx = parseInt(e.target.getAttribute('data-index'));
+            uploadedImagesBase64.splice(idx, 1);
+            
+            // ვასწორებთ მთავარი ფოტოს ინდექსს წაშლის შემდეგ
+            if (idx === mainPhotoIndex) {
+                mainPhotoIndex = 0;
+            } else if (idx < mainPhotoIndex) {
+                mainPhotoIndex--; 
+            }
+            renderGallery();
+        }
     });
 
-    // სურათის ატვირთვა და კომპრესია
+    // 2. სურათის ატვირთვა და კომპრესია (ჭკვიანი კომპრესორი)
     imageInput.addEventListener('change', (e) => {
         const files = Array.from(e.target.files);
         
@@ -34,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
                     
-                    const MAX_WIDTH = 800; // ვამცირებთ სიგანეს ბაზისთვის
+                    const MAX_WIDTH = 800; // ვამცირებთ ზომას ბაზისთვის
                     const scaleSize = MAX_WIDTH / img.width;
                     canvas.width = MAX_WIDTH;
                     canvas.height = img.height * scaleSize;
@@ -52,10 +68,11 @@ document.addEventListener("DOMContentLoaded", () => {
         imageInput.value = ''; // ვასუფთავებთ ინპუტს
     });
 
-    // გალერეის დახატვა
+    // 3. გალერეის დახატვა
     function renderGallery() {
         imageGallery.innerHTML = '';
         
+        // უსაფრთხოების შემოწმება, ID არ გავიდეს მასივიდან
         if (mainPhotoIndex >= uploadedImagesBase64.length) {
             mainPhotoIndex = 0;
         }
@@ -63,6 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
         uploadedImagesBase64.forEach((base64, index) => {
             const isMain = index === mainPhotoIndex;
             const thumbBox = document.createElement('div');
+            // 'main-photo' კლასი უმატებს ყვითელ ჩარჩოს და ჩრდილს
             thumbBox.className = `img-thumb-box ${isMain ? 'main-photo' : ''}`;
             
             thumbBox.innerHTML = `
@@ -75,33 +93,9 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
             imageGallery.appendChild(thumbBox);
         });
-
-        // წაშლის ლოგიკა
-        document.querySelectorAll('.remove-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const indexToRemove = parseInt(e.target.getAttribute('data-index'));
-                uploadedImagesBase64.splice(indexToRemove, 1);
-                
-                if (indexToRemove === mainPhotoIndex) {
-                    mainPhotoIndex = 0;
-                } else if (indexToRemove < mainPhotoIndex) {
-                    mainPhotoIndex--; 
-                }
-                
-                renderGallery(); 
-            });
-        });
-
-        // "მთავარზე დაყენება"
-        document.querySelectorAll('.set-main-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                mainPhotoIndex = parseInt(e.target.getAttribute('data-index'));
-                renderGallery(); 
-            });
-        });
     }
 
-    // ფორმის გაგზავნა
+    // 4. ფორმის გაგზავნა (Submitting the form)
     document.getElementById('addListingForm').addEventListener('submit', (e) => {
         e.preventDefault();
 
@@ -116,44 +110,45 @@ document.addEventListener("DOMContentLoaded", () => {
             selectedAmenities.push(checkbox.value);
         });
 
-        // კვების მონაცემები
-        let mealData = null;
-        if (hasMealsCheckbox.checked) {
-            const mPrice = document.getElementById('mealPrice').value;
-            mealData = {
-                type: document.getElementById('mealType').value,
-                price: mPrice === "" || mPrice == 0 ? "შედის ფასში" : `${mPrice} ₾`
-            };
-        }
-
-        // სურათების გადალაგება - მთავარი ფოტო პირველ ადგილას
+        // 🔄 სურათების გადალაგება: მთავარი ფოტო ყოველთვის პირველ ადგილზე
         let finalImagesArray = [...uploadedImagesBase64];
         if (mainPhotoIndex !== 0 && uploadedImagesBase64.length > 1) {
+            // ვიღებთ მთავარ ფოტოს
             const mainImg = finalImagesArray.splice(mainPhotoIndex, 1)[0];
+            // ჩავსვამთ მასივის დასაწყისში
             finalImagesArray.unshift(mainImg); 
         }
 
+        // ობიექტის შექმნა
         const newListing = {
             id: Date.now(),
-            title: document.getElementById('listTitle').value,
+            title: document.getElementById('listTitle').value.trim(),
             location: document.getElementById('listLocation').value,
-            rooms: parseInt(document.getElementById('listRooms').value),
-            area: parseInt(document.getElementById('listArea').value),
-            price: parseInt(document.getElementById('listPrice').value),
-            description: document.getElementById('listDesc').value,
+            rooms: parseInt(document.getElementById('listRooms').value) || 0,
+            area: parseInt(document.getElementById('listArea').value) || 0,
+            price: parseInt(document.getElementById('listPrice').value) || 0,
+            description: document.getElementById('listDesc').value.trim(),
             amenities: selectedAmenities,
-            meals: mealData,
+            
+            // 🍽️ ახალი კვების ობიექტი
+            meals: {
+                breakfast: document.getElementById('hasBreakfast')?.checked ? (parseInt(document.getElementById('priceBreakfast').value) || 0) : 0,
+                halfBoard: document.getElementById('hasHalfBoard')?.checked ? (parseInt(document.getElementById('priceHalfBoard').value) || 0) : 0,
+                fullBoard: document.getElementById('hasFullBoard')?.checked ? (parseInt(document.getElementById('priceFullBoard').value) || 0) : 0
+            },
+            
             images: finalImagesArray, 
             dateAdded: new Date().toISOString()
         };
 
+        // ბაზაში შენახვა
         let listings = JSON.parse(localStorage.getItem('staygeo_listings')) || [];
         listings.push(newListing);
         
         try {
             localStorage.setItem('staygeo_listings', JSON.stringify(listings));
             alert("🎉 განცხადება წარმატებით დაემატა!");
-            window.location.href = 'index.html';
+            window.location.href = 'index.html'; // გადამისამართება მთავარზე
         } catch (err) {
             alert("❌ შეცდომა შენახვისას! ბრაუზერის მეხსიერება გადაივსო.");
             console.error(err);

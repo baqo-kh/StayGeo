@@ -1,55 +1,126 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. URL-დან ვიღებთ განცხადების ID-ს
+document.addEventListener("DOMContentLoaded", () => {
+    // 1. ვიღებთ განცხადების ID-ს URL-დან (მაგ: details.html?id=171800000)
     const params = new URLSearchParams(window.location.search);
-    const id = parseInt(params.get('id'));
+    const listingId = parseInt(params.get('id'));
 
-    // 2. მოგვაქვს ბაზა და ვპოულობთ ჩვენს ბინას
-    let listings = JSON.parse(localStorage.getItem('staygeo_listings')) || [];
-    const listing = listings.find(item => item.id === id);
-
-    // თუ განცხადება არ არსებობს, ვაბრუნებთ მთავარ გვერდზე
-    if (!listing) {
-        alert("განცხადება ვერ მოიძებნა ან წაშლილია!");
+    if (!listingId) {
+        alert("განცხადება ვერ მოიძებნა!");
         window.location.href = 'index.html';
         return;
     }
 
-    // 3. ვავსებთ ტექსტურ ინფორმაციას
-    document.getElementById('detTitle').innerText = listing.title;
-    document.getElementById('detLocation').innerText = `📍 ${listing.location}`;
-    document.getElementById('detArea').innerText = `📏 ${listing.area} მ²`;
-    document.getElementById('detRooms').innerText = `🛏️ ${listing.rooms} ოთახი`;
-    document.getElementById('detDesc').innerText = listing.description;
-    document.getElementById('detPrice').innerText = `${listing.price}₾`;
+    // 2. მოგვაქვს მონაცემთა ბაზა LocalStorage-დან
+    const listings = JSON.parse(localStorage.getItem('staygeo_listings')) || [];
+    const listing = listings.find(item => item.id === listingId);
 
-    // 4. ვხატავთ კეთილმოწყობას
-    const amGrid = document.getElementById('detAmenities');
-    if (listing.amenities && listing.amenities.length > 0) {
-        // თითოეულ სიტყვას წინ ვუწერთ მწვანე "ჩეკს" (✔️)
-        amGrid.innerHTML = listing.amenities.map(am => `<div class="am-item">✔️ ${am}</div>`).join('');
-    } else {
-        amGrid.innerHTML = "<p>ინფორმაცია არ არის მითითებული.</p>";
+    if (!listing) {
+        alert("განცხადება წაშლილია ან აღარ არსებობს.");
+        window.location.href = 'index.html';
+        return;
     }
 
-    // 5. ვხატავთ ფოტოების გალერეას
-    const mainImg = document.getElementById('detMainImg');
-    const thumbGrid = document.getElementById('detThumbnails');
+    // 3. ავსებთ HTML ელემენტებს განცხადების მონაცემებით
+    document.title = `StayGeo.ge - ${listing.title}`;
+    document.getElementById('detailTitle').innerText = listing.title;
+    document.getElementById('detailLocation').innerText = listing.location;
+    document.getElementById('detailDesc').innerText = listing.description;
+    document.getElementById('detailArea').innerText = `📏 ${listing.area} მ²`;
+    document.getElementById('detailRooms').innerText = `🛏️ ${listing.rooms} ოთახი`;
+    document.getElementById('detailPrice').innerText = `${listing.price}₾`;
 
+    // 4. გალერეის დახატვა
+    const mainImg = document.getElementById('detailMainImg');
+    const thumbnailsContainer = document.getElementById('detailThumbnails');
+    
     if (listing.images && listing.images.length > 0) {
-        // პირველ ფოტოს ვსვამთ მთავარ ადგილას
+        // პირველი ფოტო არის მთავარი
         mainImg.src = listing.images[0];
-        
-        // დანარჩენებს ვამწკრივებთ ქვემოთ
-        thumbGrid.innerHTML = listing.images.map(imgSrc => 
-            `<img src="${imgSrc}" class="thumb" onclick="changeMainImage('${imgSrc}')">`
-        ).join('');
-    } else {
-        // თუ ფოტო არ აქვს, რამე ნაგულისხმევი ფოტო შეგვიძლია ჩავსვათ (სურვილისამებრ)
-        mainImg.src = 'https://via.placeholder.com/800x500?text=No+Image';
-    }
-});
 
-// გლობალური ფუნქცია, რომელიც პატარა ფოტოზე დაჭერისას მთავარს ცვლის
-window.changeMainImage = function(src) {
-    document.getElementById('detMainImg').src = src;
-};
+        // ვხატავთ პატარა ფოტოებს
+        listing.images.forEach((imgBase64, index) => {
+            const thumb = document.createElement('img');
+            thumb.src = imgBase64;
+            thumb.alt = `ფოტო ${index + 1}`;
+            
+            // დაკლიკებისას მთავარი ფოტო იცვლება
+            thumb.onclick = () => { mainImg.src = imgBase64; };
+            
+            thumbnailsContainer.appendChild(thumb);
+        });
+    }
+
+    // 5. კეთილმოწყობის (Amenities) დახატვა
+    const amenitiesContainer = document.getElementById('detailAmenities');
+    if (listing.amenities && listing.amenities.length > 0) {
+        listing.amenities.forEach(amenity => {
+            const item = document.createElement('div');
+            item.className = 'am-item';
+            item.innerHTML = `✅ ${amenity}`;
+            amenitiesContainer.appendChild(item);
+        });
+    } else {
+        amenitiesContainer.innerHTML = '<span style="color:#666;">ინფორმაცია არ არის მითითებული</span>';
+    }
+
+    // 6. კვების ოპციების დამატება Select-ში
+    const mealSelect = document.getElementById('mealSelect');
+    if (listing.meals) {
+        if (listing.meals.breakfast > 0) mealSelect.innerHTML += `<option value="${listing.meals.breakfast}">საუზმე - ${listing.meals.breakfast}₾</option>`;
+        if (listing.meals.halfBoard > 0) mealSelect.innerHTML += `<option value="${listing.meals.halfBoard}">2-ჯერადი კვება - ${listing.meals.halfBoard}₾</option>`;
+        if (listing.meals.fullBoard > 0) mealSelect.innerHTML += `<option value="${listing.meals.fullBoard}">3-ჯერადი კვება - ${listing.meals.fullBoard}₾</option>`;
+    }
+
+    // 7. 🧮 ფასის კალკულატორი
+    const checkInInput = document.getElementById('checkIn');
+    const checkOutInput = document.getElementById('checkOut');
+    const guestInput = document.getElementById('guestCount');
+
+    // ვადგენთ დღევანდელ და ხვალინდელ თარიღებს დეფოლტად
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    checkInInput.value = today.toISOString().split('T')[0];
+    checkOutInput.value = tomorrow.toISOString().split('T')[0];
+    checkInInput.min = today.toISOString().split('T')[0];
+
+    // კალკულაციის ფუნქცია
+    function calculateTotal() {
+        const checkIn = new Date(checkInInput.value);
+        const checkOut = new Date(checkOutInput.value);
+        const guests = parseInt(guestInput.value) || 1;
+        const mealPrice = parseInt(mealSelect.value) || 0;
+        
+        // ვიგებთ ღამეების რაოდენობას
+        let nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
+        if (nights <= 0 || isNaN(nights)) nights = 1; // მინიმუმ 1 ღამე
+
+        const basePriceTotal = listing.price * nights;
+        const mealTotal = mealPrice * guests * nights;
+        const grandTotal = basePriceTotal + mealTotal;
+
+        // ვაახლებთ ტექსტებს ეკრანზე
+        document.getElementById('calcRoom').innerText = `${listing.price} ₾ x ${nights} ღამე = ${basePriceTotal} ₾`;
+        document.getElementById('calcMeal').innerText = `კვება: ${mealPrice} ₾ x ${guests} სტუმარი x ${nights} ღამე = ${mealTotal} ₾`;
+        document.getElementById('totalPriceDisplay').innerText = `სულ გადასახდელი: ${grandTotal} ₾`;
+    }
+
+    // თუ თარიღი, სტუმარი ან კვება შეიცვლება, თავიდან დაითვალოს
+    checkInInput.addEventListener('change', () => {
+        // არ მივცეთ უფლება გასვლის თარიღი შესვლისაზე ადრე იყოს
+        checkOutInput.min = checkInInput.value;
+        if (checkOutInput.value <= checkInInput.value) {
+            let nextDay = new Date(checkInInput.value);
+            nextDay.setDate(nextDay.getDate() + 1);
+            checkOutInput.value = nextDay.toISOString().split('T')[0];
+        }
+        calculateTotal();
+    });
+    
+    checkOutInput.addEventListener('change', calculateTotal);
+    guestInput.addEventListener('input', calculateTotal);
+    mealSelect.addEventListener('change', calculateTotal);
+
+    // პირველადი დათვლა
+    calculateTotal();
+});

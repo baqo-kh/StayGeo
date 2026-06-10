@@ -1,3 +1,4 @@
+@charset "UTF-8";
 body {
   background-color: #0b3127;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -112,13 +113,18 @@ body {
 .add-listing-container .input-group input[type=file]:hover {
   border-color: #febb02;
 }
-.add-listing-container .input-group .image-gallery {
+.add-listing-container {
+  /* =========================================
+     🖼️ ფოტოების გალერეის და ღილაკების სრული დიზაინი
+     ========================================= */
+}
+.add-listing-container .image-gallery {
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
   margin-top: 15px;
 }
-.add-listing-container .input-group .image-gallery .img-thumb-box {
+.add-listing-container .image-gallery .img-thumb-box {
   position: relative;
   width: 140px;
   height: 140px;
@@ -126,18 +132,24 @@ body {
   overflow: hidden;
   border: 2px solid #1a5142;
   transition: all 0.2s;
+  /* როცა ფოტო მთავარია */
 }
-.add-listing-container .input-group .image-gallery .img-thumb-box.main-photo {
+.add-listing-container .image-gallery .img-thumb-box.main-photo {
   border-color: #febb02;
   box-shadow: 0 0 10px rgba(254, 187, 2, 0.5);
 }
-.add-listing-container .input-group .image-gallery .img-thumb-box img {
+.add-listing-container .image-gallery .img-thumb-box img {
   width: 100%;
   height: 100%;
   -o-object-fit: cover;
      object-fit: cover;
+  position: relative;
+  z-index: 1; /* სურათი მიდის უკან */
 }
-.add-listing-container .input-group .image-gallery .img-thumb-box .remove-btn {
+.add-listing-container .image-gallery .img-thumb-box {
+  /* ✖️ წაშლის ღილაკი */
+}
+.add-listing-container .image-gallery .img-thumb-box .remove-btn {
   position: absolute;
   top: 4px;
   right: 4px;
@@ -145,50 +157,125 @@ body {
   color: white;
   border: none;
   border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  font-size: 14px;
+  width: 26px;
+  height: 26px;
+  font-size: 16px;
   font-weight: bold;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 2;
+  z-index: 999 !important; /* გარანტირებულად ზემოთ! */
 }
-.add-listing-container .input-group .image-gallery .img-thumb-box .remove-btn:hover {
+.add-listing-container .image-gallery .img-thumb-box .remove-btn:hover {
   background: #ff3b30;
   transform: scale(1.1);
 }
-.add-listing-container .input-group .image-gallery .img-thumb-box .set-main-btn {
+.add-listing-container .image-gallery .img-thumb-box {
+  /* ⭐ მთავარზე დაყენების ღილაკი */
+}
+.add-listing-container .image-gallery .img-thumb-box .set-main-btn {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.75);
   color: white;
   border: none;
-  padding: 6px 0;
-  font-size: 11px;
+  padding: 8px 0;
+  font-size: 12px;
   cursor: pointer;
   transition: background 0.2s;
+  z-index: 999 !important; /* გარანტირებულად ზემოთ! */
 }
-.add-listing-container .input-group .image-gallery .img-thumb-box .set-main-btn:hover {
+.add-listing-container .image-gallery .img-thumb-box .set-main-btn:hover {
   background: #febb02;
   color: #0b3127;
   font-weight: bold;
 }
-.add-listing-container .input-group .image-gallery .img-thumb-box .main-badge {
+.add-listing-container .image-gallery .img-thumb-box {
+  /* 🏆 მთავარი ფოტოს ნიშანი (Badge) */
+}
+.add-listing-container .image-gallery .img-thumb-box .main-badge {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
   background: #febb02;
   color: #0b3127;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: bold;
   text-align: center;
-  padding: 6px 0;
+  padding: 8px 0;
   pointer-events: none;
+  z-index: 999 !important; /* გარანტირებულად ზემოთ! */
+}
+.add-listing-container {
+  /* =========================================
+     🍽️ კვების ბარათების სწორი სტილი (მუქი მწვანე)
+     ========================================= */
+}
+.add-listing-container .meal-box {
+  background-color: #0b3127 !important;
+  border: 1px solid #1a5142 !important;
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.2s ease;
+  margin-bottom: 0;
+  min-height: 120px;
+}
+.add-listing-container .meal-box:hover {
+  border-color: #febb02 !important;
+  background-color: #0d3b2f !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+.add-listing-container .meal-box label {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 10px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+.add-listing-container .meal-box label input[type=checkbox] {
+  width: 18px;
+  height: 18px;
+  accent-color: #febb02;
+  cursor: pointer;
+  margin: 0;
+}
+.add-listing-container .meal-box input[type=number] {
+  width: 100%;
+  background-color: #0f4537 !important;
+  border: 1px solid #1a5142 !important;
+  color: #ffffff !important;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+  transition: 0.2s;
+}
+.add-listing-container .meal-box input[type=number]::-moz-placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+.add-listing-container .meal-box input[type=number]::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+.add-listing-container .meal-box input[type=number]:focus {
+  border-color: #febb02 !important;
+}
+.add-listing-container .meal-box input[type=number]:disabled {
+  background-color: #0b3127 !important;
+  border-color: #1a5142 !important;
+  color: rgba(255, 255, 255, 0.3) !important;
+  cursor: not-allowed;
 }
 .add-listing-container .amenities-grid {
   display: flex;
@@ -219,10 +306,6 @@ body {
 .add-listing-container .custom-checkbox:hover {
   color: #ffffff;
 }
-.add-listing-container .toggle-meal {
-  font-weight: bold;
-  color: #febb02;
-}
 .add-listing-container .submit-btn {
   width: 100%;
   padding: 16px;
@@ -240,7 +323,4 @@ body {
   background-color: #e0a502;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(254, 187, 2, 0.3);
-}
-.add-listing-container .submit-btn:active {
-  transform: translateY(0);
 }/*# sourceMappingURL=add-listing-style.css.map */

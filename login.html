@@ -19,25 +19,25 @@
         
         <form id="loginForm">
             <div class="input-group">
-                <label>ელ. ფოსტის მისამართი</label>
+                <label for="email">ელ. ფოსტის მისამართი</label>
                 <input type="email" id="email" required placeholder="giorgi@example.com">
             </div>
             
             <div class="input-group">
-                <label class="password-label">პაროლი</label> 
-                
-                <div class="password-wrapper">
-                    <input type="password" id="password" required placeholder="••••••••">
-                    <button type="button" id="togglePassword" class="toggle-password-btn">
-                        <svg id="eyeIcon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#a0c4bc" stroke-width="2" stroke-linecap="round">
-                            <path d="M5 11a7 7 0 0 1 14 0" />
-                            <circle cx="12" cy="13" r="3" />
-                        </svg>
-                    </button>
-                </div>
-                
-                <a href="#" class="forgot-link">დაგავიწყდათ პაროლი?</a>
-            </div>
+    <label for="password">პაროლი</label> 
+    
+    <div class="password-wrapper">
+        <input type="password" id="password" required placeholder="••••••••">
+        <button type="button" id="togglePassword" class="toggle-password-btn" onclick="togglePasswordVisibility()">
+            <svg id="eyeIcon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#a0c4bc" stroke-width="2" stroke-linecap="round">
+                <path d="M5 11a7 7 0 0 1 14 0" />
+                <circle cx="12" cy="13" r="3" />
+            </svg>
+        </button>
+    </div>
+    
+    <a href="#" class="forgot-link" style="margin-top: 10px; display: inline-block;">დაგავიწყდათ პაროლი?</a>
+</div>
             
             <button type="submit" class="submit-btn">შესვლა</button>
         </form>
@@ -51,7 +51,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-  // Supabase კლიენტის ინიციალიზაცია ლოგინისთვის
+  // Supabase კლიენტის ინიციალიზაცია
   const SUPABASE_URL = "https://volwthkudypgvlafbdqf.supabase.co"; 
   const SUPABASE_ANON_KEY = "sb_publishable_IDi82Onln8r5EQ3ZH-u-Ow__ugEm86U"; 
 
