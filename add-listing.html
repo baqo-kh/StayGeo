@@ -9,52 +9,69 @@
 <body>
     <div class="add-listing-container">
         <div class="header-link">
-            <a href="index.html">← მთავარ გვერდზე დაბრუნება</a>
+            <a href="my-listings.html">← ჩემს განცხადებებში დაბრუნება</a>
         </div>
-        <h2>ახალი განცხადება</h2>
-        <p class="subtitle">შეავსეთ დეტალები თქვენი ადგილის შესახებ</p>
+        <h2>➕ ახალი განცხადების დამატება</h2>
+        <p class="subtitle">შეავსეთ ინფორმაცია თქვენი ობიექტის შესახებ</p>
 
         <form id="addListingForm">
             
             <div class="form-section">
                 <h3>1. ძირითადი ინფორმაცია</h3>
+
+                <div class="input-group" style="margin-bottom: 15px;">
+                    <label>რას აქირავებთ?</label>
+                    <select id="propertyTypeSelect" required style="width: 100%; padding: 12px; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; font-family: inherit; font-size: 14px; background: #0b3127; color: white;">
+                        <option value="cottage">კოტეჯი / აგარაკი</option>
+                        <option value="apartment">ბინა</option>
+                        <option value="hotel">სასტუმრო</option>
+                    </select>
+                </div>
+
                 <div class="input-group">
                     <label>სახელწოდება</label>
-                    <input type="text" id="listTitle" required placeholder="მაგ: მყუდრო კოტეჯი ცენტრში">
+                    <input type="text" id="listTitle" placeholder="მაგ: მყუდრო კოტეჯი ტყის პირას" required>
                 </div>
 
                 <div class="input-row">
                     <div class="input-group">
                         <label>მდებარეობა</label>
-                        <select id="listLocation" required>
+                        <select id="listLocation" required style="background: #0b3127; color: white;">
                             <option value="" disabled selected>აირჩიეთ...</option>
                             <option value="თბილისი">თბილისი</option>
                             <option value="ბათუმი">ბათუმი</option>
-                            <option value="ქუთაისი">ქუთაისი</option>
                             <option value="ბაკურიანი">ბაკურიანი</option>
                             <option value="გუდაური">გუდაური</option>
-                            <option value="მესტია">მესტია</option>
                             <option value="ბორჯომი">ბორჯომი</option>
-                            <option value="თელავი">თელავი</option>
-                            <option value="სიღნაღი">სიღნაღი</option>
-                            <option value="მცხეთა">მცხეთა</option>
+                            <option value="ქობულეთი">ქობულეთი</option>
+                            <option value="ურეკი">ურეკი</option>
+                            <option value="მესტია">მესტია</option>
+                            <option value="ყაზბეგი (სტეფანწმინდა)">ყაზბეგი (სტეფანწმინდა)</option>
                         </select>
                     </div>
                     <div class="input-group">
                         <label>ოთახები</label>
-                        <input type="number" id="listRooms" required min="1" placeholder="მაგ: 2">
+                        <input type="number" id="listRooms" placeholder="მაგ: 3" required min="1">
                     </div>
                 </div>
 
                 <div class="input-row">
                     <div class="input-group">
                         <label>ფართობი (მ²)</label>
-                        <input type="number" id="listArea" required min="5" placeholder="მაგ: 50">
+                        <input type="number" id="listArea" placeholder="მაგ: 120" required min="5">
                     </div>
-                    <div class="input-group">
+                    <div class="input-group" id="standardPriceBlock">
                         <label>ფასი 1 ღამეში (₾)</label>
-                        <input type="number" id="listPrice" required min="1" placeholder="მაგ: 150">
+                        <input type="number" id="listPrice" placeholder="მაგ: 150" min="1">
                     </div>
+                </div>
+
+                <div id="hotelRoomsBlock" style="display: none; border: 1px solid rgba(255, 255, 255, 0.2); padding: 15px; border-radius: 8px; background: transparent; margin-top: 10px;">
+                    <label style="font-weight: 600; margin-bottom: 10px; display: block; color: white;">სასტუმროს ოთახები და ფასები</label>
+                    <div id="roomsContainer"></div>
+                    <button type="button" id="addRoomBtn" style="background: #0b3127; border: 1px solid #ffc107; color: #ffc107; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; margin-top: 5px; transition: 0.2s;">
+                        + ახალი ოთახის დამატება
+                    </button>
                 </div>
             </div>
 
@@ -70,27 +87,23 @@
                     <label class="custom-checkbox"><input type="checkbox" name="amenity" value="უთო"> უთო და საუთოო მაგიდა</label>
                     <label class="custom-checkbox"><input type="checkbox" name="amenity" value="თეთრეული და პირსახოცები"> თეთრეული / პირსახოცები</label>
                     <label class="custom-checkbox"><input type="checkbox" name="amenity" value="ბუხარი"> ბუხარი</label>
-
                     <label class="custom-checkbox"><input type="checkbox" name="amenity" value="სამზარეულო"> სამზარეულო</label>
                     <label class="custom-checkbox"><input type="checkbox" name="amenity" value="მაცივარი"> მაცივარი</label>
                     <label class="custom-checkbox"><input type="checkbox" name="amenity" value="მიკროტალღური ღუმელი"> მიკროტალღური ღუმელი</label>
                     <label class="custom-checkbox"><input type="checkbox" name="amenity" value="ჭურჭლის სარეცხი მანქანა"> ჭურჭლის სარეცხი მანქანა</label>
                     <label class="custom-checkbox"><input type="checkbox" name="amenity" value="ყავის აპარატი"> ყავის აპარატი</label>
-
                     <label class="custom-checkbox"><input type="checkbox" name="amenity" value="აივანი"> აივანი</label>
                     <label class="custom-checkbox"><input type="checkbox" name="amenity" value="ტერასა / ეზო"> ტერასა / ეზო</label>
                     <label class="custom-checkbox"><input type="checkbox" name="amenity" value="ზღვის ხედი"> ზღვის ხედი</label>
                     <label class="custom-checkbox"><input type="checkbox" name="amenity" value="მთის ხედი"> მთის ხედი</label>
                     <label class="custom-checkbox"><input type="checkbox" name="amenity" value="ბარბექიუ / მაყალი"> ბარბექიუ / მაყალი</label>
                     <label class="custom-checkbox"><input type="checkbox" name="amenity" value="სათხილამურო ტრასასთან ახლოს"> სათხილამურო ტრასასთან</label>
-
                     <label class="custom-checkbox"><input type="checkbox" name="amenity" value="პარკინგი"> უფასო პარკინგი</label>
                     <label class="custom-checkbox"><input type="checkbox" name="amenity" value="აუზი"> აუზი</label>
                     <label class="custom-checkbox"><input type="checkbox" name="amenity" value="საუნა / სპა"> საუნა / სპა</label>
                     <label class="custom-checkbox"><input type="checkbox" name="amenity" value="სპორტდარბაზი"> სპორტდარბაზი</label>
                     <label class="custom-checkbox"><input type="checkbox" name="amenity" value="ლიფტი"> ლიფტი</label>
                     <label class="custom-checkbox"><input type="checkbox" name="amenity" value="24/7 დაცვა / რეცეფცია"> 24/7 დაცვა / რეცეფცია</label>
-
                     <label class="custom-checkbox"><input type="checkbox" name="amenity" value="შინაური ცხოველები დაშვებულია"> ცხოველები დაშვებულია</label>
                     <label class="custom-checkbox"><input type="checkbox" name="amenity" value="მოწევა დაშვებულია"> მოწევა დაშვებულია</label>
                 </div>
@@ -98,28 +111,25 @@
 
             <div class="form-section">
                 <h3>3. კვების ოპციები</h3>
-                <p class="subtitle">მონიშნეთ რას სთავაზობთ და მიუთითეთ საფასური 1 პერსონაზე (1 ღამით). დაუტოვებელი ოპციები არ გამოჩნდება.</p>
-                
-                <div class="input-row">
-                    <div class="meal-box">
-                        <label>
-                            <input type="checkbox" id="hasBreakfast" onchange="document.getElementById('priceBreakfast').disabled = !this.checked; if(!this.checked) document.getElementById('priceBreakfast').value='';"> 🥞 საუზმე
+                <p class="subtitle">მონიშნეთ რას სთავაზობთ და მიუთითეთ საფასური 1 პერსონაზე (1 ღამით).</p>
+                <div class="input-row" style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    <div class="meal-box" style="flex: 1; background: rgba(0,0,0,0.1); padding: 15px; border-radius: 8px;">
+                        <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: white; font-weight: bold;">
+                            <input type="checkbox" id="hasBreakfast"> 🥞 საუზმე
                         </label>
-                        <input type="number" id="priceBreakfast" placeholder="ფასი (₾)" disabled>
+                        <input type="number" id="priceBreakfast" placeholder="ფასი (₾)" disabled style="width: 100%; padding: 10px; border-radius: 6px; border: none;">
                     </div>
-                    
-                    <div class="meal-box">
-                        <label>
-                            <input type="checkbox" id="hasHalfBoard" onchange="document.getElementById('priceHalfBoard').disabled = !this.checked; if(!this.checked) document.getElementById('priceHalfBoard').value='';"> 🍖 2-ჯერადი კვება
+                    <div class="meal-box" style="flex: 1; background: rgba(0,0,0,0.1); padding: 15px; border-radius: 8px;">
+                        <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: white; font-weight: bold;">
+                            <input type="checkbox" id="hasHalfBoard"> 🍖 2-ჯერადი
                         </label>
-                        <input type="number" id="priceHalfBoard" placeholder="ფასი (₾)" disabled>
+                        <input type="number" id="priceHalfBoard" placeholder="ფასი (₾)" disabled style="width: 100%; padding: 10px; border-radius: 6px; border: none;">
                     </div>
-
-                    <div class="meal-box">
-                        <label>
-                            <input type="checkbox" id="hasFullBoard" onchange="document.getElementById('priceFullBoard').disabled = !this.checked; if(!this.checked) document.getElementById('priceFullBoard').value='';"> 🍲 3-ჯერადი კვება
+                    <div class="meal-box" style="flex: 1; background: rgba(0,0,0,0.1); padding: 15px; border-radius: 8px;">
+                        <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: white; font-weight: bold;">
+                            <input type="checkbox" id="hasFullBoard"> 🍲 3-ჯერადი
                         </label>
-                        <input type="number" id="priceFullBoard" placeholder="ფასი (₾)" disabled>
+                        <input type="number" id="priceFullBoard" placeholder="ფასი (₾)" disabled style="width: 100%; padding: 10px; border-radius: 6px; border: none;">
                     </div>
                 </div>
             </div>
@@ -127,18 +137,43 @@
             <div class="form-section">
                 <h3>4. ფოტოები და აღწერა</h3>
                 <div class="input-group">
-                    <label>ატვირთეთ სურათები (შეგიძლიათ ერთდროულად რამდენიმეს არჩევა)</label>
-                    <input type="file" id="listImages" accept="image/*" multiple>
+                    <label>ფოტოების ატვირთვა (აირჩიეთ მთავარი ფოტო)</label>
+                    <input type="file" id="listImages" accept="image/*" multiple required>
                     <div id="imageGallery" class="image-gallery"></div> 
                 </div>
-
                 <div class="input-group">
-                    <label>აღწერა</label>
-                    <textarea id="listDesc" rows="4" required placeholder="მოკლედ აღწერეთ ადგილი და მისი უპირატესობები..."></textarea>
+                    <label>დეტალური აღწერა</label>
+                    <textarea id="listDesc" rows="4" placeholder="აღწერეთ თქვენი ობიექტი დეტალურად..." required></textarea>
                 </div>
             </div>
 
-            <button type="submit" class="submit-btn">განცხადების გამოქვეყნება</button>
+            <div class="form-section" style="margin-top: 25px; border: 1px solid rgba(255, 255, 255, 0.1); padding: 20px; border-radius: 8px;">
+                <h3 style="margin-top: 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 12px; margin-bottom: 15px; font-size: 18px; color: white;">5. 📅 კალენდრის მართვა (დღეების ჩაკეტვა)</h3>
+                <p style="color: #ddd; font-size: 14px; margin-bottom: 20px;">თუ ობიექტი უკვე დაკავებულია კონკრეტულ თარიღებში, შეგიძლიათ წინასწარ ჩაკეტოთ.</p>
+
+                <div id="blockRoomContainer" style="display: none; margin-bottom: 15px;">
+                    <label style="font-weight: bold; font-size: 14px; margin-bottom: 8px; display: block; color: white;">აირჩიეთ ოთახი გასათიშად:</label>
+                    <select id="blockRoomSelect" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); font-family: inherit; background: #fff; color: #333;"></select>
+                </div>
+
+                <div class="input-row" style="align-items: flex-end; display: flex; gap: 15px; flex-wrap: wrap;">
+                    <div class="input-group" style="flex: 1; min-width: 150px;">
+                        <label style="font-weight: bold; font-size: 14px; margin-bottom: 8px; display: block; color: white;">დაწყება</label>
+                        <input type="date" id="blockStartDate" style="background-color: #0b3127; color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 12px 15px; width: 100%; font-family: inherit; color-scheme: dark; box-sizing: border-box;">
+                    </div>
+                    <div class="input-group" style="flex: 1; min-width: 150px;">
+                        <label style="font-weight: bold; font-size: 14px; margin-bottom: 8px; display: block; color: white;">დასრულება</label>
+                        <input type="date" id="blockEndDate" style="background-color: #0b3127; color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 12px 15px; width: 100%; font-family: inherit; color-scheme: dark; box-sizing: border-box;">
+                    </div>
+                    <div class="input-group" style="flex: 1; min-width: 150px;">
+                        <button type="button" id="addBlockBtn" style="background: #ff4d4d; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; font-size: 15px; box-shadow: 0 4px 10px rgba(255, 77, 77, 0.3); box-sizing: border-box;">ჩაკეტვა 🔒</button>
+                    </div>
+                </div>
+
+                <div id="blockedDatesList" style="margin-top: 15px; display: flex; flex-wrap: wrap; gap: 8px;"></div>
+            </div>
+
+            <button type="submit" class="submit-btn" style="margin-top: 25px;">განცხადების დამატება</button>
         </form>
     </div>
     

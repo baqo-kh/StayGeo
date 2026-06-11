@@ -25,19 +25,49 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // ==========================================
-    // 1. ლოკაციების ბაზა და ძებნა
+    // 1. ლოკაციების ბაზა და ძებნა (⚡ განახლებული)
     // ==========================================
     const geoLocations = [
+        // მთავარი ქალაქები
         { city: "თბილისი", region: "თბილისი, საქართველო" },
         { city: "ბათუმი", region: "აჭარა, საქართველო" },
         { city: "ქუთაისი", region: "იმერეთი, საქართველო" },
+        { city: "რუსთავი", region: "ქვემო ქართლი, საქართველო" },
+        { city: "ზუგდიდი", region: "სამეგრელო, საქართველო" },
+        { city: "გორი", region: "შიდა ქართლი, საქართველო" },
+        { city: "ფოთი", region: "სამეგრელო, საქართველო" },
+        { city: "თელავი", region: "კახეთი, საქართველო" },
+
+        // ზღვის კურორტები
+        { city: "ქობულეთი", region: "აჭარა, საქართველო" },
+        { city: "ურეკი", region: "გურია, საქართველო" },
+        { city: "შეკვეთილი", region: "გურია, საქართველო" },
+        { city: "გონიო", region: "აჭარა, საქართველო" },
+        { city: "კვარიათი", region: "აჭარა, საქართველო" },
+        { city: "მწვანე კონცხი", region: "აჭარა, საქართველო" },
+        { city: "ანაკლია", region: "სამეგრელო, საქართველო" },
+        { city: "გრიგოლეთი", region: "გურია, საქართველო" },
+
+        // მთის კურორტები
         { city: "ბაკურიანი", region: "სამცხე-ჯავახეთი, საქართველო" },
         { city: "გუდაური", region: "მცხეთა-მთიანეთი, საქართველო" },
         { city: "მესტია", region: "სამეგრელო-ზემო სვანეთი, საქართველო" },
+        { city: "ყაზბეგი (სტეფანწმინდა)", region: "მცხეთა-მთიანეთი, საქართველო" },
+        { city: "გოდერძი", region: "აჭარა, საქართველო" },
+        { city: "ბახმარო", region: "გურია, საქართველო" },
+        { city: "შოვი", region: "რაჭა-ლეჩხუმი, საქართველო" },
+
+        // სხვა ცნობილი ადგილები
         { city: "ბორჯომი", region: "სამცხე-ჯავახეთი, საქართველო" },
-        { city: "თელავი", region: "კახეთი, საქართველო" },
+        { city: "წყალტუბო", region: "იმერეთი, საქართველო" },
+        { city: "საირმე", region: "იმერეთი, საქართველო" },
+        { city: "აბასთუმანი", region: "სამცხე-ჯავახეთი, საქართველო" },
         { city: "სიღნაღი", region: "კახეთი, საქართველო" },
-        { city: "მცხეთა", region: "მცხეთა-მთიანეთი, საქართველო" }
+        { city: "მცხეთა", region: "მცხეთა-მთიანეთი, საქართველო" },
+        { city: "ყვარელი", region: "კახეთი, საქართველო" },
+        { city: "ცემი", region: "სამცხე-ჯავახეთი, საქართველო" },
+        { city: "წაღვერი", region: "სამცხე-ჯავახეთი, საქართველო" },
+        { city: "სურამი", region: "შიდა ქართლი, საქართველო" }
     ];
 
     const destInput = document.getElementById('sgDestInput');
@@ -63,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         destInput.addEventListener('focus', () => {
-            if (destInput.value.trim() === '') renderLocations(geoLocations.slice(0, 6));
+            if (destInput.value.trim() === '') renderLocations(geoLocations.slice(0, 6)); // ცარიელზე 6 ვარიანტი ჩანს
             locDropdown.classList.add('open');
         });
 
@@ -72,6 +102,13 @@ document.addEventListener("DOMContentLoaded", () => {
             const filtered = word === '' ? geoLocations.slice(0, 6) : geoLocations.filter(i => i.city.toLowerCase().includes(word));
             renderLocations(filtered);
             locDropdown.classList.add('open');
+        });
+        
+        // დროპდაუნის დამალვა გარეთ დაკლიკებისას
+        document.addEventListener('click', (e) => {
+            if (!destBlock.contains(e.target)) {
+                locDropdown.classList.remove('open');
+            }
         });
     }
 

@@ -1,210 +1,251 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // 🔒 1. უსაფრთხოება: ავტორიზაციის შემოწმება (მხოლოდ შესულმა იუზერმა უნდა შეძლოს რედაქტირება)
+    // 🔒 ავტორიზაციის შემოწმება
     if (localStorage.getItem('isLoggedIn') !== 'true') {
-        window.location.href = 'index.html';
-        return;
+        window.location.href = 'index.html'; return;
     }
-
-    // 2. ვამოწმებთ URL-ს და ID-ს
     const params = new URLSearchParams(window.location.search);
     const id = parseInt(params.get('id'));
+    if (!id) { window.location.href = 'my-listings.html'; return; }
 
-    if (!id) {
-        window.location.href = 'my-listings.html';
-        return;
-    }
-
-    // 3. მოგვაქვს ბაზა და განცხადება
     let listings = JSON.parse(localStorage.getItem('staygeo_listings')) || [];
     const listingIndex = listings.findIndex(item => item.id === id);
-    
-    // თუ ID არასწორია ან განცხადება წაშლილია
-    if (listingIndex === -1) {
-        alert("განცხადება ვერ მოიძებნა!");
-        window.location.href = 'my-listings.html';
-        return;
-    }
+    if (listingIndex === -1) { alert("განცხადება ვერ მოიძებნა!"); window.location.href = 'my-listings.html'; return; }
 
     const listing = listings[listingIndex];
 
-    // 4. 🖼️ გალერეის ცვლადები
-    const imageGallery = document.getElementById('imageGallery');
-    const imageInput = document.getElementById('listImages');
-    let uploadedImagesBase64 = listing.images ? [...listing.images] : [];
-    let mainPhotoIndex = 0;
+    // ძირითადი ველების შევსება
+    document.getElementById('listTitle').value = listing.title || "";
+    document.getElementById('listLocation').value = listing.location || "თბილისი";
+    document.getElementById('listRooms').value = listing.rooms || "";
+    document.getElementById('listArea').value = listing.area || "";
+    document.getElementById('listDesc').value = listing.description || "";
 
-    // 5. ვავსებთ ველებს ძველი მონაცემებით
-    const safeSetVal = (id, val) => {
-        const el = document.getElementById(id);
-        if (el) el.value = val;
+    // ----------------------------------------------------
+    // 🏨 ქონების ტიპი და სასტუმროს ოთახები
+    // ----------------------------------------------------
+    const propertyTypeSelect = document.getElementById('propertyTypeSelect');
+    const standardPriceBlock = document.getElementById('standardPriceBlock');
+    const listPrice = document.getElementById('listPrice');
+    const hotelRoomsBlock = document.getElementById('hotelRoomsBlock');
+    const roomsContainer = document.getElementById('roomsContainer');
+    const blockRoomContainer = document.getElementById('blockRoomContainer');
+    const blockRoomSelect = document.getElementById('blockRoomSelect');
+
+    propertyTypeSelect.value = listing.propertyType || 'cottage';
+    if (listing.propertyType !== 'hotel') listPrice.value = listing.price || "";
+
+    function togglePropertyFields() {
+        if (propertyTypeSelect.value === 'hotel') {
+            standardPriceBlock.style.display = 'none';
+            hotelRoomsBlock.style.display = 'block';
+            blockRoomContainer.style.display = 'block';
+            listPrice.required = false;
+        } else {
+            standardPriceBlock.style.display = 'block';
+            hotelRoomsBlock.style.display = 'none';
+            blockRoomContainer.style.display = 'none';
+            listPrice.required = true;
+        }
+        updateBlockRoomSelect();
+    }
+
+    function createRoomRow(name = '', price = '') {
+        const row = document.createElement('div');
+        row.className = 'room-row';
+        row.style.cssText = 'display: flex; gap: 10px; margin-bottom: 10px;';
+        row.innerHTML = `
+            <input type="text" class="room-name" placeholder="მაგ: 2 პერსონაზე" value="${name}" style="flex: 2; padding: 10px; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; background: #0b3127; color: white;" required>
+            <input type="number" class="room-price" placeholder="ფასი (₾)" value="${price}" style="flex: 1; padding: 10px; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; background: #0b3127; color: white;" required>
+            <button type="button" class="remove-room-btn" style="background: #ff4d4d; color: white; border: none; border-radius: 6px; padding: 0 15px; cursor: pointer; font-weight: bold;">X</button>
+        `;
+        row.querySelector('.remove-room-btn').onclick = () => { row.remove(); updateBlockRoomSelect(); };
+        row.querySelector('.room-name').oninput = updateBlockRoomSelect;
+        roomsContainer.appendChild(row);
+    }
+
+    if (listing.hotelRooms && listing.hotelRooms.length > 0) {
+        listing.hotelRooms.forEach(r => createRoomRow(r.type, r.price));
+    } else if (listing.propertyType === 'hotel') {
+        createRoomRow();
+    }
+
+    document.getElementById('addRoomBtn').onclick = () => { createRoomRow(); updateBlockRoomSelect(); };
+    propertyTypeSelect.onchange = togglePropertyFields;
+
+    // ----------------------------------------------------
+    // 📅 ჩაკეტილი დღეების ლოგიკა
+    // ----------------------------------------------------
+    let blockedDates = listing.blockedDates ? [...listing.blockedDates] : [];
+
+    function updateBlockRoomSelect() {
+        blockRoomSelect.innerHTML = '<option value="all">მთლიანი ობიექტი</option>';
+        if (propertyTypeSelect.value === 'hotel') {
+            document.querySelectorAll('.room-name').forEach((input, index) => {
+                const val = input.value.trim();
+                const displayName = val === '' ? `ოთახი ${index + 1}` : val;
+                blockRoomSelect.innerHTML += `<option value="${displayName}">მხოლოდ: ${displayName}</option>`;
+            });
+        }
+    }
+
+    function renderBlockedDates() {
+        const list = document.getElementById('blockedDatesList');
+        list.innerHTML = '';
+        blockedDates.forEach((block, idx) => {
+            const tag = document.createElement('div');
+            tag.style.cssText = 'background: #ffebee; border: 1px solid #ffcdd2; color: #b71c1c; padding: 6px 12px; border-radius: 6px; display: flex; align-items: center; gap: 8px; font-size: 13px;';
+            const roomText = block.room === 'all' ? 'მთლიანი ობიექტი' : `ოთახი: ${block.room}`;
+            tag.innerHTML = `<span><strong>${roomText}</strong> | ${block.start} ➔ ${block.end}</span>
+                             <button type="button" style="background: none; border: none; color: red; font-weight: bold; cursor:pointer;">X</button>`;
+            tag.querySelector('button').onclick = () => { blockedDates.splice(idx, 1); renderBlockedDates(); };
+            list.appendChild(tag);
+        });
+    }
+
+    document.getElementById('addBlockBtn').onclick = () => {
+        const start = document.getElementById('blockStartDate').value;
+        const end = document.getElementById('blockEndDate').value;
+        const room = propertyTypeSelect.value === 'hotel' ? blockRoomSelect.value : 'all';
+
+        if (!start || !end || new Date(start) >= new Date(end)) {
+            alert("გთხოვთ შეიყვანოთ სწორი თარიღები!"); return;
+        }
+        blockedDates.push({ room, start, end });
+        renderBlockedDates();
+        document.getElementById('blockStartDate').value = '';
+        document.getElementById('blockEndDate').value = '';
     };
 
-    safeSetVal('listTitle', listing.title || "");
-    safeSetVal('listLocation', listing.location || "თბილისი");
-    safeSetVal('listRooms', listing.rooms || "");
-    safeSetVal('listArea', listing.area || "");
-    safeSetVal('listPrice', listing.price || "");
-    safeSetVal('listDesc', listing.description || "");
+    togglePropertyFields();
+    renderBlockedDates();
 
-    // კეთილმოწყობის ჩექბოქსები
-    if (listing.amenities && Array.isArray(listing.amenities)) {
-        listing.amenities.forEach(savedItem => {
-            let checkbox = document.querySelector(`input[type="checkbox"][name="amenity"][value="${savedItem}"]`);
-            if (checkbox) checkbox.checked = true;
+    // ----------------------------------------------------
+    // კეთილმოწყობა და კვება
+    // ----------------------------------------------------
+    if (listing.amenities) {
+        listing.amenities.forEach(am => {
+            const cb = document.querySelector(`input[value="${am}"]`);
+            if (cb) cb.checked = true;
         });
     }
+    
+    ['Breakfast', 'HalfBoard', 'FullBoard'].forEach(meal => {
+        const cb = document.getElementById(`has${meal}`);
+        const input = document.getElementById(`price${meal}`);
+        const savedVal = listing.meals ? listing.meals[meal.charAt(0).toLowerCase() + meal.slice(1)] : 0;
+        
+        cb.onchange = () => { input.disabled = !cb.checked; if(!cb.checked) input.value = ''; };
+        if (savedVal > 0) { cb.checked = true; input.disabled = false; input.value = savedVal; }
+    });
 
-    // კვების ოპციები
-    if (listing.meals) {
-        const mealMap = [
-            { checkId: 'hasBreakfast', inputId: 'priceBreakfast', value: listing.meals.breakfast },
-            { checkId: 'hasHalfBoard', inputId: 'priceHalfBoard', value: listing.meals.halfBoard },
-            { checkId: 'hasFullBoard', inputId: 'priceFullBoard', value: listing.meals.fullBoard }
-        ];
-
-        mealMap.forEach(meal => {
-            const checkBox = document.getElementById(meal.checkId);
-            const priceInput = document.getElementById(meal.inputId);
-
-            if (checkBox && priceInput && meal.value > 0) {
-                checkBox.checked = true;
-                priceInput.disabled = false;
-                priceInput.value = meal.value;
-            }
-        });
-    }
-
-    // 🏆 EVENT DELEGATION: გალერეის უსაფრთხო დაკლიკება
-    if (imageGallery) {
-        imageGallery.addEventListener('click', (e) => {
-            // მთავარზე დაყენება
-            if (e.target.classList.contains('set-main-btn')) {
-                mainPhotoIndex = parseInt(e.target.getAttribute('data-index'));
-                renderGallery();
-            }
-
-            // წაშლა
-            if (e.target.classList.contains('remove-btn')) {
-                const idx = parseInt(e.target.getAttribute('data-index'));
-                uploadedImagesBase64.splice(idx, 1);
-
-                if (idx === mainPhotoIndex) {
-                    mainPhotoIndex = 0;
-                } else if (idx < mainPhotoIndex) {
-                    mainPhotoIndex--;
-                }
-                renderGallery();
-            }
-        });
-    }
-
-    // 6. 🖼️ გალერეის დახატვის ფუნქცია
+    // ----------------------------------------------------
+    // 🖼️ გალერეა ულამაზესი დიზაინით
+    // ----------------------------------------------------
+    let images = listing.images ? [...listing.images] : [];
+    let mainPhotoIndex = 0; 
+    const gallery = document.getElementById('imageGallery');
+    
     function renderGallery() {
-        if (!imageGallery) return;
-        imageGallery.innerHTML = '';
+        gallery.innerHTML = '';
+        if (mainPhotoIndex >= images.length) mainPhotoIndex = 0;
 
-        if (mainPhotoIndex >= uploadedImagesBase64.length) {
-            mainPhotoIndex = 0;
-        }
-
-        uploadedImagesBase64.forEach((base64Str, index) => {
-            const isMain = index === mainPhotoIndex;
-            const item = document.createElement('div');
-            item.className = `img-thumb-box ${isMain ? 'main-photo' : ''}`;
-
-            item.innerHTML = `
-                <img src="${base64Str}" alt="photo-${index}">
-                <button type="button" class="remove-btn" data-index="${index}" title="ფოტოს წაშლა">&times;</button>
-                ${isMain ?
-                    '<div class="main-badge">★ მთავარი</div>' :
-                    `<button type="button" class="set-main-btn" data-index="${index}">მთავარზე დაყენება</button>`
+        images.forEach((src, i) => {
+            const isMain = i === mainPhotoIndex;
+            const div = document.createElement('div');
+            // ვიყენებთ HTML-ში ჩაწერილ ახალ კლასებს
+            div.className = `img-thumb-box ${isMain ? 'main-photo' : ''}`;
+            
+            div.innerHTML = `
+                <img src="${src}">
+                <button type="button" class="remove-btn" data-index="${i}">X</button>
+                ${isMain ? 
+                    '<div class="main-badge">★ მთავარი</div>' : 
+                    `<button type="button" class="set-main-btn" data-index="${i}">მთავარზე დაყენება</button>`
                 }
             `;
-            imageGallery.appendChild(item);
+            gallery.appendChild(div);
         });
     }
 
-    // 7. ახალი სურათების ატვირთვა და კომპრესია
-    if (imageInput) {
-        imageInput.addEventListener('change', (e) => {
-            const files = Array.from(e.target.files);
-            files.forEach(file => {
-                if (!file.type.startsWith('image/')) return;
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    const img = new Image();
-                    img.src = event.target.result;
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        const ctx = canvas.getContext('2d');
-                        const MAX_WIDTH = 800;
-                        const scaleSize = MAX_WIDTH / img.width;
-                        canvas.width = MAX_WIDTH;
-                        canvas.height = img.height * scaleSize;
-                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
-                        uploadedImagesBase64.push(compressedBase64);
-                        renderGallery();
-                    }
-                };
-                reader.readAsDataURL(file);
-            });
-            imageInput.value = '';
-        });
-    }
+    gallery.addEventListener('click', (e) => {
+        if (e.target.classList.contains('remove-btn')) {
+            const idx = parseInt(e.target.getAttribute('data-index'));
+            images.splice(idx, 1);
+            if (idx === mainPhotoIndex) mainPhotoIndex = 0;
+            else if (idx < mainPhotoIndex) mainPhotoIndex--;
+            renderGallery();
+        }
+        if (e.target.classList.contains('set-main-btn')) {
+            mainPhotoIndex = parseInt(e.target.getAttribute('data-index'));
+            renderGallery();
+        }
+    });
 
+    document.getElementById('listImages').onchange = (e) => {
+        Array.from(e.target.files).forEach(file => {
+            if (!file.type.startsWith('image/')) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => { images.push(ev.target.result); renderGallery(); };
+            reader.readAsDataURL(file);
+        });
+        e.target.value = ''; 
+    };
     renderGallery();
 
-    // 8. ფორმის გაგზავნა (ცვლილებების შენახვა)
-    const editForm = document.getElementById('editListingForm');
-    if (editForm) {
-        editForm.addEventListener('submit', (e) => {
-            e.preventDefault();
+    // ----------------------------------------------------
+    // 💾 ბაზაში შენახვა (Submit)
+    // ----------------------------------------------------
+    document.getElementById('editListingForm').onsubmit = (e) => {
+        e.preventDefault();
+        
+        if (images.length === 0) { alert("მინიმუმ 1 ფოტო აუცილებელია!"); return; }
 
-            const newAmenities = [];
-            document.querySelectorAll('input[name="amenity"]:checked').forEach(cb => {
-                newAmenities.push(cb.value);
+        let finalImagesArray = [...images];
+        if (mainPhotoIndex !== 0 && images.length > 1) {
+            const mainImg = finalImagesArray.splice(mainPhotoIndex, 1)[0];
+            finalImagesArray.unshift(mainImg);
+        }
+
+        const amenities = Array.from(document.querySelectorAll('input[name="amenity"]:checked')).map(cb => cb.value);
+        
+        const type = propertyTypeSelect.value;
+        let finalPrice = 0;
+        let hotelRoomsData = [];
+
+        if (type === 'hotel') {
+            document.querySelectorAll('.room-row').forEach(row => {
+                const name = row.querySelector('.room-name').value.trim();
+                const price = parseInt(row.querySelector('.room-price').value) || 0;
+                if (name && price > 0) hotelRoomsData.push({ type: name, price });
             });
+            if (hotelRoomsData.length === 0) { alert("დაამატეთ მინიმუმ 1 ოთახი!"); return; }
+            finalPrice = hotelRoomsData[0].price;
+        } else {
+            finalPrice = parseInt(listPrice.value) || 0;
+        }
 
-            if (uploadedImagesBase64.length === 0) {
-                alert("გთხოვთ დატოვოთ ან ატვირთოთ მინიმუმ 1 ფოტო!");
-                return;
+        listings[listingIndex] = {
+            ...listing,
+            title: document.getElementById('listTitle').value,
+            location: document.getElementById('listLocation').value,
+            rooms: parseInt(document.getElementById('listRooms').value),
+            area: parseInt(document.getElementById('listArea').value),
+            description: document.getElementById('listDesc').value,
+            propertyType: type,
+            price: finalPrice,
+            hotelRooms: hotelRoomsData,
+            blockedDates: blockedDates, 
+            amenities: amenities,
+            images: finalImagesArray,
+            meals: {
+                breakfast: document.getElementById('hasBreakfast').checked ? parseInt(document.getElementById('priceBreakfast').value) || 0 : 0,
+                halfBoard: document.getElementById('hasHalfBoard').checked ? parseInt(document.getElementById('priceHalfBoard').value) || 0 : 0,
+                fullBoard: document.getElementById('hasFullBoard').checked ? parseInt(document.getElementById('priceFullBoard').value) || 0 : 0
             }
+        };
 
-            // სურათების გადალაგება
-            let finalImagesArray = [...uploadedImagesBase64];
-            if (mainPhotoIndex !== 0 && uploadedImagesBase64.length > 1) {
-                const mainImg = finalImagesArray.splice(mainPhotoIndex, 1)[0];
-                finalImagesArray.unshift(mainImg);
-            }
-
-            // ვინახავთ ძველ ინფორმაციას (...listing) და ვაახლებთ მხოლოდ შეცვლილ ველებს
-            listings[listingIndex] = {
-                ...listing,
-                title: document.getElementById('listTitle')?.value.trim() || listing.title,
-                location: document.getElementById('listLocation')?.value || listing.location,
-                rooms: parseInt(document.getElementById('listRooms')?.value) || listing.rooms,
-                area: parseInt(document.getElementById('listArea')?.value) || listing.area,
-                price: parseInt(document.getElementById('listPrice')?.value) || listing.price,
-                description: document.getElementById('listDesc')?.value.trim() || listing.description,
-                amenities: newAmenities,
-                images: finalImagesArray,
-
-                meals: {
-                    breakfast: document.getElementById('hasBreakfast')?.checked ? parseInt(document.getElementById('priceBreakfast').value) || 0 : 0,
-                    halfBoard: document.getElementById('hasHalfBoard')?.checked ? parseInt(document.getElementById('priceHalfBoard').value) || 0 : 0,
-                    fullBoard: document.getElementById('hasFullBoard')?.checked ? parseInt(document.getElementById('priceFullBoard').value) || 0 : 0
-                }
-            };
-
-            try {
-                localStorage.setItem('staygeo_listings', JSON.stringify(listings));
-                alert("✅ ცვლილებები წარმატებით შენახვა!");
-                window.location.href = 'my-listings.html';
-            } catch (err) {
-                alert("❌ შეცდომა შენახვისას! მეხსიერება გადაივსო.");
-                console.error(err);
-            }
-        });
-    }
+        localStorage.setItem('staygeo_listings', JSON.stringify(listings));
+        alert("✅ განცხადება წარმატებით განახლდა!"); // ⚡ ზედმეტი ტექსტი წაშლილია
+        window.location.href = 'my-listings.html';
+    };
 });
