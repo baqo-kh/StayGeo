@@ -179,7 +179,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let finalPrice = 0;
         let hotelRoomsData = [];
 
-        // ოთახების ვალიდაცია JS-ში
+        // ოთახების და ფასის ვალიდაცია JS-ში
         if (type === 'hotel') {
             document.querySelectorAll('.room-row').forEach(row => {
                 const name = row.querySelector('.room-name').value.trim();
@@ -193,7 +193,6 @@ document.addEventListener("DOMContentLoaded", () => {
             if (finalPrice <= 0) { alert("გთხოვთ, მიუთითოთ ობიექტის ფასი 1 ღამეში!"); return; }
         }
 
-        // ვქმნით ახალ განცხადებას
         const newListing = {
             id: Date.now(),
             title: document.getElementById('listTitle').value,
@@ -214,7 +213,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         };
 
-        // მოგვაქვს ძველი ბაზა და ვამატებთ ახალს
         let listings = JSON.parse(localStorage.getItem('staygeo_listings')) || [];
         listings.push(newListing);
         localStorage.setItem('staygeo_listings', JSON.stringify(listings));
