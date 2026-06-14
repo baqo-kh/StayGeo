@@ -15,17 +15,20 @@
         .room-row input[type="text"], 
         .room-row input[type="number"] {
             box-sizing: border-box !important;
-            -webkit-appearance: none; /* ⚡ ასწორებს iPhone-ზე ველების გაშავებას და გამრუდებას */
+            -webkit-appearance: none; /* ⚡ ასწორებს iPhone-ზე ველების გაშავებას */
             appearance: none;
             min-height: 48px; /* ტელეფონზე დასაკლიკად კომფორტული ზომა */
             width: 100% !important;
+            font-size: 16px !important; /* ⚡ კრძალავს iPhone-ის ავტომატურ ზუმს (Zoom) დაკლიკვისას */
         }
 
-        /* გამორთული ველების ფერი (როცა კვება არაა მონიშნული) */
+        /* ⚡ გამორთული (Disabled) ველების ფერი მობილურისთვის */
         input:disabled {
-            opacity: 0.5;
+            opacity: 0.4 !important;
             background: rgba(0,0,0,0.2) !important;
-            color: rgba(255,255,255,0.5) !important;
+            color: rgba(255,255,255,0.4) !important;
+            border: 1px solid rgba(255,255,255,0.1) !important;
+            cursor: not-allowed;
         }
 
         @media (max-width: 768px) {
@@ -72,7 +75,7 @@
 
                 <div class="input-group" style="margin-bottom: 15px;">
                     <label>რას აქირავებთ?</label>
-                    <select id="propertyTypeSelect" required style="padding: 12px; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; font-family: inherit; font-size: 14px; background: #0b3127; color: white;">
+                    <select id="propertyTypeSelect" required style="padding: 12px; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; font-family: inherit; font-size: 16px; background: #0b3127; color: white;">
                         <option value="cottage">კოტეჯი / აგარაკი</option>
                         <option value="apartment">ბინა</option>
                         <option value="hotel">სასტუმრო</option>
@@ -81,13 +84,13 @@
 
                 <div class="input-group">
                     <label>სახელწოდება</label>
-                    <input type="text" id="listTitle" placeholder="მაგ: მყუდრო კოტეჯი ტყის პირას" required>
+                    <input type="text" id="listTitle" placeholder="მაგ: მყუდრო კოტეჯი ტყის პირას" required style="font-size: 16px;">
                 </div>
 
                 <div class="input-row" style="display: flex; gap: 15px;">
                     <div class="input-group" style="flex: 1;">
                         <label>მდებარეობა</label>
-                        <select id="listLocation" required style="background: #0b3127; color: white;">
+                        <select id="listLocation" required style="background: #0b3127; color: white; font-size: 16px;">
                             <option value="" disabled selected>აირჩიეთ...</option>
                             <option value="თბილისი">თბილისი</option>
                             <option value="ბათუმი">ბათუმი</option>
@@ -126,25 +129,25 @@
                     </div>
                     <div class="input-group" style="flex: 1;">
                         <label>ოთახები</label>
-                        <input type="number" id="listRooms" placeholder="მაგ: 3" required min="1">
+                        <input type="number" id="listRooms" placeholder="მაგ: 3" required min="1" style="font-size: 16px;">
                     </div>
                 </div>
 
                 <div class="input-row" style="display: flex; gap: 15px;">
                     <div class="input-group" style="flex: 1;">
                         <label>ფართობი (მ²)</label>
-                        <input type="number" id="listArea" placeholder="მაგ: 120" required min="5">
+                        <input type="number" id="listArea" placeholder="მაგ: 120" required min="5" style="font-size: 16px;">
                     </div>
                     <div class="input-group" id="standardPriceBlock" style="flex: 1;">
                         <label>ფასი 1 ღამეში (₾)</label>
-                        <input type="number" id="listPrice" placeholder="მაგ: 150" min="1">
+                        <input type="number" id="listPrice" placeholder="მაგ: 150" min="1" style="font-size: 16px;">
                     </div>
                 </div>
 
                 <div id="hotelRoomsBlock" style="display: none; border: 1px solid rgba(255, 255, 255, 0.2); padding: 15px; border-radius: 8px; background: transparent; margin-top: 10px;">
                     <label style="font-weight: 600; margin-bottom: 10px; display: block; color: white;">სასტუმროს ოთახები და ფასები</label>
                     <div id="roomsContainer"></div>
-                    <button type="button" id="addRoomBtn" style="background: #0b3127; border: 1px solid #ffc107; color: #ffc107; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; margin-top: 5px; transition: 0.2s;">
+                    <button type="button" id="addRoomBtn" style="background: #0b3127; border: 1px solid #ffc107; color: #ffc107; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold; margin-top: 5px; transition: 0.2s; min-height: 44px;">
                         + ახალი ოთახის დამატება
                     </button>
                 </div>
@@ -188,23 +191,23 @@
                 <h3>3. კვების ოპციები</h3>
                 <p class="subtitle">მონიშნეთ რას სთავაზობთ და მიუთითეთ საფასური 1 პერსონაზე (1 ღამით).</p>
                 <div class="input-row" style="display: flex; gap: 15px;">
-                    <div class="meal-box" style="flex: 1; background: rgba(0,0,0,0.1); padding: 15px; border-radius: 8px;">
+                    <div class="meal-box" style="flex: 1; background: rgba(0,0,0,0.15); padding: 15px; border-radius: 8px;">
                         <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: white; font-weight: bold;">
-                            <input type="checkbox" id="hasBreakfast"> 🥞 საუზმე
+                            <input type="checkbox" id="hasBreakfast" style="width: 18px; height: 18px;"> 🥞 საუზმე
                         </label>
-                        <input type="number" id="priceBreakfast" placeholder="ფასი (₾)" disabled style="padding: 10px; border-radius: 6px; border: none;">
+                        <input type="number" id="priceBreakfast" placeholder="ფასი (₾)" disabled style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: #0b3127; color: white; box-sizing: border-box; -webkit-appearance: none; font-size: 16px;">
                     </div>
-                    <div class="meal-box" style="flex: 1; background: rgba(0,0,0,0.1); padding: 15px; border-radius: 8px;">
+                    <div class="meal-box" style="flex: 1; background: rgba(0,0,0,0.15); padding: 15px; border-radius: 8px;">
                         <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: white; font-weight: bold;">
-                            <input type="checkbox" id="hasHalfBoard"> 🍖 2-ჯერადი
+                            <input type="checkbox" id="hasHalfBoard" style="width: 18px; height: 18px;"> 🍖 2-ჯერადი
                         </label>
-                        <input type="number" id="priceHalfBoard" placeholder="ფასი (₾)" disabled style="padding: 10px; border-radius: 6px; border: none;">
+                        <input type="number" id="priceHalfBoard" placeholder="ფასი (₾)" disabled style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: #0b3127; color: white; box-sizing: border-box; -webkit-appearance: none; font-size: 16px;">
                     </div>
-                    <div class="meal-box" style="flex: 1; background: rgba(0,0,0,0.1); padding: 15px; border-radius: 8px;">
+                    <div class="meal-box" style="flex: 1; background: rgba(0,0,0,0.15); padding: 15px; border-radius: 8px;">
                         <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: white; font-weight: bold;">
-                            <input type="checkbox" id="hasFullBoard"> 🍲 3-ჯერადი
+                            <input type="checkbox" id="hasFullBoard" style="width: 18px; height: 18px;"> 🍲 3-ჯერადი
                         </label>
-                        <input type="number" id="priceFullBoard" placeholder="ფასი (₾)" disabled style="padding: 10px; border-radius: 6px; border: none;">
+                        <input type="number" id="priceFullBoard" placeholder="ფასი (₾)" disabled style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: #0b3127; color: white; box-sizing: border-box; -webkit-appearance: none; font-size: 16px;">
                     </div>
                 </div>
             </div>
@@ -213,12 +216,12 @@
                 <h3>4. ფოტოები და აღწერა</h3>
                 <div class="input-group">
                     <label>ფოტოების ატვირთვა (აირჩიეთ მთავარი ფოტო)</label>
-                    <input type="file" id="listImages" accept="image/*" multiple>
+                    <input type="file" id="listImages" accept="image/*" multiple style="font-size: 16px;">
                     <div id="imageGallery" class="image-gallery"></div> 
                 </div>
                 <div class="input-group">
                     <label>დეტალური აღწერა</label>
-                    <textarea id="listDesc" rows="4" placeholder="აღწერეთ თქვენი ობიექტი დეტალურად..." required></textarea>
+                    <textarea id="listDesc" rows="4" placeholder="აღწერეთ თქვენი ობიექტი დეტალურად..." required style="font-size: 16px;"></textarea>
                 </div>
             </div>
 
@@ -228,20 +231,20 @@
 
                 <div id="blockRoomContainer" style="display: none; margin-bottom: 15px;">
                     <label style="font-weight: bold; font-size: 14px; margin-bottom: 8px; display: block; color: white;">აირჩიეთ ოთახი გასათიშად:</label>
-                    <select id="blockRoomSelect" style="padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); font-family: inherit; background: #0b3127; color: white;"></select>
+                    <select id="blockRoomSelect" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); font-family: inherit; background: #0b3127; color: white; font-size: 16px;"></select>
                 </div>
 
                 <div class="input-row" style="align-items: flex-end; display: flex; gap: 15px;">
                     <div class="input-group" style="flex: 1;">
                         <label style="font-weight: bold; font-size: 14px; margin-bottom: 8px; display: block; color: white;">დაწყება</label>
-                        <input type="date" id="blockStartDate" style="background-color: #0b3127; color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 12px 15px; font-family: inherit; color-scheme: dark;">
+                        <input type="date" id="blockStartDate" style="background-color: #0b3127; color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 12px 15px; width: 100%; font-family: inherit; color-scheme: dark; box-sizing: border-box; font-size: 16px;">
                     </div>
                     <div class="input-group" style="flex: 1;">
                         <label style="font-weight: bold; font-size: 14px; margin-bottom: 8px; display: block; color: white;">დასრულება</label>
-                        <input type="date" id="blockEndDate" style="background-color: #0b3127; color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 12px 15px; font-family: inherit; color-scheme: dark;">
+                        <input type="date" id="blockEndDate" style="background-color: #0b3127; color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 12px 15px; width: 100%; font-family: inherit; color-scheme: dark; box-sizing: border-box; font-size: 16px;">
                     </div>
                     <div class="input-group" style="flex: 1;">
-                        <button type="button" id="addBlockBtn" style="background: #ff4d4d; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; font-size: 15px; box-shadow: 0 4px 10px rgba(255, 77, 77, 0.3);">ჩაკეტვა 🔒</button>
+                        <button type="button" id="addBlockBtn" style="background: #ff4d4d; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; font-size: 15px; box-shadow: 0 4px 10px rgba(255, 77, 77, 0.3); min-height: 48px;">ჩაკეტვა 🔒</button>
                     </div>
                 </div>
 
