@@ -15,18 +15,20 @@
         .room-row input[type="text"], 
         .room-row input[type="number"] {
             box-sizing: border-box !important;
-            -webkit-appearance: none; /* ⚡ ასწორებს iPhone-ზე ველების გაშავებას */
-            appearance: none;
-            min-height: 48px; /* ტელეფონზე დასაკლიკად კომფორტული ზომა */
+            -webkit-appearance: none;
+            appearance: none; /* ⚡ VS Code ერორს აღარ ამოაგდებს */
+            min-height: 48px;
             width: 100% !important;
-            font-size: 16px !important; /* ⚡ კრძალავს iPhone-ის ავტომატურ ზუმს (Zoom) დაკლიკვისას */
+            font-size: 16px !important;
         }
 
-        /* ⚡ გამორთული (Disabled) ველების ფერი მობილურისთვის */
+        /* ⚡ გამორთული (Disabled) ველების ფერი მობილურისთვის (iPhone Fix) */
         input:disabled {
-            opacity: 0.4 !important;
+            opacity: 1 !important; 
+            -webkit-opacity: 1 !important;
+            -webkit-text-fill-color: rgba(255,255,255,0.5) !important; 
             background: rgba(0,0,0,0.2) !important;
-            color: rgba(255,255,255,0.4) !important;
+            color: rgba(255,255,255,0.5) !important;
             border: 1px solid rgba(255,255,255,0.1) !important;
             cursor: not-allowed;
         }
@@ -195,19 +197,19 @@
                         <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: white; font-weight: bold;">
                             <input type="checkbox" id="hasBreakfast" style="width: 18px; height: 18px;"> 🥞 საუზმე
                         </label>
-                        <input type="number" id="priceBreakfast" placeholder="ფასი (₾)" disabled style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: #0b3127; color: white; box-sizing: border-box; -webkit-appearance: none; font-size: 16px;">
+                        <input type="number" id="priceBreakfast" placeholder="ფასი (₾)" disabled style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: #0b3127; color: white; box-sizing: border-box; -webkit-appearance: none; appearance: none; font-size: 16px;">
                     </div>
                     <div class="meal-box" style="flex: 1; background: rgba(0,0,0,0.15); padding: 15px; border-radius: 8px;">
                         <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: white; font-weight: bold;">
                             <input type="checkbox" id="hasHalfBoard" style="width: 18px; height: 18px;"> 🍖 2-ჯერადი
                         </label>
-                        <input type="number" id="priceHalfBoard" placeholder="ფასი (₾)" disabled style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: #0b3127; color: white; box-sizing: border-box; -webkit-appearance: none; font-size: 16px;">
+                        <input type="number" id="priceHalfBoard" placeholder="ფასი (₾)" disabled style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: #0b3127; color: white; box-sizing: border-box; -webkit-appearance: none; appearance: none; font-size: 16px;">
                     </div>
                     <div class="meal-box" style="flex: 1; background: rgba(0,0,0,0.15); padding: 15px; border-radius: 8px;">
                         <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: white; font-weight: bold;">
                             <input type="checkbox" id="hasFullBoard" style="width: 18px; height: 18px;"> 🍲 3-ჯერადი
                         </label>
-                        <input type="number" id="priceFullBoard" placeholder="ფასი (₾)" disabled style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: #0b3127; color: white; box-sizing: border-box; -webkit-appearance: none; font-size: 16px;">
+                        <input type="number" id="priceFullBoard" placeholder="ფასი (₾)" disabled style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: #0b3127; color: white; box-sizing: border-box; -webkit-appearance: none; appearance: none; font-size: 16px;">
                     </div>
                 </div>
             </div>
