@@ -5,6 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StayGeo.ge - განცხადების დამატება</title>
     <link rel="stylesheet" href="css/add-listing-style.css"> 
+    
+    <style>
+        @media (max-width: 768px) {
+            .input-row {
+                flex-direction: column !important;
+                gap: 15px !important;
+            }
+            .input-group, .meal-box {
+                width: 100% !important;
+                flex: none !important;
+            }
+            .room-row {
+                flex-direction: column !important;
+                background: rgba(0,0,0,0.1);
+                padding: 10px;
+                border-radius: 8px;
+            }
+            .room-name, .room-price {
+                width: 100% !important;
+                margin-bottom: 8px;
+                box-sizing: border-box;
+            }
+            .remove-room-btn {
+                width: 100% !important;
+                padding: 12px !important;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="add-listing-container">
@@ -33,34 +61,58 @@
                     <input type="text" id="listTitle" placeholder="მაგ: მყუდრო კოტეჯი ტყის პირას" required>
                 </div>
 
-                <div class="input-row">
-                    <div class="input-group">
+                <div class="input-row" style="display: flex; gap: 15px;">
+                    <div class="input-group" style="flex: 1;">
                         <label>მდებარეობა</label>
                         <select id="listLocation" required style="background: #0b3127; color: white;">
                             <option value="" disabled selected>აირჩიეთ...</option>
                             <option value="თბილისი">თბილისი</option>
                             <option value="ბათუმი">ბათუმი</option>
-                            <option value="ბაკურიანი">ბაკურიანი</option>
-                            <option value="გუდაური">გუდაური</option>
-                            <option value="ბორჯომი">ბორჯომი</option>
+                            <option value="ქუთაისი">ქუთაისი</option>
+                            <option value="რუსთავი">რუსთავი</option>
+                            <option value="ზუგდიდი">ზუგდიდი</option>
+                            <option value="გორი">გორი</option>
+                            <option value="ფოთი">ფოთი</option>
+                            <option value="თელავი">თელავი</option>
                             <option value="ქობულეთი">ქობულეთი</option>
                             <option value="ურეკი">ურეკი</option>
+                            <option value="შეკვეთილი">შეკვეთილი</option>
+                            <option value="გონიო">გონიო</option>
+                            <option value="კვარიათი">კვარიათი</option>
+                            <option value="მწვანე კონცხი">მწვანე კონცხი</option>
+                            <option value="ანაკლია">ანაკლია</option>
+                            <option value="გრიგოლეთი">გრიგოლეთი</option>
+                            <option value="ბაკურიანი">ბაკურიანი</option>
+                            <option value="გუდაური">გუდაური</option>
                             <option value="მესტია">მესტია</option>
                             <option value="ყაზბეგი (სტეფანწმინდა)">ყაზბეგი (სტეფანწმინდა)</option>
+                            <option value="გოდერძი">გოდერძი</option>
+                            <option value="ბახმარო">ბახმარო</option>
+                            <option value="შოვი">შოვი</option>
+                            <option value="ბორჯომი">ბორჯომი</option>
+                            <option value="წყალტუბო">წყალტუბო</option>
+                            <option value="საირმე">საირმე</option>
+                            <option value="აბასთუმანი">აბასთუმანი</option>
+                            <option value="სიღნაღი">სიღნაღი</option>
+                            <option value="მცხეთა">მცხეთა</option>
+                            <option value="ყვარელი">ყვარელი</option>
+                            <option value="ცემი">ცემი</option>
+                            <option value="წაღვერი">წაღვერი</option>
+                            <option value="სურამი">სურამი</option>
                         </select>
                     </div>
-                    <div class="input-group">
+                    <div class="input-group" style="flex: 1;">
                         <label>ოთახები</label>
                         <input type="number" id="listRooms" placeholder="მაგ: 3" required min="1">
                     </div>
                 </div>
 
-                <div class="input-row">
-                    <div class="input-group">
+                <div class="input-row" style="display: flex; gap: 15px;">
+                    <div class="input-group" style="flex: 1;">
                         <label>ფართობი (მ²)</label>
                         <input type="number" id="listArea" placeholder="მაგ: 120" required min="5">
                     </div>
-                    <div class="input-group" id="standardPriceBlock">
+                    <div class="input-group" id="standardPriceBlock" style="flex: 1;">
                         <label>ფასი 1 ღამეში (₾)</label>
                         <input type="number" id="listPrice" placeholder="მაგ: 150" min="1">
                     </div>
@@ -112,24 +164,24 @@
             <div class="form-section">
                 <h3>3. კვების ოპციები</h3>
                 <p class="subtitle">მონიშნეთ რას სთავაზობთ და მიუთითეთ საფასური 1 პერსონაზე (1 ღამით).</p>
-                <div class="input-row" style="display: flex; gap: 15px; flex-wrap: wrap;">
+                <div class="input-row" style="display: flex; gap: 15px;">
                     <div class="meal-box" style="flex: 1; background: rgba(0,0,0,0.1); padding: 15px; border-radius: 8px;">
                         <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: white; font-weight: bold;">
                             <input type="checkbox" id="hasBreakfast"> 🥞 საუზმე
                         </label>
-                        <input type="number" id="priceBreakfast" placeholder="ფასი (₾)" disabled style="width: 100%; padding: 10px; border-radius: 6px; border: none;">
+                        <input type="number" id="priceBreakfast" placeholder="ფასი (₾)" disabled style="width: 100%; padding: 10px; border-radius: 6px; border: none; box-sizing: border-box;">
                     </div>
                     <div class="meal-box" style="flex: 1; background: rgba(0,0,0,0.1); padding: 15px; border-radius: 8px;">
                         <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: white; font-weight: bold;">
                             <input type="checkbox" id="hasHalfBoard"> 🍖 2-ჯერადი
                         </label>
-                        <input type="number" id="priceHalfBoard" placeholder="ფასი (₾)" disabled style="width: 100%; padding: 10px; border-radius: 6px; border: none;">
+                        <input type="number" id="priceHalfBoard" placeholder="ფასი (₾)" disabled style="width: 100%; padding: 10px; border-radius: 6px; border: none; box-sizing: border-box;">
                     </div>
                     <div class="meal-box" style="flex: 1; background: rgba(0,0,0,0.1); padding: 15px; border-radius: 8px;">
                         <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: white; font-weight: bold;">
                             <input type="checkbox" id="hasFullBoard"> 🍲 3-ჯერადი
                         </label>
-                        <input type="number" id="priceFullBoard" placeholder="ფასი (₾)" disabled style="width: 100%; padding: 10px; border-radius: 6px; border: none;">
+                        <input type="number" id="priceFullBoard" placeholder="ფასი (₾)" disabled style="width: 100%; padding: 10px; border-radius: 6px; border: none; box-sizing: border-box;">
                     </div>
                 </div>
             </div>
@@ -138,7 +190,7 @@
                 <h3>4. ფოტოები და აღწერა</h3>
                 <div class="input-group">
                     <label>ფოტოების ატვირთვა (აირჩიეთ მთავარი ფოტო)</label>
-                    <input type="file" id="listImages" accept="image/*" multiple required>
+                    <input type="file" id="listImages" accept="image/*" multiple>
                     <div id="imageGallery" class="image-gallery"></div> 
                 </div>
                 <div class="input-group">
@@ -153,19 +205,19 @@
 
                 <div id="blockRoomContainer" style="display: none; margin-bottom: 15px;">
                     <label style="font-weight: bold; font-size: 14px; margin-bottom: 8px; display: block; color: white;">აირჩიეთ ოთახი გასათიშად:</label>
-                    <select id="blockRoomSelect" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); font-family: inherit; background: #fff; color: #333;"></select>
+                    <select id="blockRoomSelect" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); font-family: inherit; background: #0b3127; color: white;"></select>
                 </div>
 
-                <div class="input-row" style="align-items: flex-end; display: flex; gap: 15px; flex-wrap: wrap;">
-                    <div class="input-group" style="flex: 1; min-width: 150px;">
+                <div class="input-row" style="align-items: flex-end; display: flex; gap: 15px;">
+                    <div class="input-group" style="flex: 1;">
                         <label style="font-weight: bold; font-size: 14px; margin-bottom: 8px; display: block; color: white;">დაწყება</label>
                         <input type="date" id="blockStartDate" style="background-color: #0b3127; color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 12px 15px; width: 100%; font-family: inherit; color-scheme: dark; box-sizing: border-box;">
                     </div>
-                    <div class="input-group" style="flex: 1; min-width: 150px;">
+                    <div class="input-group" style="flex: 1;">
                         <label style="font-weight: bold; font-size: 14px; margin-bottom: 8px; display: block; color: white;">დასრულება</label>
                         <input type="date" id="blockEndDate" style="background-color: #0b3127; color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 12px 15px; width: 100%; font-family: inherit; color-scheme: dark; box-sizing: border-box;">
                     </div>
-                    <div class="input-group" style="flex: 1; min-width: 150px;">
+                    <div class="input-group" style="flex: 1;">
                         <button type="button" id="addBlockBtn" style="background: #ff4d4d; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; font-size: 15px; box-shadow: 0 4px 10px rgba(255, 77, 77, 0.3); box-sizing: border-box;">ჩაკეტვა 🔒</button>
                     </div>
                 </div>

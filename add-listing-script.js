@@ -20,12 +20,10 @@ document.addEventListener("DOMContentLoaded", () => {
             standardPriceBlock.style.display = 'none';
             hotelRoomsBlock.style.display = 'block';
             blockRoomContainer.style.display = 'block';
-            listPrice.required = false;
         } else {
             standardPriceBlock.style.display = 'block';
             hotelRoomsBlock.style.display = 'none';
             blockRoomContainer.style.display = 'none';
-            listPrice.required = true;
         }
         updateBlockRoomSelect();
     }
@@ -34,9 +32,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const row = document.createElement('div');
         row.className = 'room-row';
         row.style.cssText = 'display: flex; gap: 10px; margin-bottom: 10px;';
+        
+        // ⚡ აქედან ამოღებულია required, რომ დამატების ღილაკი არ გაჭედოს!
         row.innerHTML = `
-            <input type="text" class="room-name" placeholder="მაგ:ორ პერსონაზე" style="flex: 2; padding: 10px; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; background: #0b3127; color: white;" required>
-            <input type="number" class="room-price" placeholder="ფასი (₾)" style="flex: 1; padding: 10px; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; background: #0b3127; color: white;" required>
+            <input type="text" class="room-name" placeholder="მაგ: 2 პერსონაზე" style="flex: 2; padding: 10px; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; background: #0b3127; color: white;">
+            <input type="number" class="room-price" placeholder="ფასი (₾)" style="flex: 1; padding: 10px; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; background: #0b3127; color: white;">
             <button type="button" class="remove-room-btn" style="background: #ff4d4d; color: white; border: none; border-radius: 6px; padding: 0 15px; cursor: pointer; font-weight: bold;">X</button>
         `;
         row.querySelector('.remove-room-btn').onclick = () => { row.remove(); updateBlockRoomSelect(); };
@@ -164,6 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('addListingForm').onsubmit = (e) => {
         e.preventDefault();
         
+        // JS აკონტროლებს რომ სურათები ნამდვილად იყოს ატვირთული
         if (images.length === 0) { alert("გთხოვთ, ატვირთოთ მინიმუმ 1 ფოტო!"); return; }
 
         let finalImagesArray = [...images];
@@ -178,21 +179,23 @@ document.addEventListener("DOMContentLoaded", () => {
         let finalPrice = 0;
         let hotelRoomsData = [];
 
+        // ოთახების ვალიდაცია JS-ში
         if (type === 'hotel') {
             document.querySelectorAll('.room-row').forEach(row => {
                 const name = row.querySelector('.room-name').value.trim();
                 const price = parseInt(row.querySelector('.room-price').value) || 0;
                 if (name && price > 0) hotelRoomsData.push({ type: name, price });
             });
-            if (hotelRoomsData.length === 0) { alert("დაამატეთ მინიმუმ 1 ოთახი ფასით!"); return; }
-            finalPrice = hotelRoomsData[0].price; // დეფოლტ ფასი
+            if (hotelRoomsData.length === 0) { alert("გთხოვთ, დაამატოთ მინიმუმ 1 სასტუმროს ოთახი და მიუთითოთ ფასი!"); return; }
+            finalPrice = hotelRoomsData[0].price; 
         } else {
             finalPrice = parseInt(listPrice.value) || 0;
+            if (finalPrice <= 0) { alert("გთხოვთ, მიუთითოთ ობიექტის ფასი 1 ღამეში!"); return; }
         }
 
         // ვქმნით ახალ განცხადებას
         const newListing = {
-            id: Date.now(), // ⚡ უნიკალური ID ახალი განცხადებისთვის
+            id: Date.now(),
             title: document.getElementById('listTitle').value,
             location: document.getElementById('listLocation').value,
             rooms: parseInt(document.getElementById('listRooms').value),

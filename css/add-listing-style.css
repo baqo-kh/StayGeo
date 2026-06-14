@@ -113,7 +113,11 @@ body {
 .add-listing-container .input-group input[type=file]:hover {
   border-color: #febb02;
 }
-
+.add-listing-container {
+  /* =========================================
+     🖼️ ფოტოების გალერეის და ღილაკების სრული დიზაინი
+     ========================================= */
+}
 .add-listing-container .image-gallery {
   display: flex;
   flex-wrap: wrap;
@@ -142,7 +146,9 @@ body {
   position: relative;
   z-index: 1; /* სურათი მიდის უკან */
 }
-
+.add-listing-container .image-gallery .img-thumb-box {
+  /* ✖️ წაშლის ღილაკი */
+}
 .add-listing-container .image-gallery .img-thumb-box .remove-btn {
   position: absolute;
   top: 4px;
@@ -165,7 +171,9 @@ body {
   background: #ff3b30;
   transform: scale(1.1);
 }
-
+.add-listing-container .image-gallery .img-thumb-box {
+  /* ⭐ მთავარზე დაყენების ღილაკი */
+}
 .add-listing-container .image-gallery .img-thumb-box .set-main-btn {
   position: absolute;
   bottom: 0;
@@ -185,7 +193,9 @@ body {
   color: #0b3127;
   font-weight: bold;
 }
-
+.add-listing-container .image-gallery .img-thumb-box {
+  /* 🏆 მთავარი ფოტოს ნიშანი (Badge) */
+}
 .add-listing-container .image-gallery .img-thumb-box .main-badge {
   position: absolute;
   bottom: 0;
@@ -200,7 +210,11 @@ body {
   pointer-events: none;
   z-index: 999 !important; /* გარანტირებულად ზემოთ! */
 }
-
+.add-listing-container {
+  /* =========================================
+     🍽️ კვების ბარათების სწორი სტილი (მუქი მწვანე)
+     ========================================= */
+}
 .add-listing-container .meal-box {
   background-color: #0b3127 !important;
   border: 1px solid #1a5142 !important;
