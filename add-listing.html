@@ -16,13 +16,12 @@
         .room-row input[type="number"] {
             box-sizing: border-box !important;
             -webkit-appearance: none;
-            appearance: none; /* ⚡ VS Code ერორს აღარ ამოაგდებს */
+            appearance: none; 
             min-height: 48px;
             width: 100% !important;
             font-size: 16px !important;
         }
 
-        /* ⚡ გამორთული (Disabled) ველების ფერი მობილურისთვის (iPhone Fix) */
         input:disabled {
             opacity: 1 !important; 
             -webkit-opacity: 1 !important;
@@ -63,10 +62,13 @@
     </style>
 </head>
 <body>
+
     <div class="add-listing-container">
-        <div class="header-link">
-            <a href="my-listings.html">← ჩემს განცხადებებში დაბრუნება</a>
-        </div>
+        
+        <a href="index.html" style="color: white; text-decoration: none; font-weight: bold; font-size: 14px; background: rgba(255,255,255,0.1); padding: 10px 15px; border-radius: 8px; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 25px; transition: 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">
+            <span style="font-size: 18px; line-height: 1;">←</span> მთავარი გვერდი
+        </a>
+
         <h2>➕ ახალი განცხადების დამატება</h2>
         <p class="subtitle">შეავსეთ ინფორმაცია თქვენი ობიექტის შესახებ</p>
 
@@ -140,6 +142,12 @@
                         <label>ფართობი (მ²)</label>
                         <input type="number" id="listArea" placeholder="მაგ: 120" required min="5" style="font-size: 16px;">
                     </div>
+                    
+                    <div class="input-group" id="capacityBlock" style="flex: 1;">
+                        <label>სტუმრების რაოდენობა</label>
+                        <input type="number" id="listCapacity" placeholder="მაგ: 4" min="1" style="font-size: 16px;">
+                    </div>
+
                     <div class="input-group" id="standardPriceBlock" style="flex: 1;">
                         <label>ფასი 1 ღამეში (₾)</label>
                         <input type="number" id="listPrice" placeholder="მაგ: 150" min="1" style="font-size: 16px;">
@@ -257,6 +265,6 @@
         </form>
     </div>
     
-    <script src="add-listing-script.js"></script>
+    <script type="module" src="add-listing-script.js"></script>
 </body>
 </html>

@@ -1,22 +1,23 @@
+import { auth, db } from './firebase-config.js';
+import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
 document.addEventListener("DOMContentLoaded", () => {
     const loginForm = document.getElementById('loginForm');
     const passwordInput = document.getElementById('password');
     const toggleBtn = document.getElementById('togglePassword');
     const submitBtn = document.querySelector('.submit-btn');
     
-    // 1. თვალის ღილაკის გამოჩენა/მალვა წერისას (უფრო მოკლე ჩანაწერი)
     if (passwordInput && toggleBtn) {
         passwordInput.addEventListener('input', () => {
             toggleBtn.style.display = passwordInput.value.length > 0 ? 'flex' : 'none';
         });
     }
 
-    // 2. ფორმის გაგზავნის მართვა
     if (loginForm) {
         loginForm.addEventListener('submit', async (event) => {
             event.preventDefault(); 
 
-            // ვიყენებთ Optional Chaining-ს უსაფრთხოებისთვის
             const email = document.getElementById('email')?.value.trim();
             const password = passwordInput?.value;
 
@@ -25,7 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            // ღილაკის საწყის მდგომარეობაში დაბრუნების ფუნქცია
             const originalBtnText = submitBtn ? submitBtn.innerText : "შესვლა";
             const resetButton = () => {
                 if (submitBtn) {
@@ -35,7 +35,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             };
 
-            // ვიზუალური ეფექტი: ღილაკს ვაწერთ "ვამოწმებ..." და ვბლოკავთ
             if (submitBtn) {
                 submitBtn.innerText = "ვამოწმებ...";
                 submitBtn.disabled = true;
@@ -43,44 +42,51 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             try {
-                if (typeof supabaseClient === 'undefined') {
-                    alert("❌ ბაზასთან კავშირი ვერ მოხერხდა! (Supabase არ არის ჩატვირთული)");
-                    resetButton();
-                    return;
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                const userDocRef = doc(db, "users", user.uid);
+                const userDocSnap = await getDoc(userDocRef);
+                
+                let userData = {};
+                if (userDocSnap.exists()) {
+                    userData = userDocSnap.data();
                 }
 
-                // ⚡ რეალური მოთხოვნა Supabase ბაზაში
-                const { data, error } = await supabaseClient.auth.signInWithPassword({
-                    email: email,
-                    password: password,
-                });
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('user_id', user.uid);
+                
+                localStorage.setItem('staygeo_user_profile', JSON.stringify({
+                    uid: user.uid,
+                    name: user.displayName || `${userData.firstName || ''} ${userData.lastName || ''}`.trim(),
+                    email: user.email,
+                    phone: userData.phone || '',
+                    avatar: userData.avatar || ''
+                }));
 
-                if (error) {
-                    // თუ პაროლი ან მეილი არასწორია (ან არ არსებობს)
-                    alert("❌ შეცდომა: ელ-ფოსტის მისამართი ან პაროლი არასწორია!");
-                    resetButton();
-                } else {
-                    // ავტორიზაცია წარმატებულია
-                    localStorage.setItem('isLoggedIn', 'true');
-                    
-                    // 🆕 ვინახავთ მომხმარებლის ID-ს (დაგჭირდება Supabase-ში განცხადების დასამატებლად)
-                    if (data.user) {
-                        localStorage.setItem('user_id', data.user.id);
-                    }
+                alert("✅ ავტორიზაცია წარმატებულია! კეთილი იყოს თქვენი მობრძანება.");
+                window.location.href = "index.html"; 
 
-                    alert("✅ ავტორიზაცია წარმატებულია! კეთილი იყოს თქვენი მობრძანება.");
-                    window.location.href = "index.html"; 
+            } catch (error) {
+                console.error(error);
+                
+                let errorMessage = "დაფიქსირდა სისტემური შეცდომა.";
+                
+                if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+                    errorMessage = "ელ-ფოსტა ან პაროლი არასწორია.";
+                } else if (error.code === 'auth/too-many-requests') {
+                    errorMessage = "ზედმეტად ბევრი მცდელობა. უსაფრთხოების მიზნით, სცადეთ მოგვიანებით.";
+                } else if (error.code === 'auth/network-request-failed') {
+                    errorMessage = "ინტერნეტთან კავშირი გაწყვეტილია.";
                 }
-            } catch (err) {
-                alert("❌ სისტემური შეცდომა: " + err.message);
+                
+                alert(`❌ ${errorMessage}`);
                 resetButton();
             }
         });
     }
 });
 
-// 3. პაროლის ჩვენება / დამალვა 
-// (მიბმულია window-ზე, რომ HTML-ის onclick-მა გარანტირებულად იპოვოს)
 window.togglePasswordVisibility = function() {
     const passwordInput = document.getElementById('password');
     const eyeIcon = document.getElementById('eyeIcon');

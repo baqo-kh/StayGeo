@@ -1,10 +1,11 @@
+import { auth, db } from './firebase-config.js';
+import { createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
 document.addEventListener("DOMContentLoaded", () => {
     
-    // 🌍 ქვეყნების სრული გლობალური სია
     const countries = [
         { name: "საქართველო", code: "+995", iso: "ge" },
-        
-        // ევროპა
         { name: "დიდი ბრიტანეთი", code: "+44", iso: "gb" },
         { name: "გერმანია", code: "+49", iso: "de" },
         { name: "საფრანგეთი", code: "+33", iso: "fr" },
@@ -49,8 +50,6 @@ document.addEventListener("DOMContentLoaded", () => {
         { name: "სან-მარინო", code: "+378", iso: "sm" },
         { name: "ვატიკანი", code: "+379", iso: "va" },
         { name: "ლიხტენშტაინი", code: "+423", iso: "li" },
-
-        // ამერიკა
         { name: "აშშ", code: "+1", iso: "us" },
         { name: "კანადა", code: "+1", iso: "ca" },
         { name: "მექსიკა", code: "+52", iso: "mx" },
@@ -74,8 +73,6 @@ document.addEventListener("DOMContentLoaded", () => {
         { name: "პანამა", code: "+507", iso: "pa" },
         { name: "ურუგვაი", code: "+598", iso: "uy" },
         { name: "იამაიკა", code: "+1", iso: "jm" },
-
-        // აზია და ევრაზია
         { name: "თურქეთი", code: "+90", iso: "tr" },
         { name: "სომხეთი", code: "+374", iso: "am" },
         { name: "აზერბაიჯანი", code: "+994", iso: "az" },
@@ -105,8 +102,6 @@ document.addEventListener("DOMContentLoaded", () => {
         { name: "კამბოჯა", code: "+855", iso: "kh" },
         { name: "მონღოლეთი", code: "+976", iso: "mn" },
         { name: "მალდივები", code: "+960", iso: "mv" },
-
-        // ახლო აღმოსავლეთი და ჩრდ. აფრიკა
         { name: "საამიროები (UAE)", code: "+971", iso: "ae" },
         { name: "საუდის არაბეთი", code: "+966", iso: "sa" },
         { name: "კატარი", code: "+974", iso: "qa" },
@@ -126,8 +121,6 @@ document.addEventListener("DOMContentLoaded", () => {
         { name: "პალესტინა", code: "+970", iso: "ps" },
         { name: "ისრაელი", code: "+972", iso: "il" },
         { name: "ირანი", code: "+98", iso: "ir" },
-
-        // აფრიკა
         { name: "სამხრეთ აფრიკა", code: "+27", iso: "za" },
         { name: "ნიგერია", code: "+234", iso: "ng" },
         { name: "ეთიოპია", code: "+251", iso: "et" },
@@ -145,8 +138,6 @@ document.addEventListener("DOMContentLoaded", () => {
         { name: "ზიმბაბვე", code: "+263", iso: "zw" },
         { name: "რუანდა", code: "+250", iso: "rw" },
         { name: "ნამიბია", code: "+264", iso: "na" },
-
-        // ოკეანეთი
         { name: "ავსტრალია", code: "+61", iso: "au" },
         { name: "ახალი ზელანდია", code: "+64", iso: "nz" },
         { name: "პაპუა-ახალი გვინეა", code: "+675", iso: "pg" },
@@ -165,9 +156,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (countryDropdown && countryList) {
         
-        // 1. ფუნქცია: ხატავს სიას
         function renderOptions(filterText = "") {
-            countryList.innerHTML = ''; // ვასუფთავებთ
+            countryList.innerHTML = ''; 
             
             const filteredCountries = countries.filter(country => 
                 country.name.toLowerCase().includes(filterText.toLowerCase()) || 
@@ -192,41 +182,36 @@ document.addEventListener("DOMContentLoaded", () => {
                     selectedCodeText.innerText = country.code;
                     regCountryCodeInput.value = country.code;
                     countryDropdown.style.display = 'none';
-                    countrySearch.value = ''; // ვასუფთავებთ ძებნას დახურვისას
-                    renderOptions(); // ვაბრუნებთ სრულ სიას
+                    countrySearch.value = ''; 
+                    renderOptions(); 
                 });
                 
                 countryList.appendChild(optionDiv);
             });
         }
 
-        // ვხატავთ თავდაპირველად სრულ სიას
         renderOptions();
 
-        // 2. ძებნის ლოგიკა (Search)
         countrySearch.addEventListener('input', (e) => {
             renderOptions(e.target.value);
         });
 
-        // 3. სიის გახსნა/დახურვა
         selectedCountry.addEventListener('click', (e) => {
             e.stopPropagation(); 
             const isClosed = countryDropdown.style.display === 'none' || countryDropdown.style.display === '';
             
             if (isClosed) {
                 countryDropdown.style.display = 'block';
-                countrySearch.focus(); // ეკრანის გახსნისთანავე კურსორი ძებნაში ჯდება
+                countrySearch.focus(); 
             } else {
                 countryDropdown.style.display = 'none';
             }
         });
 
-        // ხელს უშლის ძებნაზე დაჭერისას სიის დახურვას
         countrySearch.addEventListener('click', (e) => {
             e.stopPropagation();
         });
 
-        // გარე დაკლიკვისას სიის დახურვა
         document.addEventListener('click', (e) => {
             if (!selectedCountry.contains(e.target) && !countryDropdown.contains(e.target)) {
                 countryDropdown.style.display = 'none';
@@ -234,7 +219,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 🚀 ფორმის გაგზავნა
     const registerForm = document.getElementById('registerForm');
     const submitBtn = document.getElementById('submitBtn');
 
@@ -261,38 +245,57 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             const originalBtnText = submitBtn.innerText;
-            submitBtn.innerText = "ვარეგისტრირებ...";
+            submitBtn.innerText = "მიმდინარეობს რეგისტრაცია ⏳...";
             submitBtn.disabled = true;
             submitBtn.style.opacity = "0.7";
 
             try {
-                const { data, error } = await supabaseClient.auth.signUp({
-                    email: email,
-                    password: password,
-                    options: {
-                        data: {
-                            first_name: firstName,
-                            last_name: lastName,
-                            phone_number: fullPhone
-                        }
-                    }
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                await updateProfile(user, {
+                    displayName: `${firstName} ${lastName}`
                 });
 
-                if (error) throw error;
+                await setDoc(doc(db, "users", user.uid), {
+                    uid: user.uid,
+                    firstName: firstName,
+                    lastName: lastName,
+                    phone: fullPhone,
+                    email: email,
+                    avatar: "", 
+                    role: "user", 
+                    createdAt: new Date().toISOString()
+                });
+
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('staygeo_user_profile', JSON.stringify({
+                    uid: user.uid,
+                    name: `${firstName} ${lastName}`,
+                    email: email,
+                    phone: fullPhone,
+                    avatar: ""
+                }));
 
                 alert("✅ რეგისტრაცია წარმატებით დასრულდა! ახლა შეგიძლიათ გაიაროთ ავტორიზაცია.");
                 window.location.href = "login.html";
 
             } catch (err) {
-                let errorMsg = "დაფიქსირდა შეცდომა.";
-                if (err.message.includes("User already registered")) {
-                    errorMsg = "ეს ელ-ფოსტა უკვე გამოყენებულია!";
-                } else if (err.message.includes("Password should be")) {
-                    errorMsg = "პაროლი ძალიან მარტივია.";
-                } else {
-                    errorMsg = err.message;
+                console.error(err);
+                
+                let errorMessage = "დაფიქსირდა შეცდომა. სცადეთ მოგვიანებით.";
+                
+                if (err.code === 'auth/email-already-in-use') {
+                    errorMessage = "ამ ელ-ფოსტით მომხმარებელი უკვე რეგისტრირებულია.";
+                } else if (err.code === 'auth/weak-password') {
+                    errorMessage = "პაროლი უნდა შეიცავდეს მინიმუმ 6 სიმბოლოს.";
+                } else if (err.code === 'auth/invalid-email') {
+                    errorMessage = "ელ-ფოსტის ფორმატი არასწორია.";
+                } else if (err.code === 'auth/network-request-failed') {
+                    errorMessage = "ინტერნეტთან კავშირი გაწყვეტილია.";
                 }
-                alert("❌ რეგისტრაცია ვერ მოხერხდა: " + errorMsg);
+                
+                alert(`❌ ${errorMessage}`);
                 
                 submitBtn.innerText = originalBtnText;
                 submitBtn.disabled = false;

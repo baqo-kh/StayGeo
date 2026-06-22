@@ -5,6 +5,126 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StayGeo.ge - იპოვე შენი შემდეგი დასასვენებელი ადგილი</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    
+    <style>
+        .sg-search-bar-box {
+            background: #febb02; 
+            padding: 4px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+            width: 100%; 
+            max-width: 1100px; 
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+
+        .sg-search-inner-form {
+            display: flex; 
+            width: 100%; 
+            background: #febb02; 
+            gap: 2px; 
+            border-radius: 8px; 
+        }
+
+        .sg-search-item {
+            flex: 1; 
+            min-width: 0; 
+            position: relative; 
+            display: flex; 
+            align-items: center; 
+            padding: 0 15px;
+            height: 45px; 
+            min-height: 45px;
+            background: white; 
+            box-sizing: border-box;
+        }
+
+        .sg-search-item:first-child {
+            border-radius: 8px 0 0 8px;
+        }
+
+        .sg-search-item-guests {
+            flex: 1.5;
+            cursor: pointer;
+        }
+
+        .sg-main-input {
+            width: 100%; 
+            height: 100%; 
+            padding-left: 32px; 
+            border: none; 
+            background: transparent;
+            outline: none; 
+            font-weight: bold; 
+            color: #333; 
+            text-overflow: ellipsis; 
+            font-size: 15px; 
+        }
+
+        .sg-guests-val {
+            font-size: 15px; 
+            font-weight: bold;
+            color: #333;
+            text-overflow: ellipsis; 
+            overflow: hidden; 
+            white-space: nowrap;
+        }
+
+        .sg-main-search-btn {
+            flex: 0 0 auto;
+            height: 45px; 
+            min-height: 45px;
+            padding: 0 35px; 
+            margin: 0; 
+            border: none; 
+            font-size: 16px; 
+            cursor: pointer;
+            background: #00c853; 
+            color: white;
+            font-weight: bold;
+            border-radius: 0 8px 8px 0; 
+        }
+
+        .sg-block-icon {
+            position: absolute; 
+            left: 15px; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+        }
+
+        @media (max-width: 992px) {
+            .sg-search-inner-form {
+                flex-direction: column; 
+            }
+            .sg-search-item {
+                width: 100% !important;
+                height: 48px !important; 
+                min-height: 48px !important;
+                flex: none !important; 
+                border-radius: 0 !important; 
+            }
+            .sg-search-item:first-child {
+                border-radius: 8px 8px 0 0 !important;
+            }
+            .sg-main-search-btn {
+                width: 100% !important;
+                height: 48px !important; 
+                min-height: 48px !important;
+                flex: none !important;
+                border-radius: 0 0 8px 8px !important;
+            }
+            .sg-guests-dropdown {
+                width: 100% !important; 
+                top: 100% !important;
+                right: 0 !important;
+                left: 0 !important;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -53,14 +173,14 @@
 
                     <div id="userProfile" style="display: none; position: relative; cursor: pointer;">
                         <div onclick="toggleDropdown(event)">
-                            <svg width="40" height="40" viewBox="0 0 24 24" style="border: 2px solid #00c853; border-radius: 50%; background-color: #ffffff; display: block;">
-                                <path fill="#808080" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                            </svg>
+                            <img id="headerAvatarDisplay" src="" alt="" width="40" height="40" style="border-radius: 50%; background-color: #ffffff; display: block; object-fit: cover;">
                         </div>
                         
                         <div id="profileDropdown" style="display: none; position: absolute; right: 0; top: 50px; background: #1a1a1a; border: 1px solid #333; padding: 12px; min-width: 150px; border-radius: 8px; z-index: 1000;">
                             <span style="color: white; font-weight: bold; display: block; margin-bottom: 8px; font-family: sans-serif; font-size: 14px;">აქაუნთი</span>
                             <hr style="border: 0; height: 1px; background: #333; margin: 8px 0;">
+                            
+                            <button onclick="window.location.href='profile.html'" style="width: 100%; background: transparent; color: white; border: 1px solid #555; padding: 8px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 13px; margin-bottom: 8px; transition: background 0.2s;" onmouseover="this.style.background='#333'" onmouseout="this.style.background='transparent'">ჩემი პროფილი</button>
                             
                             <button onclick="window.location.href='my-listings.html'" style="width: 100%; background: #0b3127; color: #febb02; border: 1px solid #febb02; padding: 8px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 13px; margin-bottom: 8px; transition: background 0.2s;" onmouseover="this.style.background='#1a5142'" onmouseout="this.style.background='#0b3127'">ჩემი განცხადებები</button>
                             
@@ -75,11 +195,12 @@
             <h1 class="sg-hero-title">იპოვე შენი შემდეგი დასასვენებელი ადგილი</h1>
             <p class="sg-hero-subtitle">აღმოაჩინე საუკეთესო შემოთავაზებები საქართველოში</p>
             
-            <div class="sg-search-zone">
+            <div class="sg-search-zone" style="width: 100%; padding: 0 20px; box-sizing: border-box;">
+                
                 <div class="sg-search-bar-box">
                     <form class="sg-search-inner-form" onsubmit="event.preventDefault();">
                         
-                        <div class="sg-input-block sg-block-dest" id="sgDestBlock">
+                        <div class="sg-search-item sg-block-dest" id="sgDestBlock">
                             <span class="sg-block-icon">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4a4a4a" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                             </span>
@@ -87,59 +208,64 @@
                             <div class="sg-location-dropdown" id="sgLocDropdown"></div>
                         </div>
 
-                        <div class="sg-input-block sg-block-date" id="sgDateBlock">
+                        <div class="sg-search-item">
+                            <span class="sg-block-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4a4a4a" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                            </span>
+                            <select id="sgTypeInput" class="sg-main-input" style="-webkit-appearance: none; appearance: none; cursor: pointer;">
+                                <option value="all">ყველა ტიპი</option>
+                                <option value="cottage">კოტეჯი / აგარაკი</option>
+                                <option value="apartment">ბინა</option>
+                                <option value="hotel">სასტუმრო</option>
+                            </select>
+                        </div>
+
+                        <div class="sg-search-item sg-block-date" id="sgDateBlock">
                             <span class="sg-block-icon">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4a4a4a" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                             </span>
-                            <div class="sg-date-labels">
-                                <span id="sgCheckInLabel">შესვლის თარიღი</span>
-                                <span class="sg-date-sep">—</span>
-                                <span id="sgCheckOutLabel">გასვლის თარიღი</span>
-                            </div>
-
-                            <div class="sg-exact-calendar-pop" id="sgCalPop">
-                                <div class="sg-pop-months-flex" id="sgCalMonthsContainer"></div>
-                            </div>
+                            <input type="text" id="searchDates" placeholder="შესვლა — გასვლა" class="sg-main-input" style="cursor: pointer;">
                         </div>
 
-                        <div class="sg-input-block sg-block-guests" id="sgGuestsBlock">
-                            <div class="sg-guests-left">
-                                <span class="sg-block-icon">
+                        <div class="sg-search-item sg-search-item-guests sg-block-guests" id="sgGuestsBlock">
+                            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                                <div style="display: flex; align-items: center; gap: 8px; overflow: hidden; white-space: nowrap;">
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4a4a4a" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                                </span>
-                                <span class="sg-guests-val" id="sgGuestsDisplay">2 ზრდასრული · 0 ბავშვი · 1 ოთახი</span>
+                                    <span class="sg-guests-val" id="sgGuestsDisplay">2 ზრდ. · 0 ბავშ. · 1 ოთახი</span>
+                                </div>
+                                <span class="sg-chevron-down" style="font-size: 14px; margin-left: 5px; color: #4a4a4a;">▼</span>
                             </div>
-                            <span class="sg-chevron-down">▼</span>
 
-                            <div class="sg-guests-dropdown" id="sgGuestsDropdown">
-                                <div class="sg-dropdown-row">
-                                    <span class="sg-row-label">ზრდასრული</span>
-                                    <div class="sg-counter-box">
-                                        <button type="button" class="sg-counter-btn" id="btnAdultMinus">-</button>
-                                        <span class="sg-counter-value" id="valAdults">2</span>
-                                        <button type="button" class="sg-counter-btn" id="btnAdultPlus">+</button>
+                            <div class="sg-guests-dropdown" id="sgGuestsDropdown" style="display: none; position: absolute; top: calc(100% + 5px); right: 0; width: 320px; background: white; border: 1px solid #ddd; border-radius: 8px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); z-index: 100; cursor: default;">
+                                <div class="sg-dropdown-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                    <span class="sg-row-label" style="font-weight: bold; font-size: 15px;">ზრდასრული</span>
+                                    <div class="sg-counter-box" style="display: flex; align-items: center; gap: 10px;">
+                                        <button type="button" class="sg-counter-btn" id="btnAdultMinus" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid #ccc; background: white; cursor: pointer; font-weight: bold; font-size: 16px;">-</button>
+                                        <span class="sg-counter-value" id="valAdults" style="font-weight: bold; width: 25px; text-align: center; font-size: 16px;">2</span>
+                                        <button type="button" class="sg-counter-btn" id="btnAdultPlus" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid #ccc; background: white; cursor: pointer; font-weight: bold; font-size: 16px;">+</button>
                                     </div>
                                 </div>
-                                <div class="sg-dropdown-row">
-                                    <span class="sg-row-label">ბავშვი</span>
-                                    <div class="sg-counter-box">
-                                        <button type="button" class="sg-counter-btn" id="btnChildMinus">-</button>
-                                        <span class="sg-counter-value" id="valChildren">0</span>
-                                        <button type="button" class="sg-counter-btn" id="btnChildPlus">+</button>
+                                <div class="sg-dropdown-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                    <span class="sg-row-label" style="font-weight: bold; font-size: 15px;">ბავშვი</span>
+                                    <div class="sg-counter-box" style="display: flex; align-items: center; gap: 10px;">
+                                        <button type="button" class="sg-counter-btn" id="btnChildMinus" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid #ccc; background: white; cursor: pointer; font-weight: bold; font-size: 16px;">-</button>
+                                        <span class="sg-counter-value" id="valChildren" style="font-weight: bold; width: 25px; text-align: center; font-size: 16px;">0</span>
+                                        <button type="button" class="sg-counter-btn" id="btnChildPlus" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid #ccc; background: white; cursor: pointer; font-weight: bold; font-size: 16px;">+</button>
                                     </div>
                                 </div>
-                                <div class="sg-dropdown-row">
-                                    <span class="sg-row-label">ოთახი</span>
-                                    <div class="sg-counter-box">
-                                        <button type="button" class="sg-counter-btn" id="btnRoomMinus">-</button>
-                                        <span class="sg-counter-value" id="valRooms">1</span>
-                                        <button type="button" class="sg-counter-btn" id="btnRoomPlus">+</button>
+                                <div class="sg-dropdown-row" style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span class="sg-row-label" style="font-weight: bold; font-size: 15px;">ოთახი</span>
+                                    <div class="sg-counter-box" style="display: flex; align-items: center; gap: 10px;">
+                                        <button type="button" class="sg-counter-btn" id="btnRoomMinus" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid #ccc; background: white; cursor: pointer; font-weight: bold; font-size: 16px;">-</button>
+                                        <span class="sg-counter-value" id="valRooms" style="font-weight: bold; width: 25px; text-align: center; font-size: 16px;">1</span>
+                                        <button type="button" class="sg-counter-btn" id="btnRoomPlus" style="width: 32px; height: 32px; border-radius: 50%; border: 1px solid #ccc; background: white; cursor: pointer; font-weight: bold; font-size: 16px;">+</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <button type="submit" class="sg-main-search-btn">ძებნა</button>
+                        <button type="button" class="sg-main-search-btn" id="mainSearchBtn">ძებნა</button>
+                        
                     </form>
                 </div>
             </div>
@@ -166,35 +292,30 @@
             </div>
             <button class="close-popup" id="closeHelpBtn">&times;</button>
         </div>
-        
         <div class="popup-body">
             <p>მოგესალმებით! შეგიძლიათ აღწეროთ პრობლემა და საჭიროების შემთხვევაში ატვირთოთ ფოტო/სკრინშოტი.</p>
-            
             <form id="helpForm">
                 <textarea id="helpQuestion" placeholder="ჩაწერეთ თქვენი კითხვა..." required></textarea>
-                
                 <div id="filePreviewContainer" class="file-preview-container">
                     <span id="fileNameDisplay"></span>
                     <button type="button" id="removeFileBtn">&times;</button>
                 </div>
-
                 <div class="form-controls">
                     <label for="fileUpload" class="file-upload-label" title="ფაილის მიბმა">
-                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
-                        </svg>
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
                         <span>მიაბით ფაილი</span>
                     </label>
                     <input type="file" id="fileUpload" accept="image/*,application/pdf" style="display: none;">
-                    
                     <button type="submit" class="send-btn">გაგზავნა</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <script src="script.js"></script>
-    <script src="help-script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/ka.js"></script>
+    <script type="module" src="script.js"></script>
+    <script type="module" src="help-script.js"></script>
 
 </body>
 </html>

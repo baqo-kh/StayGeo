@@ -126,7 +126,6 @@ body {
         @media (max-width: 992px) { border-radius: 4px !important; width: 100%; }
     }
 
-    // ლოკაციების დროპდაუნი
     .sg-location-dropdown {
         display: none; position: absolute; top: calc(100% + 8px); left: 0; width: 100%; min-width: 280px;
         background: #ffffff; border-radius: 8px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15); z-index: 10000;
@@ -144,7 +143,6 @@ body {
         .sg-no-results { padding: 16px; font-size: 14px; color: #6b6b6b; text-align: center; }
     }
 
-    // კალენდარი
     .sg-exact-calendar-pop {
         display: none; position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%);
         background: #ffffff; border-radius: 8px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
@@ -168,7 +166,6 @@ body {
         }
     }
 
-    // სტუმრები
     .sg-guests-dropdown {
         display: none; position: absolute; top: calc(100% + 8px); right: 0;
         background: #ffffff; border-radius: 8px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
@@ -191,7 +188,6 @@ body {
 .logo-link:hover {
     opacity: 0.9;
 }
-// ⚡ ნავიგაციის ბლოკი
 .nav-links {
     display: flex;
     align-items: center;
@@ -236,7 +232,6 @@ body {
         }
     }
 }
-// 🎨 ფერების ახალი ცვლადები
 $popup-header-bg: #0f172a; 
 $popup-body-bg: #1e293b;   
 $input-bg: #0f172a;        
@@ -245,7 +240,6 @@ $text-light: #ffffff;
 $text-muted: #94a3b8;      
 $classic-blue: #007bff;    
 
-// 🎧 მცურავი ღილაკი
 .help-center-btn {
     position: fixed;
     bottom: 30px;
@@ -272,7 +266,6 @@ $classic-blue: #007bff;
     }
 }
 
-// 💬 დახმარების ფანჯარა
 .help-popup {
     position: fixed;
     bottom: 105px;
@@ -476,10 +469,6 @@ $classic-blue: #007bff;
     }
 } 
 
-/* =========================================
-   მთავარი გვერდის რესპონსიულობა და დიზაინის კორექცია
-   ========================================= */
-
 .sg-search-bar-box {
     border: 3px solid #febb02 !important; 
     border-radius: 12px;
@@ -551,10 +540,6 @@ $classic-blue: #007bff;
     }
 }
 
-/* =========================================
-   ჩემი განცხადებების მართვის ღილაკები
-   ========================================= */
-
 .my-listing-actions {
     display: flex;
     gap: 10px;
@@ -597,10 +582,6 @@ $classic-blue: #007bff;
     .card-title { font-size: 16px; } 
     .price { font-size: 18px; }      
 }
-
-/* =========================================
-   🏡 განცხადებების გრიდი და ბარათები
-   ========================================= */
 
 .listings-grid {
     display: grid;
@@ -706,10 +687,6 @@ $classic-blue: #007bff;
         }
     }
 }
-
-/* =========================================
-   🔍 დეტალური გვერდის (details.html) სტილები
-   ========================================= */
 
 .sg-details-container {
     max-width: 1200px;
@@ -912,40 +889,31 @@ $classic-blue: #007bff;
         }
     }
 
-/* =========================================
-   🖼️ ფოტოების გალერეის ღილაკების ფიქსი (მთავარზე დაყენება და წაშლა)
-   ========================================= */
 .img-thumb-box {
-    position: relative; /* ეს აუცილებელია, რომ აბსოლუტური პოზიციის შვილები დაიკავოს */
+    position: relative; 
 
     img {
         position: relative;
-        z-index: 1; /* სურათი მიდის ქვემოთ */
+        z-index: 1; 
     }
 
     .remove-btn, 
     .set-main-btn, 
     .main-badge {
         position: absolute;
-        z-index: 999 !important; /* ღილაკები ამოდის სურათის ზემოთ! */
+        z-index: 999 !important; 
     }
 }
-
-/* =========================================
-   🏡 განცხადების დეტალური გვერდის (details.html) განახლებული სტილები
-   ========================================= */
 
 .listing-details-page {
     background-color: #FDF9F3;
 }
 
-// ⚡ 1. ფიქსირებული ჰედერი (Sticky Navigation)
 .details-header-nav {
     background-color: $hero-bg;
-    padding: 10px 20px; // ოდნავ შევამცირეთ პედინგი სიმაღლის დასაბალანსებლად
+    padding: 10px 20px; 
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     
-    // აფიქსირებს ჰედერს ეკრანის ზედა ნაწილში სქროლვისას
     position: fixed;
     top: 0;
     left: 0;
@@ -953,7 +921,6 @@ $classic-blue: #007bff;
     z-index: 1000; 
     box-sizing: border-box;
     
-    // გლუვი გამოჩენის ეფექტი
     transition: all 0.3s ease; 
 
     .details-header-container {
@@ -969,9 +936,8 @@ $classic-blue: #007bff;
             align-items: center;
             text-decoration: none;
 
-            // ⚡ 2. ლოგოს გადიდება
             .header-logo {
-                height: 55px; // 40px-დან გავზარდეთ 55px-მდე
+                height: 55px; 
                 width: auto;
                 object-fit: contain;
                 transition: transform 0.2s ease;
@@ -994,10 +960,9 @@ $classic-blue: #007bff;
     }
 }
 
-// ⚡ 3. კონტეინერის დაშორება ზემოდან (რომ ფიქსირებულმა ჰედერმა ტექსტი არ დაფაროს)
 .sg-details-container {
     max-width: 1200px;
-    margin: 120px auto 40px auto; // ზედა მარჟინი გავზარდეთ 120px-მდე
+    margin: 120px auto 40px auto; 
     padding: 0 20px;
 }
 
@@ -1011,7 +976,6 @@ $classic-blue: #007bff;
     }
 }
 
-// მარჯვენა საიდბარი (გადახდების ფიქსირებული პანელი)
 .right-sidebar {
     .booking-card {
         background: white;
@@ -1023,7 +987,6 @@ $classic-blue: #007bff;
         position: relative; 
         top: 0; 
         
-        /* ⚡ თუ ოდნავ კიდევ ზემოთ/ქვემოთ დაგჭირდება, მხოლოდ ეს 65px შეცვალე (მაგ: 60px, 70px...) */
         margin-top: 120px; 
 
         .price-header {
@@ -1106,18 +1069,12 @@ $classic-blue: #007bff;
     }
 }
 
-/* =========================================
-   ჩემი განცხადებების (my-listings.html) ფიქსი
-   ========================================= */
-
 .my-listings-container {
     max-width: 1200px;
-    /* ⚡ მთავარი ფიქსი: 120px დაშორება ზემოდან, რომ ჰედერის ქვეშ არ შეძვრეს */
     margin: 120px auto 40px auto; 
     padding: 0 20px;
 }
 
-/* სათაურის ოდნავი გალამაზება (თუ დაგჭირდება) */
 .my-listings-header {
     margin-bottom: 30px;
     

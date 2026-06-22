@@ -1,15 +1,20 @@
+import { db, auth } from './firebase-config.js';
+import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+const IMGBB_API_KEY = "9db4c152a217facd1c03ef9c605af364";
+
 document.addEventListener("DOMContentLoaded", () => {
-    // უსაფრთხოება
     if (localStorage.getItem('isLoggedIn') !== 'true') {
-        window.location.href = 'index.html'; return;
+        window.location.href = 'login.html'; 
+        return;
     }
 
-    // ----------------------------------------------------
-    // 🏨 ქონების ტიპის ლოგიკა
-    // ----------------------------------------------------
     const propertyTypeSelect = document.getElementById('propertyTypeSelect');
     const standardPriceBlock = document.getElementById('standardPriceBlock');
+    const capacityBlock = document.getElementById('capacityBlock');
     const listPrice = document.getElementById('listPrice');
+    const listCapacity = document.getElementById('listCapacity'); 
+    
     const hotelRoomsBlock = document.getElementById('hotelRoomsBlock');
     const roomsContainer = document.getElementById('roomsContainer');
     const blockRoomContainer = document.getElementById('blockRoomContainer');
@@ -18,10 +23,12 @@ document.addEventListener("DOMContentLoaded", () => {
     function togglePropertyFields() {
         if (propertyTypeSelect.value === 'hotel') {
             standardPriceBlock.style.display = 'none';
+            capacityBlock.style.display = 'none';
             hotelRoomsBlock.style.display = 'block';
             blockRoomContainer.style.display = 'block';
         } else {
             standardPriceBlock.style.display = 'block';
+            capacityBlock.style.display = 'block';
             hotelRoomsBlock.style.display = 'none';
             blockRoomContainer.style.display = 'none';
         }
@@ -33,7 +40,6 @@ document.addEventListener("DOMContentLoaded", () => {
         row.className = 'room-row';
         row.style.cssText = 'display: flex; gap: 10px; margin-bottom: 10px;';
         
-        // ⚡ აქედან ამოღებულია required, რომ დამატების ღილაკი არ გაჭედოს!
         row.innerHTML = `
             <input type="text" class="room-name" placeholder="მაგ: 2 პერსონაზე" style="flex: 2; padding: 10px; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; background: #0b3127; color: white;">
             <input type="number" class="room-price" placeholder="ფასი (₾)" style="flex: 1; padding: 10px; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; background: #0b3127; color: white;">
@@ -46,12 +52,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById('addRoomBtn').onclick = () => { createRoomRow(); updateBlockRoomSelect(); };
     propertyTypeSelect.onchange = togglePropertyFields;
-    createRoomRow(); // საწყისად 1 ცარიელი ოთახი
+    createRoomRow(); 
     togglePropertyFields();
 
-    // ----------------------------------------------------
-    // 📅 კალენდრის მართვა (ჩაკეტილი დღეები)
-    // ----------------------------------------------------
     let blockedDates = [];
 
     function updateBlockRoomSelect() {
@@ -93,9 +96,6 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById('blockEndDate').value = '';
     };
 
-    // ----------------------------------------------------
-    // 🍽️ კვების ოპციები
-    // ----------------------------------------------------
     ['Breakfast', 'HalfBoard', 'FullBoard'].forEach(meal => {
         const cb = document.getElementById(`has${meal}`);
         const input = document.getElementById(`price${meal}`);
@@ -106,9 +106,6 @@ document.addEventListener("DOMContentLoaded", () => {
         };
     });
 
-    // ----------------------------------------------------
-    // 🖼️ გალერეა 
-    // ----------------------------------------------------
     let images = [];
     let mainPhotoIndex = 0; 
     const gallery = document.getElementById('imageGallery');
@@ -158,14 +155,38 @@ document.addEventListener("DOMContentLoaded", () => {
         e.target.value = ''; 
     };
 
-    // ----------------------------------------------------
-    // 💾 ბაზაში შენახვა (Submit)
-    // ----------------------------------------------------
-    document.getElementById('addListingForm').onsubmit = (e) => {
+    async function uploadToImgBB(base64String) {
+        const base64Data = base64String.split(',')[1]; 
+        
+        const formData = new FormData();
+        formData.append('image', base64Data);
+
+        const response = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+            method: 'POST',
+            body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            return data.data.url;
+        } else {
+            throw new Error("ფოტოს ატვირთვა ვერ მოხერხდა");
+        }
+    }
+
+    document.getElementById('addListingForm').onsubmit = async (e) => {
         e.preventDefault();
         
-        // JS აკონტროლებს რომ სურათები ნამდვილად იყოს ატვირთული
-        if (images.length === 0) { alert("გთხოვთ, ატვირთოთ მინიმუმ 1 ფოტო!"); return; }
+        const submitBtn = document.querySelector('.submit-btn');
+        const originalBtnText = submitBtn.innerText;
+        submitBtn.disabled = true;
+        
+        if (images.length === 0) { 
+            alert("გთხოვთ, ატვირთოთ მინიმუმ 1 ფოტო!"); 
+            submitBtn.disabled = false;
+            return; 
+        }
 
         let finalImagesArray = [...images];
         if (mainPhotoIndex !== 0 && images.length > 1) {
@@ -174,50 +195,84 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const amenities = Array.from(document.querySelectorAll('input[name="amenity"]:checked')).map(cb => cb.value);
-        
         const type = propertyTypeSelect.value;
         let finalPrice = 0;
+        let finalCapacity = 0;
         let hotelRoomsData = [];
 
-        // ოთახების და ფასის ვალიდაცია JS-ში
         if (type === 'hotel') {
             document.querySelectorAll('.room-row').forEach(row => {
                 const name = row.querySelector('.room-name').value.trim();
                 const price = parseInt(row.querySelector('.room-price').value) || 0;
                 if (name && price > 0) hotelRoomsData.push({ type: name, price });
             });
-            if (hotelRoomsData.length === 0) { alert("გთხოვთ, დაამატოთ მინიმუმ 1 სასტუმროს ოთახი და მიუთითოთ ფასი!"); return; }
+            if (hotelRoomsData.length === 0) { 
+                alert("გთხოვთ, დაამატოთ მინიმუმ 1 სასტუმროს ოთახი და მიუთითოთ ფასი!"); 
+                submitBtn.disabled = false;
+                return; 
+            }
             finalPrice = hotelRoomsData[0].price; 
         } else {
             finalPrice = parseInt(listPrice.value) || 0;
-            if (finalPrice <= 0) { alert("გთხოვთ, მიუთითოთ ობიექტის ფასი 1 ღამეში!"); return; }
+            finalCapacity = parseInt(listCapacity.value) || 0;
+            
+            if (finalCapacity <= 0) { 
+                alert("გთხოვთ, მიუთითოთ სტუმრების რაოდენობა!"); 
+                submitBtn.disabled = false;
+                return; 
+            }
+            if (finalPrice <= 0) { 
+                alert("გთხოვთ, მიუთითოთ ობიექტის ფასი 1 ღამეში!"); 
+                submitBtn.disabled = false;
+                return; 
+            }
         }
 
-        const newListing = {
-            id: Date.now(),
-            title: document.getElementById('listTitle').value,
-            location: document.getElementById('listLocation').value,
-            rooms: parseInt(document.getElementById('listRooms').value),
-            area: parseInt(document.getElementById('listArea').value),
-            description: document.getElementById('listDesc').value,
-            propertyType: type,
-            price: finalPrice,
-            hotelRooms: hotelRoomsData,
-            blockedDates: blockedDates, 
-            amenities: amenities,
-            images: finalImagesArray,
-            meals: {
-                breakfast: document.getElementById('hasBreakfast').checked ? parseInt(document.getElementById('priceBreakfast').value) || 0 : 0,
-                halfBoard: document.getElementById('hasHalfBoard').checked ? parseInt(document.getElementById('priceHalfBoard').value) || 0 : 0,
-                fullBoard: document.getElementById('hasFullBoard').checked ? parseInt(document.getElementById('priceFullBoard').value) || 0 : 0
+        try {
+            let uploadedImageUrls = [];
+            for (let i = 0; i < finalImagesArray.length; i++) {
+                submitBtn.innerText = `ფოტო იტვირთება (${i + 1}/${finalImagesArray.length}) ⏳...`;
+                const imgUrl = await uploadToImgBB(finalImagesArray[i]);
+                uploadedImageUrls.push(imgUrl);
             }
-        };
 
-        let listings = JSON.parse(localStorage.getItem('staygeo_listings')) || [];
-        listings.push(newListing);
-        localStorage.setItem('staygeo_listings', JSON.stringify(listings));
+            submitBtn.innerText = "მონაცემები ინახება ⏳...";
 
-        alert("✅ განცხადება წარმატებით დაემატა!");
-        window.location.href = 'my-listings.html';
+            const userProfile = JSON.parse(localStorage.getItem('staygeo_user_profile')) || {};
+            const hostEmail = userProfile.email || auth.currentUser?.email || 'host@staygeo.ge';
+
+            const newListing = {
+                title: document.getElementById('listTitle').value,
+                location: document.getElementById('listLocation').value,
+                rooms: parseInt(document.getElementById('listRooms').value),
+                area: parseInt(document.getElementById('listArea').value),
+                description: document.getElementById('listDesc').value,
+                propertyType: type,
+                price: finalPrice,
+                capacity: finalCapacity,
+                hotelRooms: hotelRoomsData,
+                blockedDates: blockedDates, 
+                amenities: amenities,
+                images: uploadedImageUrls,
+                meals: {
+                    breakfast: document.getElementById('hasBreakfast').checked ? parseInt(document.getElementById('priceBreakfast').value) || 0 : 0,
+                    halfBoard: document.getElementById('hasHalfBoard').checked ? parseInt(document.getElementById('priceHalfBoard').value) || 0 : 0,
+                    fullBoard: document.getElementById('hasFullBoard').checked ? parseInt(document.getElementById('priceFullBoard').value) || 0 : 0
+                },
+                hostEmail: hostEmail, 
+                createdAt: new Date().toISOString()
+            };
+
+            await addDoc(collection(db, "listings"), newListing);
+            
+            alert("✅ განცხადება და ფოტოები წარმატებით დაემატა!");
+            window.location.href = 'my-listings.html';
+
+        } catch (error) {
+            console.error("შეცდომა შენახვისას:", error);
+            alert("შეცდომა განცხადების დამატებისას. სცადეთ მოგვიანებით.");
+            submitBtn.innerText = originalBtnText;
+            submitBtn.disabled = false;
+        }
     };
 });

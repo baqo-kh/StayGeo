@@ -39,7 +39,7 @@
                             </div>
                             <span>▼</span>
                         </div>
-                        <div id="countryDropdown" class="custom-options">
+                        <div id="countryDropdown" class="custom-options" style="display:none;">
                             <div class="search-box">
                                 <input type="text" id="countrySearch" placeholder="მოძებნე ქვეყანა..." autocomplete="off">
                             </div>
@@ -78,13 +78,7 @@
         </form>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        const SUPABASE_URL = "https://volwthkudypgvlafbdqf.supabase.co"; 
-        const SUPABASE_ANON_KEY = "sb_publishable_IDi82Onln8r5EQ3ZH-u-Ow__ugEm86U"; 
-        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        // პაროლის ჩვენება/დამალვის ფუნქცია
         function togglePasswordVisibility() {
             const passwordInput = document.getElementById('regPassword');
             const eyeIcon = document.getElementById('eyeIcon');
@@ -97,6 +91,7 @@
             }
         }
     </script>
-    <script src="register-script.js"></script>
+    
+    <script type="module" src="register-script.js"></script>
 </body>
 </html>

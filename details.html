@@ -7,14 +7,17 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
-<body class="listing-details-page">
+<body class="listing-details-page" style="margin: 0;">
 
-    <header class="details-header-nav">
-        <div class="details-header-container">
-            <a href="index.html" class="logo-link">
-                <img src="logo.svg" alt="StayGeo Logo" class="header-logo">
+    <header style="background: #0b3127; padding: 15px 20px; text-align: left; display: flex; align-items: center; justify-content: space-between; box-sizing: border-box; min-height: 85px;">
+        <div style="display: flex; align-items: center; gap: 30px;">
+            <a href="index.html" style="display: inline-block;">
+                <img src="logo.svg" alt="StayGeo Logo" style="height: 55px; display: block;">
             </a>
-            <a href="index.html" class="back-link">← მთავარ გვერდზე დაბრუნება</a>
+            
+            <a href="index.html" style="color: white; text-decoration: none; font-weight: bold; font-size: 14px; background: rgba(255,255,255,0.1); padding: 10px 15px; border-radius: 8px; display: flex; align-items: center; gap: 8px; transition: 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">
+                <span style="font-size: 18px; line-height: 1;">←</span> მთავარი გვერდი
+            </a>
         </div>
     </header>
 
@@ -40,6 +43,7 @@
                 <div class="listing-stats-tags">
                     <span id="detailArea">📏 -- მ²</span>
                     <span id="detailRooms">🛏️ -- ოთახი</span>
+                    <span id="detailCapacity">👥 -- სტუმარი</span>
                 </div>
 
                 <div class="info-section">
@@ -118,6 +122,6 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://npmcdn.com/flatpickr/dist/l10n/ka.js"></script>
     
-    <script src="details-script.js"></script>
+    <script type="module" src="details-script.js"></script>
 </body>
 </html>

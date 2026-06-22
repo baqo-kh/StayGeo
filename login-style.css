@@ -88,12 +88,11 @@ h2 {
     width: 100%;
     box-sizing: border-box;
     transition: border-color 0.2s;
-    appearance: none; /* iOS-სთვის */
+    appearance: none; 
 }
 
 .input-group input:focus { border-color: #febb02; }
 
-/* 🛡️ პაროლის თვალის ღილაკის ფიქსები */
 .password-wrapper {
     position: relative;
     width: 100%;
@@ -106,12 +105,12 @@ h2 {
     right: 10px;
     top: 50%;
     transform: translateY(-50%);
-    width: 35px; /* გავზარდეთ რომ ადვილი იყოს დაჭერა */
+    width: 35px; 
     height: 35px;
     background: transparent;
     border: none;
     cursor: pointer;
-    display: none; /* JS გამოაჩენს */
+    display: none; 
     align-items: center;
     justify-content: center;
     z-index: 10;
